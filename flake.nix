@@ -70,7 +70,7 @@
           node-dev = {
             # Example configuration:
            enable = true;
-            nodeVersion = "21.5";
+            nodeVersion = "23";
              withTools = [ "typescript" "yarn" "pnpm" ];
             # extraPackages = [ ];
             # ide.type = "none";

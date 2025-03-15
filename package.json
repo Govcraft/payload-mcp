@@ -1,7 +1,7 @@
 {
-  "name": "template-mcp",
+  "name": "payload-mcp",
   "version": "1.0.0",
-  "description": "Template for creating Model Context Protocol (MCP) Servers for connecting Claude to external data sources",
+  "description": "Payload MCP Server",
   "main": "dist/index.js",
   "type": "module",
   "scripts": {

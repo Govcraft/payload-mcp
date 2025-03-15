@@ -1266,7 +1266,7 @@ const afterChangeHook = ({ doc, req, operation, previousDoc }) => {
   // Example: Send a notification
   if (operation === 'create') {
     // Send notification about new document
-    console.log(\`New document created: \${doc.id}\`);
+    logger.info(\`New document created: \${doc.id}\`);
   }
   
   // Return the document (cannot be modified)
@@ -1299,7 +1299,7 @@ const afterDeleteHook = ({ req, id, doc }) => {
   // 'doc' is the document that was deleted
   
   // Example: Clean up related data
-  console.log(\`Document deleted: \${id}\`);
+  logger.info(\`Document deleted: \${id}\`);
   
   // No return value is expected
 };`;
@@ -1346,7 +1346,7 @@ const hook = (args) => {
   const { req } = args;
   
   // Example: Log hook execution
-  console.log('Hook executed');
+  logger.info('Hook executed');
   
   // For hooks that modify data, return the modified data
   // For other hooks, return as appropriate for the hook type
