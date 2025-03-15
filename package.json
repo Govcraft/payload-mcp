@@ -12,7 +12,8 @@
     "lint:fix": "eslint . --ext .ts --fix",
     "format": "prettier --write \"src/**/*.ts\"",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "stdio": "tsx src/index.ts --stdio-only"
+    "stdio": "tsx src/index.ts --stdio-only",
+    "generate-tools": "tsx src/generate-tools.ts"
   },
   "keywords": [],
   "author": "",
@@ -27,8 +28,10 @@
     "@typescript-eslint/parser": "^8.26.1",
     "eslint": "^9.22.0",
     "eslint-config-prettier": "^10.1.1",
+    "node-fetch": "^3.3.2",
     "nodemon": "^3.1.9",
     "prettier": "^3.5.3",
+    "ts-morph": "^25.0.1",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
     "tsconfig-paths": "^4.2.0",
@@ -42,6 +45,7 @@
     "express-validator": "^7.2.1",
     "helmet": "^8.0.0",
     "morgan": "^1.10.0",
+    "payload": "^3.28.1",
     "uuid": "^11.1.0",
     "winston": "^3.17.0"
   }

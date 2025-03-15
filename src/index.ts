@@ -9,6 +9,7 @@ import { notFoundHandler } from './middleware/notFoundHandler.js';
 import { initializeMCP } from './mcp/index.js';
 import { healthRoutes } from './routes/health.js';
 import { mcpRoutes } from './routes/mcp.js';
+import payloadMcpRoutes from './routes/payload-mcp.routes.js';
 
 // Check if we're in stdio-only mode (--stdio-only or -S flag)
 const stdioOnlyMode = process.argv.includes('--stdio-only') || process.argv.includes('-S');
@@ -33,6 +34,7 @@ if (!stdioOnlyMode) {
   // Routes
   app.use(`${config.api.prefix}/health`, healthRoutes);
   app.use(`${config.api.prefix}/mcp`, mcpRoutes);
+  app.use(`${config.api.prefix}/payload-mcp`, payloadMcpRoutes);
 
   // Error handling
   app.use(notFoundHandler);
@@ -43,6 +45,7 @@ if (!stdioOnlyMode) {
     logger.info(`Server running in ${config.server.env} mode on port ${config.server.port}`);
     logger.info(`API is available at http://localhost:${config.server.port}${config.api.prefix}`);
     logger.info(`MCP API is available at http://localhost:${config.server.port}${config.api.prefix}/mcp`);
+    logger.info(`Payload MCP API is available at http://localhost:${config.server.port}${config.api.prefix}/payload-mcp`);
   });
 
   // Handle unhandled promise rejections

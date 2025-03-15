@@ -1,6 +1,6 @@
 import readline from 'readline';
 import { v4 as uuidv4 } from 'uuid';
-import { MCPRequest, MCPResponse, MCPError, MCPToolCall, MCPToolResult } from '../types.js';
+import { MCPRequest, MCPToolCall } from '../types.js';
 import { processRequest, executeTool, validateMessage } from '../handler.js';
 import { logger } from '../../utils/logger.js';
 
