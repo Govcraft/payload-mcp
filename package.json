@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "type": "module",
   "bin": {
-    "payload-mcp": "dist/index.js"
+    "payload-mcp": "./dist/index.js"
   },
   "scripts": {
     "start": "node dist/index.js --stdio-only",
