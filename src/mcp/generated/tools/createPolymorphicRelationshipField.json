@@ -1,0 +1,31 @@
+{
+  "name": "createPolymorphicRelationshipField",
+  "description": "Creates a Payload CMS 3.0 PolymorphicRelationshipField configuration\n\nExample:\n```typescript\n{\n  name: 'polymorphicrelationshipField',\n  type: 'polymorphicrelationship',\n  required: true,\n  label: 'Polymorphicrelationship Field',\n  // Custom validation example\n  validate: (value, { siblingData, operation }) => {\n    // Validation logic based on the value, sibling data, or operation\n    if (operation === 'create' && !value) {\n      return 'This field is required for new records';\n    }\n    return true;\n  }\n}\n```",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string",
+        "description": "The name of the field"
+      },
+      "type": {
+        "type": "string",
+        "description": "The type of field"
+      },
+      "label": {
+        "type": "string",
+        "description": "The label shown in the admin UI"
+      },
+      "required": {
+        "type": "boolean",
+        "description": "Whether this field is required"
+      }
+    },
+    "required": [
+      "name",
+      "type"
+    ],
+    "description": "Field configuration"
+  },
+  "template": "{\n  name: '{name}', // Database field name\n  type: 'relationship',\n  label: 'Relationship Field', // Label shown in the admin UI\n  required: true,\n  relationTo: 'collection-slug', // The collection to relate to\n  hasMany: false, // Set to true for multiple relationships\n  // Optional: Add custom validation\n  validate: async (value, { req }) => {\n    if (value) {\n      try {\n        const doc = await req.payload.findByID({\n          collection: 'collection-slug',\n          id: value,\n        });\n        if (!doc) {\n          return 'Related document not found';\n        }\n      } catch (err) {\n        return 'Error validating relationship';\n      }\n    }\n    return true; // Return true if valid\n  },\n}"
+}

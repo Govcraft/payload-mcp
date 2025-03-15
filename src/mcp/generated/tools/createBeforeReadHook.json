@@ -1,0 +1,9 @@
+{
+  "name": "createBeforeReadHook",
+  "description": "Creates a Payload CMS 3.0 BeforeReadHook configuration",
+  "inputSchema": {
+    "type": "object",
+    "properties": {}
+  },
+  "template": "/**\n * This hook runs before/after documents are returned from the database\n * It allows you to modify the data before it's sent to the client\n */\nconst readHook = ({ doc, req }) => {\n  // 'doc' contains the document(s) being read\n  // 'req' is the Express request object with the Payload instance\n  \n  // Example: Add computed properties\n  return {\n    ...doc,\n    computedProperty: `${doc.firstName} ${doc.lastName}`,\n  };\n};"
+}

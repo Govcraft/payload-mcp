@@ -1,0 +1,31 @@
+{
+  "name": "createTextField",
+  "description": "Creates a Payload CMS 3.0 TextField configuration\n\nExample:\n```typescript\n{\n  name: 'title',\n  type: 'text',\n  required: true,\n  label: 'Post Title',\n  minLength: 10,\n  maxLength: 100,\n  // Custom validation example\n  validate: (value, { siblingData }) => {\n    if (value && value.toLowerCase().includes('forbidden')) {\n      return 'Title cannot contain the word \"forbidden\"';\n    }\n    return true;\n  }\n}\n```",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string",
+        "description": "The name of the field"
+      },
+      "type": {
+        "type": "string",
+        "description": "The type of field"
+      },
+      "label": {
+        "type": "string",
+        "description": "The label shown in the admin UI"
+      },
+      "required": {
+        "type": "boolean",
+        "description": "Whether this field is required"
+      }
+    },
+    "required": [
+      "name",
+      "type"
+    ],
+    "description": "Field configuration"
+  },
+  "template": "{\n  name: '{name}', // Database field name\n  type: 'text',\n  label: 'Text Field', // Label shown in the admin UI\n  required: true,\n  minLength: 2,\n  maxLength: 100,\n  // Optional: Add custom validation\n  validate: (value, { siblingData }) => {\n    if (value && value.toLowerCase().includes('forbidden')) {\n      return 'This field cannot contain the word \"forbidden\"';\n    }\n    return true; // Return true if valid\n  },\n}"
+}

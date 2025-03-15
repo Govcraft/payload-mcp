@@ -1,0 +1,2789 @@
+{
+  "name": "createCollectionAdminOptions",
+  "description": "Creates a Payload CMS 3.0 CollectionAdminOptions configuration",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "baseListFilter": {
+        "type": "string",
+        "description": "Function expression (e.g., \"({ req }) => req.user.role === 'admin'\")"
+      },
+      "components": {
+        "type": "object",
+        "properties": {
+          "afterList": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object",
+                  "description": "false configuration object"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "clientProps": {
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "description": "object configuration object"
+                        },
+                        {
+                          "type": "object",
+                          "properties": {}
+                        }
+                      ],
+                      "description": "One of the allowed types"
+                    },
+                    "exportName": {
+                      "type": "string"
+                    },
+                    "path": {
+                      "type": "string"
+                    },
+                    "serverProps": {
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "description": "object configuration object"
+                        },
+                        {
+                          "type": "string",
+                          "description": "String value"
+                        }
+                      ],
+                      "description": "One of the allowed types"
+                    }
+                  },
+                  "required": [
+                    "path"
+                  ]
+                }
+              ],
+              "description": "One of the allowed types"
+            }
+          },
+          "afterListTable": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object",
+                  "description": "false configuration object"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "clientProps": {
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "description": "object configuration object"
+                        },
+                        {
+                          "type": "object",
+                          "properties": {}
+                        }
+                      ],
+                      "description": "One of the allowed types"
+                    },
+                    "exportName": {
+                      "type": "string"
+                    },
+                    "path": {
+                      "type": "string"
+                    },
+                    "serverProps": {
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "description": "object configuration object"
+                        },
+                        {
+                          "type": "string",
+                          "description": "String value"
+                        }
+                      ],
+                      "description": "One of the allowed types"
+                    }
+                  },
+                  "required": [
+                    "path"
+                  ]
+                }
+              ],
+              "description": "One of the allowed types"
+            }
+          },
+          "beforeList": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object",
+                  "description": "false configuration object"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "clientProps": {
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "description": "object configuration object"
+                        },
+                        {
+                          "type": "object",
+                          "properties": {}
+                        }
+                      ],
+                      "description": "One of the allowed types"
+                    },
+                    "exportName": {
+                      "type": "string"
+                    },
+                    "path": {
+                      "type": "string"
+                    },
+                    "serverProps": {
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "description": "object configuration object"
+                        },
+                        {
+                          "type": "string",
+                          "description": "String value"
+                        }
+                      ],
+                      "description": "One of the allowed types"
+                    }
+                  },
+                  "required": [
+                    "path"
+                  ]
+                }
+              ],
+              "description": "One of the allowed types"
+            }
+          },
+          "beforeListTable": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object",
+                  "description": "false configuration object"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "clientProps": {
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "description": "object configuration object"
+                        },
+                        {
+                          "type": "object",
+                          "properties": {}
+                        }
+                      ],
+                      "description": "One of the allowed types"
+                    },
+                    "exportName": {
+                      "type": "string"
+                    },
+                    "path": {
+                      "type": "string"
+                    },
+                    "serverProps": {
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "description": "object configuration object"
+                        },
+                        {
+                          "type": "string",
+                          "description": "String value"
+                        }
+                      ],
+                      "description": "One of the allowed types"
+                    }
+                  },
+                  "required": [
+                    "path"
+                  ]
+                }
+              ],
+              "description": "One of the allowed types"
+            }
+          },
+          "Description": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "object",
+                "description": "false configuration object"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "clientProps": {
+                    "oneOf": [
+                      {
+                        "type": "object",
+                        "description": "object configuration object"
+                      },
+                      {
+                        "type": "object",
+                        "properties": {}
+                      }
+                    ],
+                    "description": "One of the allowed types"
+                  },
+                  "exportName": {
+                    "type": "string"
+                  },
+                  "path": {
+                    "type": "string"
+                  },
+                  "serverProps": {
+                    "oneOf": [
+                      {
+                        "type": "object",
+                        "description": "object configuration object"
+                      },
+                      {
+                        "type": "string",
+                        "description": "String value"
+                      }
+                    ],
+                    "description": "One of the allowed types"
+                  }
+                },
+                "required": [
+                  "path"
+                ]
+              }
+            ],
+            "description": "One of the allowed types"
+          },
+          "edit": {
+            "type": "object",
+            "properties": {
+              "PreviewButton": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "object",
+                    "description": "false configuration object"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "clientProps": {
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "description": "object configuration object"
+                          },
+                          {
+                            "type": "object",
+                            "properties": {}
+                          }
+                        ],
+                        "description": "One of the allowed types"
+                      },
+                      "exportName": {
+                        "type": "string"
+                      },
+                      "path": {
+                        "type": "string"
+                      },
+                      "serverProps": {
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "description": "object configuration object"
+                          },
+                          {
+                            "type": "string",
+                            "description": "String value"
+                          }
+                        ],
+                        "description": "One of the allowed types"
+                      }
+                    },
+                    "required": [
+                      "path"
+                    ]
+                  }
+                ],
+                "description": "One of the allowed types"
+              },
+              "PublishButton": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "object",
+                    "description": "false configuration object"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "clientProps": {
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "description": "object configuration object"
+                          },
+                          {
+                            "type": "object",
+                            "properties": {}
+                          }
+                        ],
+                        "description": "One of the allowed types"
+                      },
+                      "exportName": {
+                        "type": "string"
+                      },
+                      "path": {
+                        "type": "string"
+                      },
+                      "serverProps": {
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "description": "object configuration object"
+                          },
+                          {
+                            "type": "string",
+                            "description": "String value"
+                          }
+                        ],
+                        "description": "One of the allowed types"
+                      }
+                    },
+                    "required": [
+                      "path"
+                    ]
+                  }
+                ],
+                "description": "One of the allowed types"
+              },
+              "SaveButton": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "object",
+                    "description": "false configuration object"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "clientProps": {
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "description": "object configuration object"
+                          },
+                          {
+                            "type": "object",
+                            "properties": {}
+                          }
+                        ],
+                        "description": "One of the allowed types"
+                      },
+                      "exportName": {
+                        "type": "string"
+                      },
+                      "path": {
+                        "type": "string"
+                      },
+                      "serverProps": {
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "description": "object configuration object"
+                          },
+                          {
+                            "type": "string",
+                            "description": "String value"
+                          }
+                        ],
+                        "description": "One of the allowed types"
+                      }
+                    },
+                    "required": [
+                      "path"
+                    ]
+                  }
+                ],
+                "description": "One of the allowed types"
+              },
+              "SaveDraftButton": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "object",
+                    "description": "false configuration object"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "clientProps": {
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "description": "object configuration object"
+                          },
+                          {
+                            "type": "object",
+                            "properties": {}
+                          }
+                        ],
+                        "description": "One of the allowed types"
+                      },
+                      "exportName": {
+                        "type": "string"
+                      },
+                      "path": {
+                        "type": "string"
+                      },
+                      "serverProps": {
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "description": "object configuration object"
+                          },
+                          {
+                            "type": "string",
+                            "description": "String value"
+                          }
+                        ],
+                        "description": "One of the allowed types"
+                      }
+                    },
+                    "required": [
+                      "path"
+                    ]
+                  }
+                ],
+                "description": "One of the allowed types"
+              },
+              "Upload": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "object",
+                    "description": "false configuration object"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "clientProps": {
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "description": "object configuration object"
+                          },
+                          {
+                            "type": "object",
+                            "properties": {}
+                          }
+                        ],
+                        "description": "One of the allowed types"
+                      },
+                      "exportName": {
+                        "type": "string"
+                      },
+                      "path": {
+                        "type": "string"
+                      },
+                      "serverProps": {
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "description": "object configuration object"
+                          },
+                          {
+                            "type": "string",
+                            "description": "String value"
+                          }
+                        ],
+                        "description": "One of the allowed types"
+                      }
+                    },
+                    "required": [
+                      "path"
+                    ]
+                  }
+                ],
+                "description": "One of the allowed types"
+              }
+            }
+          },
+          "listMenuItems": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object",
+                  "description": "false configuration object"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "clientProps": {
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "description": "object configuration object"
+                        },
+                        {
+                          "type": "object",
+                          "properties": {}
+                        }
+                      ],
+                      "description": "One of the allowed types"
+                    },
+                    "exportName": {
+                      "type": "string"
+                    },
+                    "path": {
+                      "type": "string"
+                    },
+                    "serverProps": {
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "description": "object configuration object"
+                        },
+                        {
+                          "type": "string",
+                          "description": "String value"
+                        }
+                      ],
+                      "description": "One of the allowed types"
+                    }
+                  },
+                  "required": [
+                    "path"
+                  ]
+                }
+              ],
+              "description": "One of the allowed types"
+            }
+          },
+          "views": {
+            "type": "object",
+            "properties": {
+              "edit": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "api": {
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "meta": {
+                                "type": "object",
+                                "description": "any configuration object"
+                              },
+                              "actions": {
+                                "type": "array",
+                                "items": {
+                                  "oneOf": [
+                                    {
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "object",
+                                      "description": "false configuration object"
+                                    },
+                                    {
+                                      "type": "object",
+                                      "properties": {
+                                        "clientProps": {
+                                          "oneOf": [
+                                            {
+                                              "type": "object",
+                                              "description": "object configuration object"
+                                            },
+                                            {
+                                              "type": "object",
+                                              "properties": {}
+                                            }
+                                          ],
+                                          "description": "One of the allowed types"
+                                        },
+                                        "exportName": {
+                                          "type": "string"
+                                        },
+                                        "path": {
+                                          "type": "string"
+                                        },
+                                        "serverProps": {
+                                          "oneOf": [
+                                            {
+                                              "type": "object",
+                                              "description": "object configuration object"
+                                            },
+                                            {
+                                              "type": "string",
+                                              "description": "String value"
+                                            }
+                                          ],
+                                          "description": "One of the allowed types"
+                                        }
+                                      },
+                                      "required": [
+                                        "path"
+                                      ]
+                                    }
+                                  ],
+                                  "description": "One of the allowed types"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "meta": {
+                                "type": "object",
+                                "description": "any configuration object"
+                              },
+                              "Component": {
+                                "oneOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "object",
+                                    "description": "false configuration object"
+                                  },
+                                  {
+                                    "type": "object",
+                                    "properties": {
+                                      "clientProps": {
+                                        "oneOf": [
+                                          {
+                                            "type": "object",
+                                            "description": "object configuration object"
+                                          },
+                                          {
+                                            "type": "object",
+                                            "properties": {}
+                                          }
+                                        ],
+                                        "description": "One of the allowed types"
+                                      },
+                                      "exportName": {
+                                        "type": "string"
+                                      },
+                                      "path": {
+                                        "type": "string"
+                                      },
+                                      "serverProps": {
+                                        "oneOf": [
+                                          {
+                                            "type": "object",
+                                            "description": "object configuration object"
+                                          },
+                                          {
+                                            "type": "object",
+                                            "description": "Payload.DocumentViewServerProps configuration object"
+                                          }
+                                        ],
+                                        "description": "One of the allowed types"
+                                      }
+                                    },
+                                    "required": [
+                                      "path"
+                                    ]
+                                  }
+                                ],
+                                "description": "One of the allowed types"
+                              },
+                              "path": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "meta": {
+                                "type": "object",
+                                "description": "any configuration object"
+                              },
+                              "path": {
+                                "type": "string"
+                              },
+                              "tab": {
+                                "type": "object",
+                                "properties": {
+                                  "Component": {
+                                    "oneOf": [
+                                      {
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "description": "false configuration object"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "properties": {
+                                          "clientProps": {
+                                            "oneOf": [
+                                              {
+                                                "type": "object",
+                                                "description": "object configuration object"
+                                              },
+                                              {
+                                                "type": "object",
+                                                "properties": {}
+                                              }
+                                            ],
+                                            "description": "One of the allowed types"
+                                          },
+                                          "exportName": {
+                                            "type": "string"
+                                          },
+                                          "path": {
+                                            "type": "string"
+                                          },
+                                          "serverProps": {
+                                            "oneOf": [
+                                              {
+                                                "type": "object",
+                                                "description": "object configuration object"
+                                              },
+                                              {
+                                                "type": "object",
+                                                "properties": {
+                                                  "path": {
+                                                    "type": "string"
+                                                  }
+                                                },
+                                                "required": [
+                                                  "path"
+                                                ]
+                                              }
+                                            ],
+                                            "description": "One of the allowed types"
+                                          }
+                                        },
+                                        "required": [
+                                          "path"
+                                        ]
+                                      }
+                                    ],
+                                    "description": "One of the allowed types"
+                                  },
+                                  "condition": {
+                                    "type": "string",
+                                    "description": "Function expression (e.g., \"({ req }) => req.user.role === 'admin'\")"
+                                  },
+                                  "href": {
+                                    "oneOf": [
+                                      {
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "properties": {}
+                                      }
+                                    ],
+                                    "description": "One of the allowed types"
+                                  },
+                                  "isActive": {
+                                    "oneOf": [
+                                      {
+                                        "type": "object",
+                                        "description": "false configuration object"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "description": "true configuration object"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "properties": {}
+                                      }
+                                    ],
+                                    "description": "One of the allowed types"
+                                  },
+                                  "label": {
+                                    "oneOf": [
+                                      {
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "properties": {}
+                                      }
+                                    ],
+                                    "description": "One of the allowed types"
+                                  },
+                                  "newTab": {
+                                    "type": "boolean"
+                                  },
+                                  "Pill": {
+                                    "oneOf": [
+                                      {
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "description": "false configuration object"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "properties": {
+                                          "clientProps": {
+                                            "oneOf": [
+                                              {
+                                                "type": "object",
+                                                "description": "object configuration object"
+                                              },
+                                              {
+                                                "type": "object",
+                                                "properties": {}
+                                              }
+                                            ],
+                                            "description": "One of the allowed types"
+                                          },
+                                          "exportName": {
+                                            "type": "string"
+                                          },
+                                          "path": {
+                                            "type": "string"
+                                          },
+                                          "serverProps": {
+                                            "oneOf": [
+                                              {
+                                                "type": "object",
+                                                "description": "object configuration object"
+                                              },
+                                              {
+                                                "type": "object",
+                                                "properties": {}
+                                              }
+                                            ],
+                                            "description": "One of the allowed types"
+                                          }
+                                        },
+                                        "required": [
+                                          "path"
+                                        ]
+                                      }
+                                    ],
+                                    "description": "One of the allowed types"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        ],
+                        "description": "One of the allowed types"
+                      },
+                      "default": {
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "meta": {
+                                "type": "object",
+                                "description": "any configuration object"
+                              },
+                              "actions": {
+                                "type": "array",
+                                "items": {
+                                  "oneOf": [
+                                    {
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "object",
+                                      "description": "false configuration object"
+                                    },
+                                    {
+                                      "type": "object",
+                                      "properties": {
+                                        "clientProps": {
+                                          "oneOf": [
+                                            {
+                                              "type": "object",
+                                              "description": "object configuration object"
+                                            },
+                                            {
+                                              "type": "object",
+                                              "properties": {}
+                                            }
+                                          ],
+                                          "description": "One of the allowed types"
+                                        },
+                                        "exportName": {
+                                          "type": "string"
+                                        },
+                                        "path": {
+                                          "type": "string"
+                                        },
+                                        "serverProps": {
+                                          "oneOf": [
+                                            {
+                                              "type": "object",
+                                              "description": "object configuration object"
+                                            },
+                                            {
+                                              "type": "string",
+                                              "description": "String value"
+                                            }
+                                          ],
+                                          "description": "One of the allowed types"
+                                        }
+                                      },
+                                      "required": [
+                                        "path"
+                                      ]
+                                    }
+                                  ],
+                                  "description": "One of the allowed types"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "meta": {
+                                "type": "object",
+                                "description": "any configuration object"
+                              },
+                              "Component": {
+                                "oneOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "object",
+                                    "description": "false configuration object"
+                                  },
+                                  {
+                                    "type": "object",
+                                    "properties": {
+                                      "clientProps": {
+                                        "oneOf": [
+                                          {
+                                            "type": "object",
+                                            "description": "object configuration object"
+                                          },
+                                          {
+                                            "type": "object",
+                                            "properties": {}
+                                          }
+                                        ],
+                                        "description": "One of the allowed types"
+                                      },
+                                      "exportName": {
+                                        "type": "string"
+                                      },
+                                      "path": {
+                                        "type": "string"
+                                      },
+                                      "serverProps": {
+                                        "oneOf": [
+                                          {
+                                            "type": "object",
+                                            "description": "object configuration object"
+                                          },
+                                          {
+                                            "type": "object",
+                                            "description": "Payload.DocumentViewServerProps configuration object"
+                                          }
+                                        ],
+                                        "description": "One of the allowed types"
+                                      }
+                                    },
+                                    "required": [
+                                      "path"
+                                    ]
+                                  }
+                                ],
+                                "description": "One of the allowed types"
+                              },
+                              "path": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "meta": {
+                                "type": "object",
+                                "description": "any configuration object"
+                              },
+                              "path": {
+                                "type": "string"
+                              },
+                              "tab": {
+                                "type": "object",
+                                "properties": {
+                                  "Component": {
+                                    "oneOf": [
+                                      {
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "description": "false configuration object"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "properties": {
+                                          "clientProps": {
+                                            "oneOf": [
+                                              {
+                                                "type": "object",
+                                                "description": "object configuration object"
+                                              },
+                                              {
+                                                "type": "object",
+                                                "properties": {}
+                                              }
+                                            ],
+                                            "description": "One of the allowed types"
+                                          },
+                                          "exportName": {
+                                            "type": "string"
+                                          },
+                                          "path": {
+                                            "type": "string"
+                                          },
+                                          "serverProps": {
+                                            "oneOf": [
+                                              {
+                                                "type": "object",
+                                                "description": "object configuration object"
+                                              },
+                                              {
+                                                "type": "object",
+                                                "properties": {
+                                                  "path": {
+                                                    "type": "string"
+                                                  }
+                                                },
+                                                "required": [
+                                                  "path"
+                                                ]
+                                              }
+                                            ],
+                                            "description": "One of the allowed types"
+                                          }
+                                        },
+                                        "required": [
+                                          "path"
+                                        ]
+                                      }
+                                    ],
+                                    "description": "One of the allowed types"
+                                  },
+                                  "condition": {
+                                    "type": "string",
+                                    "description": "Function expression (e.g., \"({ req }) => req.user.role === 'admin'\")"
+                                  },
+                                  "href": {
+                                    "oneOf": [
+                                      {
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "properties": {}
+                                      }
+                                    ],
+                                    "description": "One of the allowed types"
+                                  },
+                                  "isActive": {
+                                    "oneOf": [
+                                      {
+                                        "type": "object",
+                                        "description": "false configuration object"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "description": "true configuration object"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "properties": {}
+                                      }
+                                    ],
+                                    "description": "One of the allowed types"
+                                  },
+                                  "label": {
+                                    "oneOf": [
+                                      {
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "properties": {}
+                                      }
+                                    ],
+                                    "description": "One of the allowed types"
+                                  },
+                                  "newTab": {
+                                    "type": "boolean"
+                                  },
+                                  "Pill": {
+                                    "oneOf": [
+                                      {
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "description": "false configuration object"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "properties": {
+                                          "clientProps": {
+                                            "oneOf": [
+                                              {
+                                                "type": "object",
+                                                "description": "object configuration object"
+                                              },
+                                              {
+                                                "type": "object",
+                                                "properties": {}
+                                              }
+                                            ],
+                                            "description": "One of the allowed types"
+                                          },
+                                          "exportName": {
+                                            "type": "string"
+                                          },
+                                          "path": {
+                                            "type": "string"
+                                          },
+                                          "serverProps": {
+                                            "oneOf": [
+                                              {
+                                                "type": "object",
+                                                "description": "object configuration object"
+                                              },
+                                              {
+                                                "type": "object",
+                                                "properties": {}
+                                              }
+                                            ],
+                                            "description": "One of the allowed types"
+                                          }
+                                        },
+                                        "required": [
+                                          "path"
+                                        ]
+                                      }
+                                    ],
+                                    "description": "One of the allowed types"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        ],
+                        "description": "One of the allowed types"
+                      },
+                      "livePreview": {
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "meta": {
+                                "type": "object",
+                                "description": "any configuration object"
+                              },
+                              "actions": {
+                                "type": "array",
+                                "items": {
+                                  "oneOf": [
+                                    {
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "object",
+                                      "description": "false configuration object"
+                                    },
+                                    {
+                                      "type": "object",
+                                      "properties": {
+                                        "clientProps": {
+                                          "oneOf": [
+                                            {
+                                              "type": "object",
+                                              "description": "object configuration object"
+                                            },
+                                            {
+                                              "type": "object",
+                                              "properties": {}
+                                            }
+                                          ],
+                                          "description": "One of the allowed types"
+                                        },
+                                        "exportName": {
+                                          "type": "string"
+                                        },
+                                        "path": {
+                                          "type": "string"
+                                        },
+                                        "serverProps": {
+                                          "oneOf": [
+                                            {
+                                              "type": "object",
+                                              "description": "object configuration object"
+                                            },
+                                            {
+                                              "type": "string",
+                                              "description": "String value"
+                                            }
+                                          ],
+                                          "description": "One of the allowed types"
+                                        }
+                                      },
+                                      "required": [
+                                        "path"
+                                      ]
+                                    }
+                                  ],
+                                  "description": "One of the allowed types"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "meta": {
+                                "type": "object",
+                                "description": "any configuration object"
+                              },
+                              "Component": {
+                                "oneOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "object",
+                                    "description": "false configuration object"
+                                  },
+                                  {
+                                    "type": "object",
+                                    "properties": {
+                                      "clientProps": {
+                                        "oneOf": [
+                                          {
+                                            "type": "object",
+                                            "description": "object configuration object"
+                                          },
+                                          {
+                                            "type": "object",
+                                            "properties": {}
+                                          }
+                                        ],
+                                        "description": "One of the allowed types"
+                                      },
+                                      "exportName": {
+                                        "type": "string"
+                                      },
+                                      "path": {
+                                        "type": "string"
+                                      },
+                                      "serverProps": {
+                                        "oneOf": [
+                                          {
+                                            "type": "object",
+                                            "description": "object configuration object"
+                                          },
+                                          {
+                                            "type": "object",
+                                            "description": "Payload.DocumentViewServerProps configuration object"
+                                          }
+                                        ],
+                                        "description": "One of the allowed types"
+                                      }
+                                    },
+                                    "required": [
+                                      "path"
+                                    ]
+                                  }
+                                ],
+                                "description": "One of the allowed types"
+                              },
+                              "path": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "meta": {
+                                "type": "object",
+                                "description": "any configuration object"
+                              },
+                              "path": {
+                                "type": "string"
+                              },
+                              "tab": {
+                                "type": "object",
+                                "properties": {
+                                  "Component": {
+                                    "oneOf": [
+                                      {
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "description": "false configuration object"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "properties": {
+                                          "clientProps": {
+                                            "oneOf": [
+                                              {
+                                                "type": "object",
+                                                "description": "object configuration object"
+                                              },
+                                              {
+                                                "type": "object",
+                                                "properties": {}
+                                              }
+                                            ],
+                                            "description": "One of the allowed types"
+                                          },
+                                          "exportName": {
+                                            "type": "string"
+                                          },
+                                          "path": {
+                                            "type": "string"
+                                          },
+                                          "serverProps": {
+                                            "oneOf": [
+                                              {
+                                                "type": "object",
+                                                "description": "object configuration object"
+                                              },
+                                              {
+                                                "type": "object",
+                                                "properties": {
+                                                  "path": {
+                                                    "type": "string"
+                                                  }
+                                                },
+                                                "required": [
+                                                  "path"
+                                                ]
+                                              }
+                                            ],
+                                            "description": "One of the allowed types"
+                                          }
+                                        },
+                                        "required": [
+                                          "path"
+                                        ]
+                                      }
+                                    ],
+                                    "description": "One of the allowed types"
+                                  },
+                                  "condition": {
+                                    "type": "string",
+                                    "description": "Function expression (e.g., \"({ req }) => req.user.role === 'admin'\")"
+                                  },
+                                  "href": {
+                                    "oneOf": [
+                                      {
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "properties": {}
+                                      }
+                                    ],
+                                    "description": "One of the allowed types"
+                                  },
+                                  "isActive": {
+                                    "oneOf": [
+                                      {
+                                        "type": "object",
+                                        "description": "false configuration object"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "description": "true configuration object"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "properties": {}
+                                      }
+                                    ],
+                                    "description": "One of the allowed types"
+                                  },
+                                  "label": {
+                                    "oneOf": [
+                                      {
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "properties": {}
+                                      }
+                                    ],
+                                    "description": "One of the allowed types"
+                                  },
+                                  "newTab": {
+                                    "type": "boolean"
+                                  },
+                                  "Pill": {
+                                    "oneOf": [
+                                      {
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "description": "false configuration object"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "properties": {
+                                          "clientProps": {
+                                            "oneOf": [
+                                              {
+                                                "type": "object",
+                                                "description": "object configuration object"
+                                              },
+                                              {
+                                                "type": "object",
+                                                "properties": {}
+                                              }
+                                            ],
+                                            "description": "One of the allowed types"
+                                          },
+                                          "exportName": {
+                                            "type": "string"
+                                          },
+                                          "path": {
+                                            "type": "string"
+                                          },
+                                          "serverProps": {
+                                            "oneOf": [
+                                              {
+                                                "type": "object",
+                                                "description": "object configuration object"
+                                              },
+                                              {
+                                                "type": "object",
+                                                "properties": {}
+                                              }
+                                            ],
+                                            "description": "One of the allowed types"
+                                          }
+                                        },
+                                        "required": [
+                                          "path"
+                                        ]
+                                      }
+                                    ],
+                                    "description": "One of the allowed types"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        ],
+                        "description": "One of the allowed types"
+                      },
+                      "root": {
+                        "type": "object",
+                        "description": "never configuration object"
+                      },
+                      "version": {
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "meta": {
+                                "type": "object",
+                                "description": "any configuration object"
+                              },
+                              "actions": {
+                                "type": "array",
+                                "items": {
+                                  "oneOf": [
+                                    {
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "object",
+                                      "description": "false configuration object"
+                                    },
+                                    {
+                                      "type": "object",
+                                      "properties": {
+                                        "clientProps": {
+                                          "oneOf": [
+                                            {
+                                              "type": "object",
+                                              "description": "object configuration object"
+                                            },
+                                            {
+                                              "type": "object",
+                                              "properties": {}
+                                            }
+                                          ],
+                                          "description": "One of the allowed types"
+                                        },
+                                        "exportName": {
+                                          "type": "string"
+                                        },
+                                        "path": {
+                                          "type": "string"
+                                        },
+                                        "serverProps": {
+                                          "oneOf": [
+                                            {
+                                              "type": "object",
+                                              "description": "object configuration object"
+                                            },
+                                            {
+                                              "type": "string",
+                                              "description": "String value"
+                                            }
+                                          ],
+                                          "description": "One of the allowed types"
+                                        }
+                                      },
+                                      "required": [
+                                        "path"
+                                      ]
+                                    }
+                                  ],
+                                  "description": "One of the allowed types"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "meta": {
+                                "type": "object",
+                                "description": "any configuration object"
+                              },
+                              "Component": {
+                                "oneOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "object",
+                                    "description": "false configuration object"
+                                  },
+                                  {
+                                    "type": "object",
+                                    "properties": {
+                                      "clientProps": {
+                                        "oneOf": [
+                                          {
+                                            "type": "object",
+                                            "description": "object configuration object"
+                                          },
+                                          {
+                                            "type": "object",
+                                            "properties": {}
+                                          }
+                                        ],
+                                        "description": "One of the allowed types"
+                                      },
+                                      "exportName": {
+                                        "type": "string"
+                                      },
+                                      "path": {
+                                        "type": "string"
+                                      },
+                                      "serverProps": {
+                                        "oneOf": [
+                                          {
+                                            "type": "object",
+                                            "description": "object configuration object"
+                                          },
+                                          {
+                                            "type": "object",
+                                            "description": "Payload.DocumentViewServerProps configuration object"
+                                          }
+                                        ],
+                                        "description": "One of the allowed types"
+                                      }
+                                    },
+                                    "required": [
+                                      "path"
+                                    ]
+                                  }
+                                ],
+                                "description": "One of the allowed types"
+                              },
+                              "path": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "meta": {
+                                "type": "object",
+                                "description": "any configuration object"
+                              },
+                              "path": {
+                                "type": "string"
+                              },
+                              "tab": {
+                                "type": "object",
+                                "properties": {
+                                  "Component": {
+                                    "oneOf": [
+                                      {
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "description": "false configuration object"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "properties": {
+                                          "clientProps": {
+                                            "oneOf": [
+                                              {
+                                                "type": "object",
+                                                "description": "object configuration object"
+                                              },
+                                              {
+                                                "type": "object",
+                                                "properties": {}
+                                              }
+                                            ],
+                                            "description": "One of the allowed types"
+                                          },
+                                          "exportName": {
+                                            "type": "string"
+                                          },
+                                          "path": {
+                                            "type": "string"
+                                          },
+                                          "serverProps": {
+                                            "oneOf": [
+                                              {
+                                                "type": "object",
+                                                "description": "object configuration object"
+                                              },
+                                              {
+                                                "type": "object",
+                                                "properties": {
+                                                  "path": {
+                                                    "type": "string"
+                                                  }
+                                                },
+                                                "required": [
+                                                  "path"
+                                                ]
+                                              }
+                                            ],
+                                            "description": "One of the allowed types"
+                                          }
+                                        },
+                                        "required": [
+                                          "path"
+                                        ]
+                                      }
+                                    ],
+                                    "description": "One of the allowed types"
+                                  },
+                                  "condition": {
+                                    "type": "string",
+                                    "description": "Function expression (e.g., \"({ req }) => req.user.role === 'admin'\")"
+                                  },
+                                  "href": {
+                                    "oneOf": [
+                                      {
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "properties": {}
+                                      }
+                                    ],
+                                    "description": "One of the allowed types"
+                                  },
+                                  "isActive": {
+                                    "oneOf": [
+                                      {
+                                        "type": "object",
+                                        "description": "false configuration object"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "description": "true configuration object"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "properties": {}
+                                      }
+                                    ],
+                                    "description": "One of the allowed types"
+                                  },
+                                  "label": {
+                                    "oneOf": [
+                                      {
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "properties": {}
+                                      }
+                                    ],
+                                    "description": "One of the allowed types"
+                                  },
+                                  "newTab": {
+                                    "type": "boolean"
+                                  },
+                                  "Pill": {
+                                    "oneOf": [
+                                      {
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "description": "false configuration object"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "properties": {
+                                          "clientProps": {
+                                            "oneOf": [
+                                              {
+                                                "type": "object",
+                                                "description": "object configuration object"
+                                              },
+                                              {
+                                                "type": "object",
+                                                "properties": {}
+                                              }
+                                            ],
+                                            "description": "One of the allowed types"
+                                          },
+                                          "exportName": {
+                                            "type": "string"
+                                          },
+                                          "path": {
+                                            "type": "string"
+                                          },
+                                          "serverProps": {
+                                            "oneOf": [
+                                              {
+                                                "type": "object",
+                                                "description": "object configuration object"
+                                              },
+                                              {
+                                                "type": "object",
+                                                "properties": {}
+                                              }
+                                            ],
+                                            "description": "One of the allowed types"
+                                          }
+                                        },
+                                        "required": [
+                                          "path"
+                                        ]
+                                      }
+                                    ],
+                                    "description": "One of the allowed types"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        ],
+                        "description": "One of the allowed types"
+                      },
+                      "versions": {
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "meta": {
+                                "type": "object",
+                                "description": "any configuration object"
+                              },
+                              "actions": {
+                                "type": "array",
+                                "items": {
+                                  "oneOf": [
+                                    {
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "object",
+                                      "description": "false configuration object"
+                                    },
+                                    {
+                                      "type": "object",
+                                      "properties": {
+                                        "clientProps": {
+                                          "oneOf": [
+                                            {
+                                              "type": "object",
+                                              "description": "object configuration object"
+                                            },
+                                            {
+                                              "type": "object",
+                                              "properties": {}
+                                            }
+                                          ],
+                                          "description": "One of the allowed types"
+                                        },
+                                        "exportName": {
+                                          "type": "string"
+                                        },
+                                        "path": {
+                                          "type": "string"
+                                        },
+                                        "serverProps": {
+                                          "oneOf": [
+                                            {
+                                              "type": "object",
+                                              "description": "object configuration object"
+                                            },
+                                            {
+                                              "type": "string",
+                                              "description": "String value"
+                                            }
+                                          ],
+                                          "description": "One of the allowed types"
+                                        }
+                                      },
+                                      "required": [
+                                        "path"
+                                      ]
+                                    }
+                                  ],
+                                  "description": "One of the allowed types"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "meta": {
+                                "type": "object",
+                                "description": "any configuration object"
+                              },
+                              "Component": {
+                                "oneOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "object",
+                                    "description": "false configuration object"
+                                  },
+                                  {
+                                    "type": "object",
+                                    "properties": {
+                                      "clientProps": {
+                                        "oneOf": [
+                                          {
+                                            "type": "object",
+                                            "description": "object configuration object"
+                                          },
+                                          {
+                                            "type": "object",
+                                            "properties": {}
+                                          }
+                                        ],
+                                        "description": "One of the allowed types"
+                                      },
+                                      "exportName": {
+                                        "type": "string"
+                                      },
+                                      "path": {
+                                        "type": "string"
+                                      },
+                                      "serverProps": {
+                                        "oneOf": [
+                                          {
+                                            "type": "object",
+                                            "description": "object configuration object"
+                                          },
+                                          {
+                                            "type": "object",
+                                            "description": "Payload.DocumentViewServerProps configuration object"
+                                          }
+                                        ],
+                                        "description": "One of the allowed types"
+                                      }
+                                    },
+                                    "required": [
+                                      "path"
+                                    ]
+                                  }
+                                ],
+                                "description": "One of the allowed types"
+                              },
+                              "path": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "meta": {
+                                "type": "object",
+                                "description": "any configuration object"
+                              },
+                              "path": {
+                                "type": "string"
+                              },
+                              "tab": {
+                                "type": "object",
+                                "properties": {
+                                  "Component": {
+                                    "oneOf": [
+                                      {
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "description": "false configuration object"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "properties": {
+                                          "clientProps": {
+                                            "oneOf": [
+                                              {
+                                                "type": "object",
+                                                "description": "object configuration object"
+                                              },
+                                              {
+                                                "type": "object",
+                                                "properties": {}
+                                              }
+                                            ],
+                                            "description": "One of the allowed types"
+                                          },
+                                          "exportName": {
+                                            "type": "string"
+                                          },
+                                          "path": {
+                                            "type": "string"
+                                          },
+                                          "serverProps": {
+                                            "oneOf": [
+                                              {
+                                                "type": "object",
+                                                "description": "object configuration object"
+                                              },
+                                              {
+                                                "type": "object",
+                                                "properties": {
+                                                  "path": {
+                                                    "type": "string"
+                                                  }
+                                                },
+                                                "required": [
+                                                  "path"
+                                                ]
+                                              }
+                                            ],
+                                            "description": "One of the allowed types"
+                                          }
+                                        },
+                                        "required": [
+                                          "path"
+                                        ]
+                                      }
+                                    ],
+                                    "description": "One of the allowed types"
+                                  },
+                                  "condition": {
+                                    "type": "string",
+                                    "description": "Function expression (e.g., \"({ req }) => req.user.role === 'admin'\")"
+                                  },
+                                  "href": {
+                                    "oneOf": [
+                                      {
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "properties": {}
+                                      }
+                                    ],
+                                    "description": "One of the allowed types"
+                                  },
+                                  "isActive": {
+                                    "oneOf": [
+                                      {
+                                        "type": "object",
+                                        "description": "false configuration object"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "description": "true configuration object"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "properties": {}
+                                      }
+                                    ],
+                                    "description": "One of the allowed types"
+                                  },
+                                  "label": {
+                                    "oneOf": [
+                                      {
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "properties": {}
+                                      }
+                                    ],
+                                    "description": "One of the allowed types"
+                                  },
+                                  "newTab": {
+                                    "type": "boolean"
+                                  },
+                                  "Pill": {
+                                    "oneOf": [
+                                      {
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "description": "false configuration object"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "properties": {
+                                          "clientProps": {
+                                            "oneOf": [
+                                              {
+                                                "type": "object",
+                                                "description": "object configuration object"
+                                              },
+                                              {
+                                                "type": "object",
+                                                "properties": {}
+                                              }
+                                            ],
+                                            "description": "One of the allowed types"
+                                          },
+                                          "exportName": {
+                                            "type": "string"
+                                          },
+                                          "path": {
+                                            "type": "string"
+                                          },
+                                          "serverProps": {
+                                            "oneOf": [
+                                              {
+                                                "type": "object",
+                                                "description": "object configuration object"
+                                              },
+                                              {
+                                                "type": "object",
+                                                "properties": {}
+                                              }
+                                            ],
+                                            "description": "One of the allowed types"
+                                          }
+                                        },
+                                        "required": [
+                                          "path"
+                                        ]
+                                      }
+                                    ],
+                                    "description": "One of the allowed types"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        ],
+                        "description": "One of the allowed types"
+                      }
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "api": {
+                        "type": "object",
+                        "description": "never configuration object"
+                      },
+                      "default": {
+                        "type": "object",
+                        "description": "never configuration object"
+                      },
+                      "livePreview": {
+                        "type": "object",
+                        "description": "never configuration object"
+                      },
+                      "root": {
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "meta": {
+                                "type": "object",
+                                "description": "any configuration object"
+                              },
+                              "actions": {
+                                "type": "array",
+                                "items": {
+                                  "oneOf": [
+                                    {
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "object",
+                                      "description": "false configuration object"
+                                    },
+                                    {
+                                      "type": "object",
+                                      "properties": {
+                                        "clientProps": {
+                                          "oneOf": [
+                                            {
+                                              "type": "object",
+                                              "description": "object configuration object"
+                                            },
+                                            {
+                                              "type": "object",
+                                              "properties": {}
+                                            }
+                                          ],
+                                          "description": "One of the allowed types"
+                                        },
+                                        "exportName": {
+                                          "type": "string"
+                                        },
+                                        "path": {
+                                          "type": "string"
+                                        },
+                                        "serverProps": {
+                                          "oneOf": [
+                                            {
+                                              "type": "object",
+                                              "description": "object configuration object"
+                                            },
+                                            {
+                                              "type": "string",
+                                              "description": "String value"
+                                            }
+                                          ],
+                                          "description": "One of the allowed types"
+                                        }
+                                      },
+                                      "required": [
+                                        "path"
+                                      ]
+                                    }
+                                  ],
+                                  "description": "One of the allowed types"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "meta": {
+                                "type": "object",
+                                "description": "any configuration object"
+                              },
+                              "Component": {
+                                "oneOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "object",
+                                    "description": "false configuration object"
+                                  },
+                                  {
+                                    "type": "object",
+                                    "properties": {
+                                      "clientProps": {
+                                        "oneOf": [
+                                          {
+                                            "type": "object",
+                                            "description": "object configuration object"
+                                          },
+                                          {
+                                            "type": "object",
+                                            "properties": {}
+                                          }
+                                        ],
+                                        "description": "One of the allowed types"
+                                      },
+                                      "exportName": {
+                                        "type": "string"
+                                      },
+                                      "path": {
+                                        "type": "string"
+                                      },
+                                      "serverProps": {
+                                        "oneOf": [
+                                          {
+                                            "type": "object",
+                                            "description": "object configuration object"
+                                          },
+                                          {
+                                            "type": "object",
+                                            "description": "Payload.DocumentViewServerProps configuration object"
+                                          }
+                                        ],
+                                        "description": "One of the allowed types"
+                                      }
+                                    },
+                                    "required": [
+                                      "path"
+                                    ]
+                                  }
+                                ],
+                                "description": "One of the allowed types"
+                              },
+                              "path": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "meta": {
+                                "type": "object",
+                                "description": "any configuration object"
+                              },
+                              "path": {
+                                "type": "string"
+                              },
+                              "tab": {
+                                "type": "object",
+                                "properties": {
+                                  "Component": {
+                                    "oneOf": [
+                                      {
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "description": "false configuration object"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "properties": {
+                                          "clientProps": {
+                                            "oneOf": [
+                                              {
+                                                "type": "object",
+                                                "description": "object configuration object"
+                                              },
+                                              {
+                                                "type": "object",
+                                                "properties": {}
+                                              }
+                                            ],
+                                            "description": "One of the allowed types"
+                                          },
+                                          "exportName": {
+                                            "type": "string"
+                                          },
+                                          "path": {
+                                            "type": "string"
+                                          },
+                                          "serverProps": {
+                                            "oneOf": [
+                                              {
+                                                "type": "object",
+                                                "description": "object configuration object"
+                                              },
+                                              {
+                                                "type": "object",
+                                                "properties": {
+                                                  "path": {
+                                                    "type": "string"
+                                                  }
+                                                },
+                                                "required": [
+                                                  "path"
+                                                ]
+                                              }
+                                            ],
+                                            "description": "One of the allowed types"
+                                          }
+                                        },
+                                        "required": [
+                                          "path"
+                                        ]
+                                      }
+                                    ],
+                                    "description": "One of the allowed types"
+                                  },
+                                  "condition": {
+                                    "type": "string",
+                                    "description": "Function expression (e.g., \"({ req }) => req.user.role === 'admin'\")"
+                                  },
+                                  "href": {
+                                    "oneOf": [
+                                      {
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "properties": {}
+                                      }
+                                    ],
+                                    "description": "One of the allowed types"
+                                  },
+                                  "isActive": {
+                                    "oneOf": [
+                                      {
+                                        "type": "object",
+                                        "description": "false configuration object"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "description": "true configuration object"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "properties": {}
+                                      }
+                                    ],
+                                    "description": "One of the allowed types"
+                                  },
+                                  "label": {
+                                    "oneOf": [
+                                      {
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "properties": {}
+                                      }
+                                    ],
+                                    "description": "One of the allowed types"
+                                  },
+                                  "newTab": {
+                                    "type": "boolean"
+                                  },
+                                  "Pill": {
+                                    "oneOf": [
+                                      {
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "description": "false configuration object"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "properties": {
+                                          "clientProps": {
+                                            "oneOf": [
+                                              {
+                                                "type": "object",
+                                                "description": "object configuration object"
+                                              },
+                                              {
+                                                "type": "object",
+                                                "properties": {}
+                                              }
+                                            ],
+                                            "description": "One of the allowed types"
+                                          },
+                                          "exportName": {
+                                            "type": "string"
+                                          },
+                                          "path": {
+                                            "type": "string"
+                                          },
+                                          "serverProps": {
+                                            "oneOf": [
+                                              {
+                                                "type": "object",
+                                                "description": "object configuration object"
+                                              },
+                                              {
+                                                "type": "object",
+                                                "properties": {}
+                                              }
+                                            ],
+                                            "description": "One of the allowed types"
+                                          }
+                                        },
+                                        "required": [
+                                          "path"
+                                        ]
+                                      }
+                                    ],
+                                    "description": "One of the allowed types"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        ],
+                        "description": "One of the allowed types"
+                      },
+                      "version": {
+                        "type": "object",
+                        "description": "never configuration object"
+                      },
+                      "versions": {
+                        "type": "object",
+                        "description": "never configuration object"
+                      }
+                    },
+                    "required": [
+                      "root"
+                    ]
+                  }
+                ],
+                "description": "One of the allowed types"
+              },
+              "list": {
+                "type": "object",
+                "properties": {
+                  "actions": {
+                    "type": "array",
+                    "items": {
+                      "oneOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "object",
+                          "description": "false configuration object"
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "clientProps": {
+                              "oneOf": [
+                                {
+                                  "type": "object",
+                                  "description": "object configuration object"
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {}
+                                }
+                              ],
+                              "description": "One of the allowed types"
+                            },
+                            "exportName": {
+                              "type": "string"
+                            },
+                            "path": {
+                              "type": "string"
+                            },
+                            "serverProps": {
+                              "oneOf": [
+                                {
+                                  "type": "object",
+                                  "description": "object configuration object"
+                                },
+                                {
+                                  "type": "string",
+                                  "description": "String value"
+                                }
+                              ],
+                              "description": "One of the allowed types"
+                            }
+                          },
+                          "required": [
+                            "path"
+                          ]
+                        }
+                      ],
+                      "description": "One of the allowed types"
+                    }
+                  },
+                  "Component": {
+                    "oneOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "object",
+                        "description": "false configuration object"
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "clientProps": {
+                            "oneOf": [
+                              {
+                                "type": "object",
+                                "description": "object configuration object"
+                              },
+                              {
+                                "type": "object",
+                                "properties": {}
+                              }
+                            ],
+                            "description": "One of the allowed types"
+                          },
+                          "exportName": {
+                            "type": "string"
+                          },
+                          "path": {
+                            "type": "string"
+                          },
+                          "serverProps": {
+                            "oneOf": [
+                              {
+                                "type": "object",
+                                "description": "object configuration object"
+                              },
+                              {
+                                "type": "object",
+                                "properties": {}
+                              }
+                            ],
+                            "description": "One of the allowed types"
+                          }
+                        },
+                        "required": [
+                          "path"
+                        ]
+                      }
+                    ],
+                    "description": "One of the allowed types"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "custom": {
+        "type": "object",
+        "properties": {}
+      },
+      "defaultColumns": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "description": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "object",
+            "properties": {}
+          },
+          {
+            "type": "object",
+            "properties": {}
+          }
+        ],
+        "description": "One of the allowed types"
+      },
+      "disableCopyToLocale": {
+        "type": "boolean"
+      },
+      "enableRichTextLink": {
+        "type": "boolean"
+      },
+      "enableRichTextRelationship": {
+        "type": "boolean"
+      },
+      "group": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "object",
+            "description": "false configuration object"
+          },
+          {
+            "type": "object",
+            "properties": {}
+          }
+        ],
+        "description": "One of the allowed types"
+      },
+      "hidden": {
+        "oneOf": [
+          {
+            "type": "object",
+            "description": "false configuration object"
+          },
+          {
+            "type": "object",
+            "description": "true configuration object"
+          },
+          {
+            "type": "object",
+            "properties": {}
+          }
+        ],
+        "description": "One of the allowed types"
+      },
+      "hideAPIURL": {
+        "type": "boolean"
+      },
+      "listSearchableFields": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "livePreview": {
+        "type": "object",
+        "properties": {
+          "breakpoints": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "height": {
+                  "oneOf": [
+                    {
+                      "type": "string",
+                      "description": "String value"
+                    },
+                    {
+                      "type": "number",
+                      "description": "Numeric value"
+                    }
+                  ],
+                  "description": "String or number value"
+                },
+                "label": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "width": {
+                  "oneOf": [
+                    {
+                      "type": "string",
+                      "description": "String value"
+                    },
+                    {
+                      "type": "number",
+                      "description": "Numeric value"
+                    }
+                  ],
+                  "description": "String or number value"
+                }
+              },
+              "required": [
+                "height",
+                "label",
+                "name",
+                "width"
+              ]
+            }
+          },
+          "url": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "object",
+                "properties": {}
+              }
+            ],
+            "description": "One of the allowed types"
+          }
+        }
+      },
+      "meta": {
+        "type": "object",
+        "description": "any configuration object"
+      },
+      "pagination": {
+        "type": "object",
+        "properties": {
+          "defaultLimit": {
+            "type": "number"
+          },
+          "limits": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
+          }
+        }
+      },
+      "preview": {
+        "type": "string",
+        "description": "Function expression (e.g., \"({ req }) => req.user.role === 'admin'\")"
+      },
+      "useAsTitle": {
+        "type": "string"
+      }
+    }
+  },
+  "template": "/**\n * Admin UI options for a collection\n */\n{\n  // Field to use as the title in the admin UI\n  useAsTitle: 'title',\n  \n  // Default columns to show in the admin UI list view\n  defaultColumns: ['title', 'status', 'createdAt'],\n  \n  // Group collections in the admin UI sidebar\n  group: 'Content',\n  \n  // Custom admin components (requires importing from your components)\n  // components: {\n  //   views: {\n  //     List: MyCustomListView,\n  //   },\n  // },\n  \n  // Additional options\n  ...{rest}\n}"
+}

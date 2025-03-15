@@ -1,0 +1,31 @@
+{
+  "name": "createRelationshipField",
+  "description": "Creates a Payload CMS 3.0 RelationshipField configuration\n\nExample:\n```typescript\n{\n  name: 'author',\n  type: 'relationship',\n  relationTo: 'users',\n  hasMany: false,\n  required: true,\n  // Custom validation example\n  validate: async (value, { req }) => {\n    // Check if the related document exists and is published\n    if (value) {\n      const relatedDoc = await req.payload.findByID({\n        collection: 'users',\n        id: value,\n      });\n      \n      if (!relatedDoc) {\n        return 'Selected user does not exist';\n      }\n    }\n    return true;\n  }\n}\n```",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string",
+        "description": "The name of the field"
+      },
+      "type": {
+        "type": "string",
+        "description": "The type of field"
+      },
+      "label": {
+        "type": "string",
+        "description": "The label shown in the admin UI"
+      },
+      "required": {
+        "type": "boolean",
+        "description": "Whether this field is required"
+      }
+    },
+    "required": [
+      "name",
+      "type"
+    ],
+    "description": "Field configuration"
+  },
+  "template": "{\n  name: '{name}', // Database field name\n  type: 'relationship',\n  label: 'Relationship Field', // Label shown in the admin UI\n  required: true,\n  relationTo: 'collection-slug', // The collection to relate to\n  hasMany: false, // Set to true for multiple relationships\n  // Optional: Add custom validation\n  validate: async (value, { req }) => {\n    if (value) {\n      try {\n        const doc = await req.payload.findByID({\n          collection: 'collection-slug',\n          id: value,\n        });\n        if (!doc) {\n          return 'Related document not found';\n        }\n      } catch (err) {\n        return 'Error validating relationship';\n      }\n    }\n    return true; // Return true if valid\n  },\n}"
+}

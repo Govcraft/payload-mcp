@@ -1,0 +1,9 @@
+{
+  "name": "createBeforeDeleteHook",
+  "description": "Creates a Payload CMS 3.0 BeforeDeleteHook configuration",
+  "inputSchema": {
+    "type": "object",
+    "properties": {}
+  },
+  "template": "/**\n * This hook runs before a document is deleted\n * It allows you to perform validation or prevent deletion\n */\nconst beforeDeleteHook = ({ req, id }) => {\n  // 'req' is the Express request object with the Payload instance\n  // 'id' is the ID of the document being deleted\n  \n  // Example: Check if deletion is allowed\n  // If you return a string, it will prevent deletion with that error message\n  // If you throw an error, it will prevent deletion with that error\n  \n  // To allow deletion, return undefined or void\n  return;\n};"
+}

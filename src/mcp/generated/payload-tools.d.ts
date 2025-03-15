@@ -27,7 +27,6 @@ export interface PayloadToolsMap {
 }
 
 /**
- * Default export for JSON import
+ * For backward compatibility
  */
-declare const toolsJson: PayloadToolsMap;
-export default toolsJson;
+export const toolsMap: Record<string, PayloadTool>;

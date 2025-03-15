@@ -1,4 +1,4 @@
-import { Project, InterfaceDeclaration, PropertySignature, Type, TypeAliasDeclaration } from 'ts-morph';
+import { Project, InterfaceDeclaration, PropertySignature, Type, TypeAliasDeclaration, JSDocableNode } from 'ts-morph';
 import { writeFileSync, mkdirSync, existsSync } from 'fs';
 import path from 'path';
 import { logger } from './utils/logger.js';
@@ -6,7 +6,84 @@ import { logger } from './utils/logger.js';
 const OUTPUT_DIR = path.join(process.cwd(), 'src', 'mcp', 'generated');
 if (!existsSync(OUTPUT_DIR)) mkdirSync(OUTPUT_DIR, { recursive: true });
 
-function typeToJsonSchema(type: Type): any {
+/**
+ * Extracts JSDoc comments from a node and returns a formatted description
+ */
+function extractJSDocDescription(node: JSDocableNode): string | undefined {
+  const jsDocs = node.getJsDocs();
+  if (jsDocs.length === 0) return undefined;
+  
+  // Combine all JSDoc comments
+  const combinedDescription = jsDocs.map(doc => {
+    const description = doc.getDescription().trim();
+    const tags = doc.getTags().map(tag => {
+      const tagName = tag.getTagName();
+      const comment = tag.getComment() || '';
+      return `@${tagName} ${comment}`.trim();
+    }).join('\n');
+    
+    return [description, tags].filter(Boolean).join('\n');
+  }).join('\n\n');
+  
+  return combinedDescription || undefined;
+}
+
+/**
+ * Extracts JSDoc comments from a property declaration
+ */
+function extractPropertyJSDoc(prop: PropertySignature): string | undefined {
+  return extractJSDocDescription(prop);
+}
+
+/**
+ * Enhances a JSON schema with JSDoc descriptions from property declarations
+ */
+function enhanceSchemaWithJSDocs(schema: any, _type: Type, decl?: InterfaceDeclaration | TypeAliasDeclaration): any {
+  if (!schema || schema.type !== 'object' || !schema.properties) return schema;
+  
+  // Add JSDoc description to the schema itself if available
+  if (decl) {
+    const typeDescription = extractJSDocDescription(decl);
+    if (typeDescription) {
+      schema.description = typeDescription;
+    }
+  }
+  
+  // Try to find property declarations to extract JSDoc comments
+  if (decl && 'getProperties' in decl) {
+    const properties = decl.getProperties();
+    
+    for (const prop of properties) {
+      const propName = prop.getName();
+      if (schema.properties[propName]) {
+        const propJSDoc = extractPropertyJSDoc(prop);
+        if (propJSDoc) {
+          schema.properties[propName].description = propJSDoc;
+        }
+      }
+    }
+  }
+  
+  return schema;
+}
+
+/**
+ * Cleans up type names by removing absolute paths and simplifying generic parameters
+ */
+function cleanTypeName(typeName: string): string {
+  // Remove absolute paths
+  let cleaned = typeName.replace(/import\(".*?\/node_modules\/payload\/dist\/(.*?)"\)\./, 'Payload.');
+  
+  // Simplify generic parameters
+  cleaned = cleaned.replace(/<.*?>/, '');
+  
+  // Remove any remaining import statements
+  cleaned = cleaned.replace(/import\(".*?"\)\./g, '');
+  
+  return cleaned;
+}
+
+function typeToJsonSchema(type: Type, _decl?: InterfaceDeclaration | TypeAliasDeclaration): any {
   if (type.isString()) return { type: 'string' };
   if (type.isNumber()) return { type: 'number' };
   if (type.isBoolean()) return { type: 'boolean' };
@@ -82,7 +159,17 @@ function typeToJsonSchema(type: Type): any {
           return;
         }
         
+        // Extract JSDoc from property declaration if available
+        let propDescription: string | undefined;
+        if (declarations.length > 0 && declarations[0].getKind() === 166) { // PropertySignature
+          propDescription = extractPropertyJSDoc(declarations[0] as PropertySignature);
+        }
+        
         properties[propName] = typeToJsonSchema(propType);
+        if (propDescription) {
+          properties[propName].description = propDescription;
+        }
+        
         if (!prop.isOptional()) required.push(propName);
       } catch (error) {
         logger.warn(`Failed to process property ${propName} in type ${type.getText()}: ${error instanceof Error ? error.message : String(error)}`);
@@ -212,6 +299,8 @@ function typeToJsonSchema(type: Type): any {
   
   // For any other type, try to provide a more specific schema based on the type name
   const typeName = type.getText();
+  const cleanedTypeName = cleanTypeName(typeName);
+  
   if (typeName.includes('string') || typeName.includes('String')) {
     return { type: 'string', description: 'String value' };
   } else if (typeName.includes('number') || typeName.includes('Number') || 
@@ -229,10 +318,10 @@ function typeToJsonSchema(type: Type): any {
     return { type: 'string', format: 'date-time', description: 'Date string (ISO format)' };
   }
   
-  // If all else fails, return a generic object schema
+  // If all else fails, return a generic object schema with a cleaned type name
   return { 
     type: 'object', 
-    description: `${typeName} configuration object`
+    description: `${cleanedTypeName} configuration object`
   };
 }
 
@@ -280,6 +369,10 @@ async function generatePayloadTools() {
   ];
   const processedNames: Set<string> = new Set();
 
+  // Create directories for individual tool files
+  const TOOLS_DIR = path.join(OUTPUT_DIR, 'tools');
+  if (!existsSync(TOOLS_DIR)) mkdirSync(TOOLS_DIR, { recursive: true });
+
   for (const iface of allInterfaces) {
     const name = iface.getName();
     const baseName = name.replace('Sanitized', '');
@@ -319,10 +412,17 @@ async function generatePayloadTools() {
 
   logger.info('Generated tools:', tools.map(t => t.name));
   
-  // Generate the JSON file with tools in MCP format
+  // Generate individual files for each tool
+  for (const tool of tools) {
+    const toolFilePath = path.join(TOOLS_DIR, `${tool.name}.json`);
+    writeFileSync(toolFilePath, JSON.stringify(tool, null, 2));
+    logger.info(`Generated ${tool.name}.json`);
+  }
+  
+  // Generate the index file with all tools
   const toolsOutput = { tools: Object.fromEntries(tools.map(t => [t.name, t])) };
   writeFileSync(path.join(OUTPUT_DIR, 'payload-tools.json'), JSON.stringify(toolsOutput, null, 2));
-  logger.info('Generated payload-tools.json');
+  logger.info('Generated payload-tools.json index file');
   
   // Generate the JavaScript module that exports the tools
   const jsContent = `
@@ -332,11 +432,12 @@ async function generatePayloadTools() {
  */
 import { logger } from '../../utils/logger.js';
 
-// Import the tools JSON
-import toolsJson from './payload-tools.json' with { type: 'json' };
+// Import individual tool files
+const toolModules = import.meta.glob('./tools/*.json', { eager: true });
 
 // Convert JSON tools to MCP SDK format
-export const payloadTools = Object.values(toolsJson.tools).map((tool) => {
+export const payloadTools = Object.values(toolModules).map((module) => {
+  const tool = module.default;
   return {
     name: tool.name,
     description: tool.description,
@@ -344,6 +445,11 @@ export const payloadTools = Object.values(toolsJson.tools).map((tool) => {
     template: tool.template
   };
 });
+
+// For backward compatibility
+export const toolsMap = Object.fromEntries(
+  payloadTools.map(tool => [tool.name, tool])
+);
 `;
   writeFileSync(path.join(OUTPUT_DIR, 'payload-tools.js'), jsContent);
   logger.info('Generated payload-tools.js');
@@ -378,25 +484,96 @@ export interface PayloadToolsMap {
 }
 
 /**
- * Default export for JSON import
+ * For backward compatibility
  */
-declare const toolsJson: PayloadToolsMap;
-export default toolsJson;
+export const toolsMap: Record<string, PayloadTool>;
 `;
   writeFileSync(path.join(OUTPUT_DIR, 'payload-tools.d.ts'), dtsContent);
   logger.info('Generated payload-tools.d.ts');
+  
+  // Generate an index.ts file to make importing specific tools easier
+  const indexTsContent = `
+/**
+ * Auto-generated Payload CMS tools for MCP
+ * DO NOT EDIT DIRECTLY - Generated by generate-tools.ts
+ */
+
+// Export all tools
+export * from './payload-tools.js';
+
+// Export individual tools for direct imports
+${tools.map(tool => `export { default as ${tool.name} } from './tools/${tool.name}.json' with { type: 'json' };`).join('\n')}
+`;
+  writeFileSync(path.join(OUTPUT_DIR, 'index.ts'), indexTsContent);
+  logger.info('Generated index.ts');
 }
 
 function addTool(decl: InterfaceDeclaration | TypeAliasDeclaration, name: string, toolsArray: any[]) {
-  const schema = typeToJsonSchema(decl.getType());
+  // Extract JSDoc comments from the declaration
+  const jsDocDescription = extractJSDocDescription(decl);
+  
+  // Generate schema with enhanced JSDoc descriptions
+  const schema = enhanceSchemaWithJSDocs(typeToJsonSchema(decl.getType(), decl), decl.getType(), decl);
+  
   let template = '';
   const baseName = name.replace('Sanitized', '');
   const toolName = generateToolName(baseName);
 
-  if (baseName === 'CollectionConfig' || baseName === 'GlobalConfig' || baseName === 'PayloadConfig' || baseName === 'Config' || baseName === 'SanitizedConfig') {
-    template = baseName === 'GlobalConfig' || baseName === 'PayloadConfig' || baseName === 'Config' || baseName === 'SanitizedConfig'
-      ? "export const {slug} = { slug: '{slug}', fields: {fields}, ...{rest} };"
-      : "export const {slug} = { slug: '{slug}', fields: {fields}, ...{rest} };";
+  // Create more detailed templates based on the type
+  if (baseName === 'CollectionConfig') {
+    template = `// Collection configuration for Payload CMS
+export const {slug} = {
+  slug: '{slug}', // URL-friendly identifier for this collection
+  admin: {
+    useAsTitle: 'title', // Field to use as the title in the admin UI
+    defaultColumns: ['title', 'createdAt'], // Default columns in the admin UI list view
+  },
+  // Define the fields for this collection
+  fields: [
+    {
+      name: 'title',
+      type: 'text',
+      required: true,
+    },
+    // Add more fields as needed
+    {fields}
+  ],
+  // Optional: Add hooks, access control, etc.
+  ...{rest}
+};`;
+  } else if (baseName === 'GlobalConfig') {
+    template = `// Global configuration for Payload CMS
+export const {slug} = {
+  slug: '{slug}', // URL-friendly identifier for this global
+  admin: {
+    group: 'Settings', // Group in the admin UI
+  },
+  // Define the fields for this global
+  fields: [
+    // Add your fields here
+    {fields}
+  ],
+  // Optional: Add hooks, access control, etc.
+  ...{rest}
+};`;
+  } else if (baseName === 'PayloadConfig' || baseName === 'Config' || baseName === 'SanitizedConfig') {
+    template = `// Main Payload CMS configuration
+export default {
+  admin: {
+    user: 'users', // Collection used for authentication
+    meta: {
+      titleSuffix: '- My Payload App', // Suffix for browser tab titles
+    },
+  },
+  collections: [
+    // Reference your collections here
+  ],
+  globals: [
+    // Reference your globals here
+  ],
+  // Optional: Add plugins, localization, etc.
+  ...{rest}
+};`;
   } else if (baseName === 'Field' || baseName.endsWith('Field')) {
     const typeProp = 'getProperty' in decl ? decl.getProperty('type') as PropertySignature | undefined : undefined;
     const typeEnum = typeProp && typeProp.getType().isUnion()
@@ -405,6 +582,359 @@ function addTool(decl: InterfaceDeclaration | TypeAliasDeclaration, name: string
           'text', 'number', 'date', 'email', 'textarea', 'relationship', 'array', 'richText',
           'code', 'json', 'select', 'radio', 'point', 'blocks', 'join', 'upload', 'group'
         ] : [baseName.toLowerCase()];
+    
+    // Create field-specific templates
+    const fieldType = baseName.replace('Field', '').toLowerCase();
+    
+    if (fieldType === 'text' || fieldType === '') {
+      template = `{
+  name: '{name}', // Database field name
+  type: 'text',
+  label: 'Text Field', // Label shown in the admin UI
+  required: true,
+  minLength: 2,
+  maxLength: 100,
+  // Optional: Add custom validation
+  validate: (value, { siblingData }) => {
+    if (value && value.toLowerCase().includes('forbidden')) {
+      return 'This field cannot contain the word "forbidden"';
+    }
+    return true; // Return true if valid
+  },
+}`;
+    } else if (fieldType === 'number') {
+      template = `{
+  name: '{name}', // Database field name
+  type: 'number',
+  label: 'Number Field', // Label shown in the admin UI
+  required: true,
+  min: 0,
+  max: 1000,
+  // Optional: Add custom validation
+  validate: (value) => {
+    if (value && value % 1 !== 0) {
+      return 'Please enter a whole number';
+    }
+    return true; // Return true if valid
+  },
+}`;
+    } else if (fieldType === 'date') {
+      template = `{
+  name: '{name}', // Database field name
+  type: 'date',
+  label: 'Date Field', // Label shown in the admin UI
+  required: true,
+  admin: {
+    date: {
+      pickerAppearance: 'dayAndTime', // 'dayOnly', 'timeOnly', or 'dayAndTime'
+    },
+  },
+  // Optional: Add custom validation
+  validate: (value) => {
+    const date = new Date(value);
+    if (date < new Date()) {
+      return 'Date must be in the future';
+    }
+    return true; // Return true if valid
+  },
+}`;
+    } else if (fieldType === 'email') {
+      template = `{
+  name: '{name}', // Database field name
+  type: 'email',
+  label: 'Email Field', // Label shown in the admin UI
+  required: true,
+  // Optional: Add custom validation beyond the built-in email validation
+  validate: (value) => {
+    if (value && !value.includes('@example.com')) {
+      return 'Only example.com email addresses are allowed';
+    }
+    return true; // Return true if valid
+  },
+}`;
+    } else if (fieldType === 'textarea') {
+      template = `{
+  name: '{name}', // Database field name
+  type: 'textarea',
+  label: 'Textarea Field', // Label shown in the admin UI
+  required: true,
+  minLength: 10,
+  maxLength: 1000,
+  // Optional: Add custom validation
+  validate: (value) => {
+    if (value && value.split('\\n').length < 2) {
+      return 'Please include at least two paragraphs';
+    }
+    return true; // Return true if valid
+  },
+}`;
+    } else if (fieldType === 'relationship' || fieldType === 'polymorphicrelationship') {
+      template = `{
+  name: '{name}', // Database field name
+  type: 'relationship',
+  label: 'Relationship Field', // Label shown in the admin UI
+  required: true,
+  relationTo: 'collection-slug', // The collection to relate to
+  hasMany: false, // Set to true for multiple relationships
+  // Optional: Add custom validation
+  validate: async (value, { req }) => {
+    if (value) {
+      try {
+        const doc = await req.payload.findByID({
+          collection: 'collection-slug',
+          id: value,
+        });
+        if (!doc) {
+          return 'Related document not found';
+        }
+      } catch (err) {
+        return 'Error validating relationship';
+      }
+    }
+    return true; // Return true if valid
+  },
+}`;
+    } else if (fieldType === 'array') {
+      template = `{
+  name: '{name}', // Database field name
+  type: 'array',
+  label: 'Array Field', // Label shown in the admin UI
+  minRows: 1,
+  maxRows: 10,
+  labels: {
+    singular: 'Item',
+    plural: 'Items',
+  },
+  fields: [
+    {
+      name: 'itemName',
+      type: 'text',
+      required: true,
+    },
+    // Add more fields as needed
+  ],
+  // Optional: Add custom validation
+  validate: (value) => {
+    if (value && value.length > 0) {
+      // Validate the array as a whole
+      return true;
+    }
+    return 'Please add at least one item';
+  },
+}`;
+    } else if (fieldType === 'richtext') {
+      template = `{
+  name: '{name}', // Database field name
+  type: 'richText',
+  label: 'Rich Text Field', // Label shown in the admin UI
+  required: true,
+  admin: {
+    elements: ['h2', 'h3', 'link', 'ol', 'ul', 'indent'],
+    leaves: ['bold', 'italic', 'underline'],
+  },
+  // Optional: Add custom validation
+  validate: (value) => {
+    if (value && JSON.stringify(value).length < 20) {
+      return 'Please enter more content';
+    }
+    return true; // Return true if valid
+  },
+}`;
+    } else if (fieldType === 'select') {
+      template = `{
+  name: '{name}', // Database field name
+  type: 'select',
+  label: 'Select Field', // Label shown in the admin UI
+  required: true,
+  options: [
+    {
+      label: 'Option One',
+      value: 'option-one',
+    },
+    {
+      label: 'Option Two',
+      value: 'option-two',
+    },
+  ],
+  defaultValue: 'option-one',
+  // Optional: Add custom validation
+  validate: (value, { siblingData }) => {
+    if (value === 'option-two' && !siblingData.requiredForOptionTwo) {
+      return 'Additional field is required when Option Two is selected';
+    }
+    return true; // Return true if valid
+  },
+}`;
+    } else if (fieldType === 'radio') {
+      template = `{
+  name: '{name}', // Database field name
+  type: 'radio',
+  label: 'Radio Field', // Label shown in the admin UI
+  required: true,
+  options: [
+    {
+      label: 'Option One',
+      value: 'option-one',
+    },
+    {
+      label: 'Option Two',
+      value: 'option-two',
+    },
+  ],
+  defaultValue: 'option-one',
+  // Optional: Add custom validation
+  validate: (value) => {
+    // Custom validation logic
+    return true; // Return true if valid
+  },
+}`;
+    } else if (fieldType === 'checkbox') {
+      template = `{
+  name: '{name}', // Database field name
+  type: 'checkbox',
+  label: 'Checkbox Field', // Label shown in the admin UI
+  defaultValue: false,
+  // Optional: Add custom validation
+  validate: (value, { siblingData }) => {
+    if (siblingData.requiresAgreement && value !== true) {
+      return 'You must agree to the terms';
+    }
+    return true; // Return true if valid
+  },
+}`;
+    } else if (fieldType === 'group') {
+      template = `{
+  name: '{name}', // Database field name
+  type: 'group',
+  label: 'Group Field', // Label shown in the admin UI
+  fields: [
+    {
+      name: 'groupedField1',
+      type: 'text',
+      required: true,
+    },
+    {
+      name: 'groupedField2',
+      type: 'number',
+    },
+    // Add more fields as needed
+  ],
+  // Optional: Add custom validation for the entire group
+  validate: (value) => {
+    if (value && (!value.groupedField1 || !value.groupedField2)) {
+      return 'Both fields in the group are required';
+    }
+    return true; // Return true if valid
+  },
+}`;
+    } else if (fieldType === 'blocks') {
+      template = `{
+  name: '{name}', // Database field name
+  type: 'blocks',
+  label: 'Blocks Field', // Label shown in the admin UI
+  minRows: 1,
+  maxRows: 10,
+  blocks: [
+    {
+      slug: 'textBlock',
+      fields: [
+        {
+          name: 'text',
+          type: 'richText',
+          required: true,
+        },
+      ],
+    },
+    {
+      slug: 'imageBlock',
+      fields: [
+        {
+          name: 'image',
+          type: 'upload',
+          relationTo: 'media',
+          required: true,
+        },
+      ],
+    },
+    // Add more block types as needed
+  ],
+  // Optional: Add custom validation
+  validate: (value) => {
+    if (value && value.length > 0) {
+      // Validate the blocks as a whole
+      return true;
+    }
+    return 'Please add at least one block';
+  },
+}`;
+    } else if (fieldType === 'upload') {
+      template = `{
+  name: '{name}', // Database field name
+  type: 'upload',
+  label: 'Upload Field', // Label shown in the admin UI
+  relationTo: 'media', // The collection to upload to
+  required: true,
+  // Optional: Add custom validation
+  validate: (value) => {
+    if (!value) {
+      return 'Please upload a file';
+    }
+    return true; // Return true if valid
+  },
+}`;
+    } else if (fieldType === 'code') {
+      template = `{
+  name: '{name}', // Database field name
+  type: 'code',
+  label: 'Code Field', // Label shown in the admin UI
+  admin: {
+    language: 'javascript', // The language for syntax highlighting
+  },
+  // Optional: Add custom validation
+  validate: (value) => {
+    if (value && value.length < 10) {
+      return 'Please enter more code';
+    }
+    return true; // Return true if valid
+  },
+}`;
+    } else if (fieldType === 'json') {
+      template = `{
+  name: '{name}', // Database field name
+  type: 'json',
+  label: 'JSON Field', // Label shown in the admin UI
+  // Optional: Add custom validation
+  validate: (value) => {
+    try {
+      if (typeof value === 'string') {
+        JSON.parse(value);
+      }
+      return true; // Return true if valid
+    } catch (err) {
+      return 'Invalid JSON format';
+    }
+  },
+}`;
+    } else {
+      // Generic field template for other field types
+      template = `{
+  name: '{name}', // Database field name
+  type: '${fieldType || '{type}'}',
+  label: '${fieldType ? fieldType.charAt(0).toUpperCase() + fieldType.slice(1) : 'Custom'} Field', // Label shown in the admin UI
+  required: true,
+  // Add field-specific properties here
+  
+  // Optional: Add custom validation
+  validate: (value, { siblingData, operation }) => {
+    // Custom validation logic based on the value, sibling data, or operation
+    if (!value && operation === 'create') {
+      return 'This field is required for new records';
+    }
+    return true; // Return true if valid
+  },
+  ...{rest}
+}`;
+    }
     
     // Ensure we have a proper schema for field types
     if (schema.type === 'any' || !schema.properties) {
@@ -425,11 +955,29 @@ function addTool(decl: InterfaceDeclaration | TypeAliasDeclaration, name: string
       if (baseName === 'TextField' || baseName === 'EmailField' || baseName === 'TextareaField') {
         schema.properties.minLength = { type: 'number', description: 'Minimum length of the text' };
         schema.properties.maxLength = { type: 'number', description: 'Maximum length of the text' };
+        
+        // Add validation property for text-based fields
+        schema.properties.validate = { 
+          type: 'string', 
+          description: 'Custom validation function that returns true if valid or an error message string if invalid'
+        };
       } else if (baseName === 'NumberField') {
         schema.properties.min = { type: 'number', description: 'Minimum value' };
         schema.properties.max = { type: 'number', description: 'Maximum value' };
+        
+        // Add validation property for number fields
+        schema.properties.validate = { 
+          type: 'string', 
+          description: 'Custom validation function that returns true if valid or an error message string if invalid'
+        };
       } else if (baseName === 'DateField') {
         schema.properties.defaultValue = { type: 'string', description: 'Default date value' };
+        
+        // Add validation property for date fields
+        schema.properties.validate = { 
+          type: 'string', 
+          description: 'Custom validation function that returns true if valid or an error message string if invalid'
+        };
       } else if (baseName === 'RelationshipField' || baseName === 'PolymorphicRelationshipField') {
         schema.properties.relationTo = { 
           oneOf: [
@@ -438,9 +986,21 @@ function addTool(decl: InterfaceDeclaration | TypeAliasDeclaration, name: string
           ]
         };
         schema.properties.hasMany = { type: 'boolean', description: 'Whether this field can relate to multiple documents' };
+        
+        // Add validation property for relationship fields
+        schema.properties.validate = { 
+          type: 'string', 
+          description: 'Custom validation function that returns true if valid or an error message string if invalid'
+        };
       } else if (baseName === 'ArrayField') {
         schema.properties.minRows = { type: 'number', description: 'Minimum number of rows' };
         schema.properties.maxRows = { type: 'number', description: 'Maximum number of rows' };
+        
+        // Add validation property for array fields
+        schema.properties.validate = { 
+          type: 'string', 
+          description: 'Custom validation function that returns true if valid or an error message string if invalid'
+        };
       } else if (baseName === 'SelectField' || baseName === 'RadioField') {
         schema.properties.options = { 
           type: 'array', 
@@ -453,6 +1013,18 @@ function addTool(decl: InterfaceDeclaration | TypeAliasDeclaration, name: string
           },
           description: 'Options for the select/radio field'
         };
+        
+        // Add validation property for select/radio fields
+        schema.properties.validate = { 
+          type: 'string', 
+          description: 'Custom validation function that returns true if valid or an error message string if invalid'
+        };
+      } else {
+        // Add validation property for all other field types
+        schema.properties.validate = { 
+          type: 'string', 
+          description: 'Custom validation function that returns true if valid or an error message string if invalid'
+        };
       }
       
       schema.required = ['name', 'type'];
@@ -464,11 +1036,323 @@ function addTool(decl: InterfaceDeclaration | TypeAliasDeclaration, name: string
         description: 'The type of field'
       };
       schema.required = schema.required?.includes('type') ? ['name', 'type'] : ['name'];
+      
+      // Ensure validation property exists
+      if (!schema.properties.validate) {
+        schema.properties.validate = { 
+          type: 'string', 
+          description: 'Custom validation function that returns true if valid or an error message string if invalid'
+        };
+      }
     }
-    
-    template = "{ name: '{name}', type: '{type}', ...{rest} }";
+  }
+
+  // Create a more detailed description using JSDoc if available
+  let description = `Creates a Payload CMS 3.0 ${baseName} configuration`;
+  if (jsDocDescription) {
+    description = `${description}\n\n${jsDocDescription}`;
+  }
+  
+  // Add usage examples based on the type
+  let examples = '';
+  if (baseName === 'CollectionConfig') {
+    examples = `
+Example:
+\`\`\`typescript
+// Collection for a basic blog post
+export const Posts = {
+  slug: 'posts',
+  admin: {
+    useAsTitle: 'title',
+  },
+  fields: [
+    {
+      name: 'title',
+      type: 'text',
+      required: true,
+    },
+    {
+      name: 'content',
+      type: 'richText',
+    },
+    {
+      name: 'author',
+      type: 'relationship',
+      relationTo: 'users',
+    },
+  ],
+}
+\`\`\``;
+  } else if (baseName.endsWith('Field')) {
+    const fieldType = baseName.replace('Field', '').toLowerCase();
+    if (fieldType === 'text') {
+      examples = `
+Example:
+\`\`\`typescript
+{
+  name: 'title',
+  type: 'text',
+  required: true,
+  label: 'Post Title',
+  minLength: 10,
+  maxLength: 100,
+  // Custom validation example
+  validate: (value, { siblingData }) => {
+    if (value && value.toLowerCase().includes('forbidden')) {
+      return 'Title cannot contain the word "forbidden"';
+    }
+    return true;
+  }
+}
+\`\`\``;
+    } else if (fieldType === 'relationship') {
+      examples = `
+Example:
+\`\`\`typescript
+{
+  name: 'author',
+  type: 'relationship',
+  relationTo: 'users',
+  hasMany: false,
+  required: true,
+  // Custom validation example
+  validate: async (value, { req }) => {
+    // Check if the related document exists and is published
+    if (value) {
+      const relatedDoc = await req.payload.findByID({
+        collection: 'users',
+        id: value,
+      });
+      
+      if (!relatedDoc) {
+        return 'Selected user does not exist';
+      }
+    }
+    return true;
+  }
+}
+\`\`\``;
+    } else if (fieldType === 'number') {
+      examples = `
+Example:
+\`\`\`typescript
+{
+  name: 'price',
+  type: 'number',
+  required: true,
+  label: 'Product Price',
+  min: 0,
+  max: 1000,
+  // Custom validation example
+  validate: (value) => {
+    if (value && value % 1 !== 0) {
+      return 'Price must be a whole number';
+    }
+    return true;
+  }
+}
+\`\`\``;
+    } else if (fieldType === 'select') {
+      examples = `
+Example:
+\`\`\`typescript
+{
+  name: 'status',
+  type: 'select',
+  required: true,
+  label: 'Status',
+  options: [
+    { label: 'Draft', value: 'draft' },
+    { label: 'Published', value: 'published' },
+    { label: 'Archived', value: 'archived' }
+  ],
+  defaultValue: 'draft',
+  // Custom validation example
+  validate: (value, { siblingData }) => {
+    if (value === 'published' && !siblingData.publishedAt) {
+      return 'Cannot set status to published without a publish date';
+    }
+    return true;
+  }
+}
+\`\`\``;
+    } else if (fieldType === 'array') {
+      examples = `
+Example:
+\`\`\`typescript
+{
+  name: 'items',
+  type: 'array',
+  label: 'Items',
+  minRows: 1,
+  maxRows: 10,
+  fields: [
+    {
+      name: 'name',
+      type: 'text',
+      required: true
+    },
+    {
+      name: 'quantity',
+      type: 'number',
+      required: true,
+      min: 1
+    }
+  ],
+  // Custom validation example
+  validate: (value) => {
+    if (value && value.length > 0) {
+      const totalQuantity = value.reduce((sum, item) => sum + (item.quantity || 0), 0);
+      if (totalQuantity > 100) {
+        return 'Total quantity cannot exceed 100';
+      }
+    }
+    return true;
+  }
+}
+\`\`\``;
+    } else {
+      // Generic field validation example
+      examples = `
+Example:
+\`\`\`typescript
+{
+  name: '${fieldType}Field',
+  type: '${fieldType}',
+  required: true,
+  label: '${fieldType.charAt(0).toUpperCase() + fieldType.slice(1)} Field',
+  // Custom validation example
+  validate: (value, { siblingData, operation }) => {
+    // Validation logic based on the value, sibling data, or operation
+    if (operation === 'create' && !value) {
+      return 'This field is required for new records';
+    }
+    return true;
+  }
+}
+\`\`\``;
+    }
   } else if (baseName.includes('Hook')) {
-    template = "({ data }) => { return { ...data, modified: true }; }";
+    // Create hook-specific templates
+    if (baseName.includes('BeforeChange')) {
+      template = `/**
+ * This hook runs before a document is saved to the database
+ * It allows you to modify the data or perform validation
+ */
+const beforeChangeHook = ({ data, req, operation, originalDoc }) => {
+  // 'data' contains the data being saved
+  // 'req' is the Express request object with the Payload instance
+  // 'operation' is either 'create' or 'update'
+  // 'originalDoc' is the document before changes (for updates)
+  
+  // Example: Add a timestamp
+  return {
+    ...data,
+    modifiedAt: new Date().toISOString(),
+    modifiedBy: req.user?.id,
+  };
+};`;
+    } else if (baseName.includes('AfterChange')) {
+      template = `/**
+ * This hook runs after a document has been saved to the database
+ * It allows you to perform side effects but cannot modify the saved data
+ */
+const afterChangeHook = ({ doc, req, operation, previousDoc }) => {
+  // 'doc' contains the saved document
+  // 'req' is the Express request object with the Payload instance
+  // 'operation' is either 'create' or 'update'
+  // 'previousDoc' is the document before changes (for updates)
+  
+  // Example: Send a notification
+  if (operation === 'create') {
+    // Send notification about new document
+    console.log(\`New document created: \${doc.id}\`);
+  }
+  
+  // Return the document (cannot be modified)
+  return doc;
+};`;
+    } else if (baseName.includes('BeforeDelete')) {
+      template = `/**
+ * This hook runs before a document is deleted
+ * It allows you to perform validation or prevent deletion
+ */
+const beforeDeleteHook = ({ req, id }) => {
+  // 'req' is the Express request object with the Payload instance
+  // 'id' is the ID of the document being deleted
+  
+  // Example: Check if deletion is allowed
+  // If you return a string, it will prevent deletion with that error message
+  // If you throw an error, it will prevent deletion with that error
+  
+  // To allow deletion, return undefined or void
+  return;
+};`;
+    } else if (baseName.includes('AfterDelete')) {
+      template = `/**
+ * This hook runs after a document has been deleted
+ * It allows you to perform side effects
+ */
+const afterDeleteHook = ({ req, id, doc }) => {
+  // 'req' is the Express request object with the Payload instance
+  // 'id' is the ID of the document that was deleted
+  // 'doc' is the document that was deleted
+  
+  // Example: Clean up related data
+  console.log(\`Document deleted: \${id}\`);
+  
+  // No return value is expected
+};`;
+    } else if (baseName.includes('BeforeValidate')) {
+      template = `/**
+ * This hook runs before validation occurs
+ * It allows you to modify the data before validation
+ */
+const beforeValidateHook = ({ data, req, operation, originalDoc }) => {
+  // 'data' contains the data to be validated
+  // 'req' is the Express request object with the Payload instance
+  // 'operation' is either 'create' or 'update'
+  // 'originalDoc' is the document before changes (for updates)
+  
+  // Example: Set default values
+  return {
+    ...data,
+    status: data.status || 'draft',
+  };
+};`;
+    } else if (baseName.includes('BeforeRead') || baseName.includes('AfterRead')) {
+      template = `/**
+ * This hook runs before/after documents are returned from the database
+ * It allows you to modify the data before it's sent to the client
+ */
+const readHook = ({ doc, req }) => {
+  // 'doc' contains the document(s) being read
+  // 'req' is the Express request object with the Payload instance
+  
+  // Example: Add computed properties
+  return {
+    ...doc,
+    computedProperty: \`\${doc.firstName} \${doc.lastName}\`,
+  };
+};`;
+    } else {
+      // Generic hook template
+      template = `/**
+ * Generic Payload CMS hook
+ * See documentation for specific hook parameters
+ */
+const hook = (args) => {
+  // Extract relevant properties from args based on hook type
+  const { req } = args;
+  
+  // Example: Log hook execution
+  console.log('Hook executed');
+  
+  // For hooks that modify data, return the modified data
+  // For other hooks, return as appropriate for the hook type
+  return args.data ? { ...args.data, modified: true } : undefined;
+};`;
+    }
     
     // Improve hook schema
     if (schema.type === 'any' || !schema.properties) {
@@ -478,7 +1362,35 @@ function addTool(decl: InterfaceDeclaration | TypeAliasDeclaration, name: string
       };
     }
   } else if (baseName === 'Access') {
-    template = "({ req }) => !!req.user;";
+    template = `/**
+ * Access control function to determine if the operation is allowed
+ * Returns true if access is granted, false if denied
+ * Can also return a string with an error message if denied
+ */
+const accessControl = ({ req, id, data, doc }) => {
+  // 'req' is the Express request object with the Payload instance and user
+  // 'id' is the ID of the document being accessed (for operations on existing documents)
+  // 'data' contains the data for create/update operations
+  // 'doc' is the existing document for update operations
+  
+  // Example: Only allow access if user is logged in
+  if (!req.user) {
+    return false; // Or return 'You must be logged in'
+  }
+  
+  // Example: Check user roles
+  if (req.user.role === 'admin') {
+    return true; // Admins have full access
+  }
+  
+  // Example: Users can only access their own documents
+  if (id && doc && doc.createdBy === req.user.id) {
+    return true;
+  }
+  
+  // Deny access with a custom message
+  return 'You do not have permission to access this resource';
+};`;
     
     // Improve access schema
     if (schema.type === 'any' || !schema.properties) {
@@ -488,13 +1400,40 @@ function addTool(decl: InterfaceDeclaration | TypeAliasDeclaration, name: string
       };
     }
   } else if (baseName === 'CollectionAdminOptions') {
-    template = "{ ...{rest} }";
+    template = `/**
+ * Admin UI options for a collection
+ */
+{
+  // Field to use as the title in the admin UI
+  useAsTitle: 'title',
+  
+  // Default columns to show in the admin UI list view
+  defaultColumns: ['title', 'status', 'createdAt'],
+  
+  // Group collections in the admin UI sidebar
+  group: 'Content',
+  
+  // Custom admin components (requires importing from your components)
+  // components: {
+  //   views: {
+  //     List: MyCustomListView,
+  //   },
+  // },
+  
+  // Additional options
+  ...{rest}
+}`;
+  }
+
+  // Create a more detailed description using JSDoc if available
+  if (examples) {
+    description = `${description}\n${examples}`;
   }
 
   // Create tool in MCP format
   toolsArray.push({
     name: toolName,
-    description: `Creates a Payload CMS 3.0 ${baseName} configuration`,
+    description: description,
     inputSchema: schema,  // Using inputSchema instead of parameters to match MCP spec
     template
   });

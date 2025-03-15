@@ -5,11 +5,12 @@
  */
 import { logger } from '../../utils/logger.js';
 
-// Import the tools JSON
-import toolsJson from './payload-tools.json' with { type: 'json' };
+// Import individual tool files
+const toolModules = import.meta.glob('./tools/*.json', { eager: true });
 
 // Convert JSON tools to MCP SDK format
-export const payloadTools = Object.values(toolsJson.tools).map((tool) => {
+export const payloadTools = Object.values(toolModules).map((module) => {
+  const tool = module.default;
   return {
     name: tool.name,
     description: tool.description,
@@ -17,3 +18,8 @@ export const payloadTools = Object.values(toolsJson.tools).map((tool) => {
     template: tool.template
   };
 });
+
+// For backward compatibility
+export const toolsMap = Object.fromEntries(
+  payloadTools.map(tool => [tool.name, tool])
+);

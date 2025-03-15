@@ -2,7 +2,7 @@
   "tools": {
     "createCollection": {
       "name": "createCollection",
-      "description": "Creates a Payload CMS 3.0 CollectionConfig configuration",
+      "description": "Creates a Payload CMS 3.0 CollectionConfig configuration\n\n@todo remove the `DeepRequired` in v4.\nWe don't actually guarantee that all properties are set when sanitizing configs.\n\nExample:\n```typescript\n// Collection for a basic blog post\nexport const Posts = {\n  slug: 'posts',\n  admin: {\n    useAsTitle: 'title',\n  },\n  fields: [\n    {\n      name: 'title',\n      type: 'text',\n      required: true,\n    },\n    {\n      name: 'content',\n      type: 'richText',\n    },\n    {\n      name: 'author',\n      type: 'relationship',\n      relationTo: 'users',\n    },\n  ],\n}\n```",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -180,11 +180,13 @@
             "items": {
               "type": "object",
               "description": "any configuration object"
-            }
+            },
+            "description": "Fields in the database schema structure\nRows / collapsible / tabs w/o name `fields` merged to top, UIs are excluded"
           },
           "joins": {
             "type": "object",
-            "properties": {}
+            "properties": {},
+            "description": "Object of collections to join 'Join Fields object keyed by collection"
           },
           "polymorphicJoins": {
             "type": "array",
@@ -193,7 +195,7 @@
               "properties": {
                 "field": {
                   "type": "object",
-                  "description": "import(\"/home/rrrodzilla/Projects/payload-mcp/node_modules/payload/dist/fields/config/types\").JoinField configuration object"
+                  "description": "Payload.JoinField configuration object"
                 },
                 "getForeignPath": {
                   "type": "string",
@@ -238,7 +240,8 @@
                 "parentIsLocalized",
                 "targetField"
               ]
-            }
+            },
+            "description": "List of all polymorphic join fields"
           },
           "sanitizedIndexes": {
             "type": "array",
@@ -287,7 +290,7 @@
           },
           "upload": {
             "type": "object",
-            "description": "import(\"/home/rrrodzilla/Projects/payload-mcp/node_modules/payload/dist/uploads/types\").SanitizedUploadConfig configuration object"
+            "description": "Payload.SanitizedUploadConfig configuration object"
           },
           "versions": {
             "type": "object",
@@ -355,9 +358,10 @@
           "slug",
           "upload",
           "versions"
-        ]
+        ],
+        "description": "@todo remove the `DeepRequired` in v4.\nWe don't actually guarantee that all properties are set when sanitizing configs."
       },
-      "template": "export const {slug} = { slug: '{slug}', fields: {fields}, ...{rest} };"
+      "template": "// Collection configuration for Payload CMS\nexport const {slug} = {\n  slug: '{slug}', // URL-friendly identifier for this collection\n  admin: {\n    useAsTitle: 'title', // Field to use as the title in the admin UI\n    defaultColumns: ['title', 'createdAt'], // Default columns in the admin UI list view\n  },\n  // Define the fields for this collection\n  fields: [\n    {\n      name: 'title',\n      type: 'text',\n      required: true,\n    },\n    // Add more fields as needed\n    {fields}\n  ],\n  // Optional: Add hooks, access control, etc.\n  ...{rest}\n};"
     },
     "createGlobal": {
       "name": "createGlobal",
@@ -449,7 +453,8 @@
             "items": {
               "type": "object",
               "description": "any configuration object"
-            }
+            },
+            "description": "Fields in the database schema structure\nRows / collapsible / tabs w/o name `fields` merged to top, UIs are excluded"
           },
           "slug": {
             "type": "string"
@@ -517,16 +522,17 @@
           "versions"
         ]
       },
-      "template": "export const {slug} = { slug: '{slug}', fields: {fields}, ...{rest} };"
+      "template": "// Global configuration for Payload CMS\nexport const {slug} = {\n  slug: '{slug}', // URL-friendly identifier for this global\n  admin: {\n    group: 'Settings', // Group in the admin UI\n  },\n  // Define the fields for this global\n  fields: [\n    // Add your fields here\n    {fields}\n  ],\n  // Optional: Add hooks, access control, etc.\n  ...{rest}\n};"
     },
     "createAccess": {
       "name": "createAccess",
-      "description": "Creates a Payload CMS 3.0 Access configuration",
+      "description": "Creates a Payload CMS 3.0 Access configuration\n\nAccess function runs on the server\nand is sent to the client allowing the dashboard to show accessible data and actions.\n@see ://payloadcms.com/docs/access-control/overview",
       "inputSchema": {
         "type": "object",
-        "properties": {}
+        "properties": {},
+        "description": "Access function runs on the server\nand is sent to the client allowing the dashboard to show accessible data and actions.\n@see ://payloadcms.com/docs/access-control/overview"
       },
-      "template": "({ req }) => !!req.user;"
+      "template": "/**\n * Access control function to determine if the operation is allowed\n * Returns true if access is granted, false if denied\n * Can also return a string with an error message if denied\n */\nconst accessControl = ({ req, id, data, doc }) => {\n  // 'req' is the Express request object with the Payload instance and user\n  // 'id' is the ID of the document being accessed (for operations on existing documents)\n  // 'data' contains the data for create/update operations\n  // 'doc' is the existing document for update operations\n  \n  // Example: Only allow access if user is logged in\n  if (!req.user) {\n    return false; // Or return 'You must be logged in'\n  }\n  \n  // Example: Check user roles\n  if (req.user.role === 'admin') {\n    return true; // Admins have full access\n  }\n  \n  // Example: Users can only access their own documents\n  if (id && doc && doc.createdBy === req.user.id) {\n    return true;\n  }\n  \n  // Deny access with a custom message\n  return 'You do not have permission to access this resource';\n};"
     },
     "createAfterErrorHook": {
       "name": "createAfterErrorHook",
@@ -535,11 +541,11 @@
         "type": "object",
         "properties": {}
       },
-      "template": "({ data }) => { return { ...data, modified: true }; }"
+      "template": "/**\n * Generic Payload CMS hook\n * See documentation for specific hook parameters\n */\nconst hook = (args) => {\n  // Extract relevant properties from args based on hook type\n  const { req } = args;\n  \n  // Example: Log hook execution\n  console.log('Hook executed');\n  \n  // For hooks that modify data, return the modified data\n  // For other hooks, return as appropriate for the hook type\n  return args.data ? { ...args.data, modified: true } : undefined;\n};"
     },
     "create": {
       "name": "create",
-      "description": "Creates a Payload CMS 3.0 Config configuration",
+      "description": "Creates a Payload CMS 3.0 Config configuration\n\nThis is the central configuration\n@see ://payloadcms.com/docs/configuration/overview",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -3002,7 +3008,7 @@
                                                         },
                                                         {
                                                           "type": "object",
-                                                          "description": "import(\"/home/rrrodzilla/Projects/payload-mcp/node_modules/payload/dist/admin/views/document\").DocumentViewServerProps configuration object"
+                                                          "description": "Payload.DocumentViewServerProps configuration object"
                                                         }
                                                       ],
                                                       "description": "One of the allowed types"
@@ -3311,7 +3317,7 @@
                                                         },
                                                         {
                                                           "type": "object",
-                                                          "description": "import(\"/home/rrrodzilla/Projects/payload-mcp/node_modules/payload/dist/admin/views/document\").DocumentViewServerProps configuration object"
+                                                          "description": "Payload.DocumentViewServerProps configuration object"
                                                         }
                                                       ],
                                                       "description": "One of the allowed types"
@@ -3620,7 +3626,7 @@
                                                         },
                                                         {
                                                           "type": "object",
-                                                          "description": "import(\"/home/rrrodzilla/Projects/payload-mcp/node_modules/payload/dist/admin/views/document\").DocumentViewServerProps configuration object"
+                                                          "description": "Payload.DocumentViewServerProps configuration object"
                                                         }
                                                       ],
                                                       "description": "One of the allowed types"
@@ -3933,7 +3939,7 @@
                                                         },
                                                         {
                                                           "type": "object",
-                                                          "description": "import(\"/home/rrrodzilla/Projects/payload-mcp/node_modules/payload/dist/admin/views/document\").DocumentViewServerProps configuration object"
+                                                          "description": "Payload.DocumentViewServerProps configuration object"
                                                         }
                                                       ],
                                                       "description": "One of the allowed types"
@@ -4242,7 +4248,7 @@
                                                         },
                                                         {
                                                           "type": "object",
-                                                          "description": "import(\"/home/rrrodzilla/Projects/payload-mcp/node_modules/payload/dist/admin/views/document\").DocumentViewServerProps configuration object"
+                                                          "description": "Payload.DocumentViewServerProps configuration object"
                                                         }
                                                       ],
                                                       "description": "One of the allowed types"
@@ -4568,7 +4574,7 @@
                                                         },
                                                         {
                                                           "type": "object",
-                                                          "description": "import(\"/home/rrrodzilla/Projects/payload-mcp/node_modules/payload/dist/admin/views/document\").DocumentViewServerProps configuration object"
+                                                          "description": "Payload.DocumentViewServerProps configuration object"
                                                         }
                                                       ],
                                                       "description": "One of the allowed types"
@@ -5726,7 +5732,7 @@
                           "type": "array",
                           "items": {
                             "type": "object",
-                            "description": "import(\"/home/rrrodzilla/Projects/payload-mcp/node_modules/payload/dist/uploads/types\").ImageSize configuration object"
+                            "description": "Payload.ImageSize configuration object"
                           }
                         },
                         "mimeTypes": {
@@ -6488,7 +6494,7 @@
                                                         },
                                                         {
                                                           "type": "object",
-                                                          "description": "import(\"/home/rrrodzilla/Projects/payload-mcp/node_modules/payload/dist/admin/views/document\").DocumentViewServerProps configuration object"
+                                                          "description": "Payload.DocumentViewServerProps configuration object"
                                                         }
                                                       ],
                                                       "description": "One of the allowed types"
@@ -6797,7 +6803,7 @@
                                                         },
                                                         {
                                                           "type": "object",
-                                                          "description": "import(\"/home/rrrodzilla/Projects/payload-mcp/node_modules/payload/dist/admin/views/document\").DocumentViewServerProps configuration object"
+                                                          "description": "Payload.DocumentViewServerProps configuration object"
                                                         }
                                                       ],
                                                       "description": "One of the allowed types"
@@ -7106,7 +7112,7 @@
                                                         },
                                                         {
                                                           "type": "object",
-                                                          "description": "import(\"/home/rrrodzilla/Projects/payload-mcp/node_modules/payload/dist/admin/views/document\").DocumentViewServerProps configuration object"
+                                                          "description": "Payload.DocumentViewServerProps configuration object"
                                                         }
                                                       ],
                                                       "description": "One of the allowed types"
@@ -7419,7 +7425,7 @@
                                                         },
                                                         {
                                                           "type": "object",
-                                                          "description": "import(\"/home/rrrodzilla/Projects/payload-mcp/node_modules/payload/dist/admin/views/document\").DocumentViewServerProps configuration object"
+                                                          "description": "Payload.DocumentViewServerProps configuration object"
                                                         }
                                                       ],
                                                       "description": "One of the allowed types"
@@ -7728,7 +7734,7 @@
                                                         },
                                                         {
                                                           "type": "object",
-                                                          "description": "import(\"/home/rrrodzilla/Projects/payload-mcp/node_modules/payload/dist/admin/views/document\").DocumentViewServerProps configuration object"
+                                                          "description": "Payload.DocumentViewServerProps configuration object"
                                                         }
                                                       ],
                                                       "description": "One of the allowed types"
@@ -8054,7 +8060,7 @@
                                                         },
                                                         {
                                                           "type": "object",
-                                                          "description": "import(\"/home/rrrodzilla/Projects/payload-mcp/node_modules/payload/dist/admin/views/document\").DocumentViewServerProps configuration object"
+                                                          "description": "Payload.DocumentViewServerProps configuration object"
                                                         }
                                                       ],
                                                       "description": "One of the allowed types"
@@ -8719,7 +8725,7 @@
           },
           "i18n": {
             "type": "object",
-            "description": "I18nOptions<any> configuration object"
+            "description": "I18nOptions configuration object"
           },
           "indexSortableFields": {
             "type": "boolean"
@@ -9316,9 +9322,10 @@
         "required": [
           "db",
           "secret"
-        ]
+        ],
+        "description": "This is the central configuration\n@see ://payloadcms.com/docs/configuration/overview"
       },
-      "template": "export const {slug} = { slug: '{slug}', fields: {fields}, ...{rest} };"
+      "template": "// Main Payload CMS configuration\nexport default {\n  admin: {\n    user: 'users', // Collection used for authentication\n    meta: {\n      titleSuffix: '- My Payload App', // Suffix for browser tab titles\n    },\n  },\n  collections: [\n    // Reference your collections here\n  ],\n  globals: [\n    // Reference your globals here\n  ],\n  // Optional: Add plugins, localization, etc.\n  ...{rest}\n};"
     },
     "createBeforeOperationHook": {
       "name": "createBeforeOperationHook",
@@ -9327,7 +9334,7 @@
         "type": "object",
         "properties": {}
       },
-      "template": "({ data }) => { return { ...data, modified: true }; }"
+      "template": "/**\n * Generic Payload CMS hook\n * See documentation for specific hook parameters\n */\nconst hook = (args) => {\n  // Extract relevant properties from args based on hook type\n  const { req } = args;\n  \n  // Example: Log hook execution\n  console.log('Hook executed');\n  \n  // For hooks that modify data, return the modified data\n  // For other hooks, return as appropriate for the hook type\n  return args.data ? { ...args.data, modified: true } : undefined;\n};"
     },
     "createBeforeValidateHook": {
       "name": "createBeforeValidateHook",
@@ -9336,7 +9343,7 @@
         "type": "object",
         "properties": {}
       },
-      "template": "({ data }) => { return { ...data, modified: true }; }"
+      "template": "/**\n * This hook runs before validation occurs\n * It allows you to modify the data before validation\n */\nconst beforeValidateHook = ({ data, req, operation, originalDoc }) => {\n  // 'data' contains the data to be validated\n  // 'req' is the Express request object with the Payload instance\n  // 'operation' is either 'create' or 'update'\n  // 'originalDoc' is the document before changes (for updates)\n  \n  // Example: Set default values\n  return {\n    ...data,\n    status: data.status || 'draft',\n  };\n};"
     },
     "createBeforeChangeHook": {
       "name": "createBeforeChangeHook",
@@ -9345,7 +9352,7 @@
         "type": "object",
         "properties": {}
       },
-      "template": "({ data }) => { return { ...data, modified: true }; }"
+      "template": "/**\n * This hook runs before a document is saved to the database\n * It allows you to modify the data or perform validation\n */\nconst beforeChangeHook = ({ data, req, operation, originalDoc }) => {\n  // 'data' contains the data being saved\n  // 'req' is the Express request object with the Payload instance\n  // 'operation' is either 'create' or 'update'\n  // 'originalDoc' is the document before changes (for updates)\n  \n  // Example: Add a timestamp\n  return {\n    ...data,\n    modifiedAt: new Date().toISOString(),\n    modifiedBy: req.user?.id,\n  };\n};"
     },
     "createAfterChangeHook": {
       "name": "createAfterChangeHook",
@@ -9354,7 +9361,7 @@
         "type": "object",
         "properties": {}
       },
-      "template": "({ data }) => { return { ...data, modified: true }; }"
+      "template": "/**\n * This hook runs after a document has been saved to the database\n * It allows you to perform side effects but cannot modify the saved data\n */\nconst afterChangeHook = ({ doc, req, operation, previousDoc }) => {\n  // 'doc' contains the saved document\n  // 'req' is the Express request object with the Payload instance\n  // 'operation' is either 'create' or 'update'\n  // 'previousDoc' is the document before changes (for updates)\n  \n  // Example: Send a notification\n  if (operation === 'create') {\n    // Send notification about new document\n    console.log(`New document created: ${doc.id}`);\n  }\n  \n  // Return the document (cannot be modified)\n  return doc;\n};"
     },
     "createBeforeReadHook": {
       "name": "createBeforeReadHook",
@@ -9363,7 +9370,7 @@
         "type": "object",
         "properties": {}
       },
-      "template": "({ data }) => { return { ...data, modified: true }; }"
+      "template": "/**\n * This hook runs before/after documents are returned from the database\n * It allows you to modify the data before it's sent to the client\n */\nconst readHook = ({ doc, req }) => {\n  // 'doc' contains the document(s) being read\n  // 'req' is the Express request object with the Payload instance\n  \n  // Example: Add computed properties\n  return {\n    ...doc,\n    computedProperty: `${doc.firstName} ${doc.lastName}`,\n  };\n};"
     },
     "createAfterReadHook": {
       "name": "createAfterReadHook",
@@ -9372,7 +9379,7 @@
         "type": "object",
         "properties": {}
       },
-      "template": "({ data }) => { return { ...data, modified: true }; }"
+      "template": "/**\n * This hook runs before/after documents are returned from the database\n * It allows you to modify the data before it's sent to the client\n */\nconst readHook = ({ doc, req }) => {\n  // 'doc' contains the document(s) being read\n  // 'req' is the Express request object with the Payload instance\n  \n  // Example: Add computed properties\n  return {\n    ...doc,\n    computedProperty: `${doc.firstName} ${doc.lastName}`,\n  };\n};"
     },
     "createBeforeDeleteHook": {
       "name": "createBeforeDeleteHook",
@@ -9381,7 +9388,7 @@
         "type": "object",
         "properties": {}
       },
-      "template": "({ data }) => { return { ...data, modified: true }; }"
+      "template": "/**\n * This hook runs before a document is deleted\n * It allows you to perform validation or prevent deletion\n */\nconst beforeDeleteHook = ({ req, id }) => {\n  // 'req' is the Express request object with the Payload instance\n  // 'id' is the ID of the document being deleted\n  \n  // Example: Check if deletion is allowed\n  // If you return a string, it will prevent deletion with that error message\n  // If you throw an error, it will prevent deletion with that error\n  \n  // To allow deletion, return undefined or void\n  return;\n};"
     },
     "createAfterDeleteHook": {
       "name": "createAfterDeleteHook",
@@ -9390,7 +9397,7 @@
         "type": "object",
         "properties": {}
       },
-      "template": "({ data }) => { return { ...data, modified: true }; }"
+      "template": "/**\n * This hook runs after a document has been deleted\n * It allows you to perform side effects\n */\nconst afterDeleteHook = ({ req, id, doc }) => {\n  // 'req' is the Express request object with the Payload instance\n  // 'id' is the ID of the document that was deleted\n  // 'doc' is the document that was deleted\n  \n  // Example: Clean up related data\n  console.log(`Document deleted: ${id}`);\n  \n  // No return value is expected\n};"
     },
     "createAfterOperationHook": {
       "name": "createAfterOperationHook",
@@ -9399,7 +9406,7 @@
         "type": "object",
         "properties": {}
       },
-      "template": "({ data }) => { return { ...data, modified: true }; }"
+      "template": "/**\n * Generic Payload CMS hook\n * See documentation for specific hook parameters\n */\nconst hook = (args) => {\n  // Extract relevant properties from args based on hook type\n  const { req } = args;\n  \n  // Example: Log hook execution\n  console.log('Hook executed');\n  \n  // For hooks that modify data, return the modified data\n  // For other hooks, return as appropriate for the hook type\n  return args.data ? { ...args.data, modified: true } : undefined;\n};"
     },
     "createBeforeLoginHook": {
       "name": "createBeforeLoginHook",
@@ -9408,7 +9415,7 @@
         "type": "object",
         "properties": {}
       },
-      "template": "({ data }) => { return { ...data, modified: true }; }"
+      "template": "/**\n * Generic Payload CMS hook\n * See documentation for specific hook parameters\n */\nconst hook = (args) => {\n  // Extract relevant properties from args based on hook type\n  const { req } = args;\n  \n  // Example: Log hook execution\n  console.log('Hook executed');\n  \n  // For hooks that modify data, return the modified data\n  // For other hooks, return as appropriate for the hook type\n  return args.data ? { ...args.data, modified: true } : undefined;\n};"
     },
     "createAfterLoginHook": {
       "name": "createAfterLoginHook",
@@ -9417,7 +9424,7 @@
         "type": "object",
         "properties": {}
       },
-      "template": "({ data }) => { return { ...data, modified: true }; }"
+      "template": "/**\n * Generic Payload CMS hook\n * See documentation for specific hook parameters\n */\nconst hook = (args) => {\n  // Extract relevant properties from args based on hook type\n  const { req } = args;\n  \n  // Example: Log hook execution\n  console.log('Hook executed');\n  \n  // For hooks that modify data, return the modified data\n  // For other hooks, return as appropriate for the hook type\n  return args.data ? { ...args.data, modified: true } : undefined;\n};"
     },
     "createAfterLogoutHook": {
       "name": "createAfterLogoutHook",
@@ -9426,7 +9433,7 @@
         "type": "object",
         "properties": {}
       },
-      "template": "({ data }) => { return { ...data, modified: true }; }"
+      "template": "/**\n * Generic Payload CMS hook\n * See documentation for specific hook parameters\n */\nconst hook = (args) => {\n  // Extract relevant properties from args based on hook type\n  const { req } = args;\n  \n  // Example: Log hook execution\n  console.log('Hook executed');\n  \n  // For hooks that modify data, return the modified data\n  // For other hooks, return as appropriate for the hook type\n  return args.data ? { ...args.data, modified: true } : undefined;\n};"
     },
     "createAfterMeHook": {
       "name": "createAfterMeHook",
@@ -9435,7 +9442,7 @@
         "type": "object",
         "properties": {}
       },
-      "template": "({ data }) => { return { ...data, modified: true }; }"
+      "template": "/**\n * Generic Payload CMS hook\n * See documentation for specific hook parameters\n */\nconst hook = (args) => {\n  // Extract relevant properties from args based on hook type\n  const { req } = args;\n  \n  // Example: Log hook execution\n  console.log('Hook executed');\n  \n  // For hooks that modify data, return the modified data\n  // For other hooks, return as appropriate for the hook type\n  return args.data ? { ...args.data, modified: true } : undefined;\n};"
     },
     "createRefreshHook": {
       "name": "createRefreshHook",
@@ -9444,7 +9451,7 @@
         "type": "object",
         "properties": {}
       },
-      "template": "({ data }) => { return { ...data, modified: true }; }"
+      "template": "/**\n * Generic Payload CMS hook\n * See documentation for specific hook parameters\n */\nconst hook = (args) => {\n  // Extract relevant properties from args based on hook type\n  const { req } = args;\n  \n  // Example: Log hook execution\n  console.log('Hook executed');\n  \n  // For hooks that modify data, return the modified data\n  // For other hooks, return as appropriate for the hook type\n  return args.data ? { ...args.data, modified: true } : undefined;\n};"
     },
     "createMeHook": {
       "name": "createMeHook",
@@ -9453,7 +9460,7 @@
         "type": "object",
         "properties": {}
       },
-      "template": "({ data }) => { return { ...data, modified: true }; }"
+      "template": "/**\n * Generic Payload CMS hook\n * See documentation for specific hook parameters\n */\nconst hook = (args) => {\n  // Extract relevant properties from args based on hook type\n  const { req } = args;\n  \n  // Example: Log hook execution\n  console.log('Hook executed');\n  \n  // For hooks that modify data, return the modified data\n  // For other hooks, return as appropriate for the hook type\n  return args.data ? { ...args.data, modified: true } : undefined;\n};"
     },
     "createAfterRefreshHook": {
       "name": "createAfterRefreshHook",
@@ -9462,7 +9469,7 @@
         "type": "object",
         "properties": {}
       },
-      "template": "({ data }) => { return { ...data, modified: true }; }"
+      "template": "/**\n * Generic Payload CMS hook\n * See documentation for specific hook parameters\n */\nconst hook = (args) => {\n  // Extract relevant properties from args based on hook type\n  const { req } = args;\n  \n  // Example: Log hook execution\n  console.log('Hook executed');\n  \n  // For hooks that modify data, return the modified data\n  // For other hooks, return as appropriate for the hook type\n  return args.data ? { ...args.data, modified: true } : undefined;\n};"
     },
     "createAfterForgotPasswordHook": {
       "name": "createAfterForgotPasswordHook",
@@ -9471,7 +9478,7 @@
         "type": "object",
         "properties": {}
       },
-      "template": "({ data }) => { return { ...data, modified: true }; }"
+      "template": "/**\n * Generic Payload CMS hook\n * See documentation for specific hook parameters\n */\nconst hook = (args) => {\n  // Extract relevant properties from args based on hook type\n  const { req } = args;\n  \n  // Example: Log hook execution\n  console.log('Hook executed');\n  \n  // For hooks that modify data, return the modified data\n  // For other hooks, return as appropriate for the hook type\n  return args.data ? { ...args.data, modified: true } : undefined;\n};"
     },
     "createCollectionAdminOptions": {
       "name": "createCollectionAdminOptions",
@@ -10198,7 +10205,7 @@
                                               },
                                               {
                                                 "type": "object",
-                                                "description": "import(\"/home/rrrodzilla/Projects/payload-mcp/node_modules/payload/dist/admin/views/document\").DocumentViewServerProps configuration object"
+                                                "description": "Payload.DocumentViewServerProps configuration object"
                                               }
                                             ],
                                             "description": "One of the allowed types"
@@ -10507,7 +10514,7 @@
                                               },
                                               {
                                                 "type": "object",
-                                                "description": "import(\"/home/rrrodzilla/Projects/payload-mcp/node_modules/payload/dist/admin/views/document\").DocumentViewServerProps configuration object"
+                                                "description": "Payload.DocumentViewServerProps configuration object"
                                               }
                                             ],
                                             "description": "One of the allowed types"
@@ -10816,7 +10823,7 @@
                                               },
                                               {
                                                 "type": "object",
-                                                "description": "import(\"/home/rrrodzilla/Projects/payload-mcp/node_modules/payload/dist/admin/views/document\").DocumentViewServerProps configuration object"
+                                                "description": "Payload.DocumentViewServerProps configuration object"
                                               }
                                             ],
                                             "description": "One of the allowed types"
@@ -11129,7 +11136,7 @@
                                               },
                                               {
                                                 "type": "object",
-                                                "description": "import(\"/home/rrrodzilla/Projects/payload-mcp/node_modules/payload/dist/admin/views/document\").DocumentViewServerProps configuration object"
+                                                "description": "Payload.DocumentViewServerProps configuration object"
                                               }
                                             ],
                                             "description": "One of the allowed types"
@@ -11438,7 +11445,7 @@
                                               },
                                               {
                                                 "type": "object",
-                                                "description": "import(\"/home/rrrodzilla/Projects/payload-mcp/node_modules/payload/dist/admin/views/document\").DocumentViewServerProps configuration object"
+                                                "description": "Payload.DocumentViewServerProps configuration object"
                                               }
                                             ],
                                             "description": "One of the allowed types"
@@ -11764,7 +11771,7 @@
                                               },
                                               {
                                                 "type": "object",
-                                                "description": "import(\"/home/rrrodzilla/Projects/payload-mcp/node_modules/payload/dist/admin/views/document\").DocumentViewServerProps configuration object"
+                                                "description": "Payload.DocumentViewServerProps configuration object"
                                               }
                                             ],
                                             "description": "One of the allowed types"
@@ -12260,11 +12267,11 @@
           }
         }
       },
-      "template": "{ ...{rest} }"
+      "template": "/**\n * Admin UI options for a collection\n */\n{\n  // Field to use as the title in the admin UI\n  useAsTitle: 'title',\n  \n  // Default columns to show in the admin UI list view\n  defaultColumns: ['title', 'status', 'createdAt'],\n  \n  // Group collections in the admin UI sidebar\n  group: 'Content',\n  \n  // Custom admin components (requires importing from your components)\n  // components: {\n  //   views: {\n  //     List: MyCustomListView,\n  //   },\n  // },\n  \n  // Additional options\n  ...{rest}\n}"
     },
     "createNumberField": {
       "name": "createNumberField",
-      "description": "Creates a Payload CMS 3.0 NumberField configuration",
+      "description": "Creates a Payload CMS 3.0 NumberField configuration\n\nExample:\n```typescript\n{\n  name: 'price',\n  type: 'number',\n  required: true,\n  label: 'Product Price',\n  min: 0,\n  max: 1000,\n  // Custom validation example\n  validate: (value) => {\n    if (value && value % 1 !== 0) {\n      return 'Price must be a whole number';\n    }\n    return true;\n  }\n}\n```",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -12291,11 +12298,11 @@
         ],
         "description": "Field configuration"
       },
-      "template": "{ name: '{name}', type: '{type}', ...{rest} }"
+      "template": "{\n  name: '{name}', // Database field name\n  type: 'number',\n  label: 'Number Field', // Label shown in the admin UI\n  required: true,\n  min: 0,\n  max: 1000,\n  // Optional: Add custom validation\n  validate: (value) => {\n    if (value && value % 1 !== 0) {\n      return 'Please enter a whole number';\n    }\n    return true; // Return true if valid\n  },\n}"
     },
     "createTextField": {
       "name": "createTextField",
-      "description": "Creates a Payload CMS 3.0 TextField configuration",
+      "description": "Creates a Payload CMS 3.0 TextField configuration\n\nExample:\n```typescript\n{\n  name: 'title',\n  type: 'text',\n  required: true,\n  label: 'Post Title',\n  minLength: 10,\n  maxLength: 100,\n  // Custom validation example\n  validate: (value, { siblingData }) => {\n    if (value && value.toLowerCase().includes('forbidden')) {\n      return 'Title cannot contain the word \"forbidden\"';\n    }\n    return true;\n  }\n}\n```",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -12322,14 +12329,14 @@
         ],
         "description": "Field configuration"
       },
-      "template": "{ name: '{name}', type: '{type}', ...{rest} }"
+      "template": "{\n  name: '{name}', // Database field name\n  type: 'text',\n  label: 'Text Field', // Label shown in the admin UI\n  required: true,\n  minLength: 2,\n  maxLength: 100,\n  // Optional: Add custom validation\n  validate: (value, { siblingData }) => {\n    if (value && value.toLowerCase().includes('forbidden')) {\n      return 'This field cannot contain the word \"forbidden\"';\n    }\n    return true; // Return true if valid\n  },\n}"
     },
     "createEmailField": {
       "name": "createEmailField",
-      "description": "Creates a Payload CMS 3.0 EmailField configuration",
+      "description": "Creates a Payload CMS 3.0 EmailField configuration\n\nExample:\n```typescript\n{\n  name: 'emailField',\n  type: 'email',\n  required: true,\n  label: 'Email Field',\n  // Custom validation example\n  validate: (value, { siblingData, operation }) => {\n    // Validation logic based on the value, sibling data, or operation\n    if (operation === 'create' && !value) {\n      return 'This field is required for new records';\n    }\n    return true;\n  }\n}\n```",
       "inputSchema": {
         "type": "object",
-        "description": "import(\"/home/rrrodzilla/Projects/payload-mcp/node_modules/payload/dist/fields/config/types\").EmailField configuration object",
+        "description": "Payload.EmailField configuration object",
         "properties": {
           "name": {
             "type": "string",
@@ -12357,6 +12364,10 @@
           "maxLength": {
             "type": "number",
             "description": "Maximum length of the text"
+          },
+          "validate": {
+            "type": "string",
+            "description": "Custom validation function that returns true if valid or an error message string if invalid"
           }
         },
         "required": [
@@ -12364,14 +12375,14 @@
           "type"
         ]
       },
-      "template": "{ name: '{name}', type: '{type}', ...{rest} }"
+      "template": "{\n  name: '{name}', // Database field name\n  type: 'email',\n  label: 'Email Field', // Label shown in the admin UI\n  required: true,\n  // Optional: Add custom validation beyond the built-in email validation\n  validate: (value) => {\n    if (value && !value.includes('@example.com')) {\n      return 'Only example.com email addresses are allowed';\n    }\n    return true; // Return true if valid\n  },\n}"
     },
     "createTextareaField": {
       "name": "createTextareaField",
-      "description": "Creates a Payload CMS 3.0 TextareaField configuration",
+      "description": "Creates a Payload CMS 3.0 TextareaField configuration\n\nExample:\n```typescript\n{\n  name: 'textareaField',\n  type: 'textarea',\n  required: true,\n  label: 'Textarea Field',\n  // Custom validation example\n  validate: (value, { siblingData, operation }) => {\n    // Validation logic based on the value, sibling data, or operation\n    if (operation === 'create' && !value) {\n      return 'This field is required for new records';\n    }\n    return true;\n  }\n}\n```",
       "inputSchema": {
         "type": "object",
-        "description": "import(\"/home/rrrodzilla/Projects/payload-mcp/node_modules/payload/dist/fields/config/types\").TextareaField configuration object",
+        "description": "Payload.TextareaField configuration object",
         "properties": {
           "name": {
             "type": "string",
@@ -12399,6 +12410,10 @@
           "maxLength": {
             "type": "number",
             "description": "Maximum length of the text"
+          },
+          "validate": {
+            "type": "string",
+            "description": "Custom validation function that returns true if valid or an error message string if invalid"
           }
         },
         "required": [
@@ -12406,11 +12421,11 @@
           "type"
         ]
       },
-      "template": "{ name: '{name}', type: '{type}', ...{rest} }"
+      "template": "{\n  name: '{name}', // Database field name\n  type: 'textarea',\n  label: 'Textarea Field', // Label shown in the admin UI\n  required: true,\n  minLength: 10,\n  maxLength: 1000,\n  // Optional: Add custom validation\n  validate: (value) => {\n    if (value && value.split('\\n').length < 2) {\n      return 'Please include at least two paragraphs';\n    }\n    return true; // Return true if valid\n  },\n}"
     },
     "createDateField": {
       "name": "createDateField",
-      "description": "Creates a Payload CMS 3.0 DateField configuration",
+      "description": "Creates a Payload CMS 3.0 DateField configuration\n\nExample:\n```typescript\n{\n  name: 'dateField',\n  type: 'date',\n  required: true,\n  label: 'Date Field',\n  // Custom validation example\n  validate: (value, { siblingData, operation }) => {\n    // Validation logic based on the value, sibling data, or operation\n    if (operation === 'create' && !value) {\n      return 'This field is required for new records';\n    }\n    return true;\n  }\n}\n```",
       "inputSchema": {
         "type": "object",
         "format": "date-time",
@@ -12438,6 +12453,10 @@
           "defaultValue": {
             "type": "string",
             "description": "Default date value"
+          },
+          "validate": {
+            "type": "string",
+            "description": "Custom validation function that returns true if valid or an error message string if invalid"
           }
         },
         "required": [
@@ -12445,14 +12464,14 @@
           "type"
         ]
       },
-      "template": "{ name: '{name}', type: '{type}', ...{rest} }"
+      "template": "{\n  name: '{name}', // Database field name\n  type: 'date',\n  label: 'Date Field', // Label shown in the admin UI\n  required: true,\n  admin: {\n    date: {\n      pickerAppearance: 'dayAndTime', // 'dayOnly', 'timeOnly', or 'dayAndTime'\n    },\n  },\n  // Optional: Add custom validation\n  validate: (value) => {\n    const date = new Date(value);\n    if (date < new Date()) {\n      return 'Date must be in the future';\n    }\n    return true; // Return true if valid\n  },\n}"
     },
     "createGroupField": {
       "name": "createGroupField",
-      "description": "Creates a Payload CMS 3.0 GroupField configuration",
+      "description": "Creates a Payload CMS 3.0 GroupField configuration\n\nExample:\n```typescript\n{\n  name: 'groupField',\n  type: 'group',\n  required: true,\n  label: 'Group Field',\n  // Custom validation example\n  validate: (value, { siblingData, operation }) => {\n    // Validation logic based on the value, sibling data, or operation\n    if (operation === 'create' && !value) {\n      return 'This field is required for new records';\n    }\n    return true;\n  }\n}\n```",
       "inputSchema": {
         "type": "object",
-        "description": "import(\"/home/rrrodzilla/Projects/payload-mcp/node_modules/payload/dist/fields/config/types\").GroupField configuration object",
+        "description": "Payload.GroupField configuration object",
         "properties": {
           "name": {
             "type": "string",
@@ -12472,6 +12491,10 @@
           "required": {
             "type": "boolean",
             "description": "Whether this field is required"
+          },
+          "validate": {
+            "type": "string",
+            "description": "Custom validation function that returns true if valid or an error message string if invalid"
           }
         },
         "required": [
@@ -12479,11 +12502,11 @@
           "type"
         ]
       },
-      "template": "{ name: '{name}', type: '{type}', ...{rest} }"
+      "template": "{\n  name: '{name}', // Database field name\n  type: 'group',\n  label: 'Group Field', // Label shown in the admin UI\n  fields: [\n    {\n      name: 'groupedField1',\n      type: 'text',\n      required: true,\n    },\n    {\n      name: 'groupedField2',\n      type: 'number',\n    },\n    // Add more fields as needed\n  ],\n  // Optional: Add custom validation for the entire group\n  validate: (value) => {\n    if (value && (!value.groupedField1 || !value.groupedField2)) {\n      return 'Both fields in the group are required';\n    }\n    return true; // Return true if valid\n  },\n}"
     },
     "createUploadField": {
       "name": "createUploadField",
-      "description": "Creates a Payload CMS 3.0 UploadField configuration",
+      "description": "Creates a Payload CMS 3.0 UploadField configuration\n\nExample:\n```typescript\n{\n  name: 'uploadField',\n  type: 'upload',\n  required: true,\n  label: 'Upload Field',\n  // Custom validation example\n  validate: (value, { siblingData, operation }) => {\n    // Validation logic based on the value, sibling data, or operation\n    if (operation === 'create' && !value) {\n      return 'This field is required for new records';\n    }\n    return true;\n  }\n}\n```",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -12510,14 +12533,14 @@
         ],
         "description": "Field configuration"
       },
-      "template": "{ name: '{name}', type: '{type}', ...{rest} }"
+      "template": "{\n  name: '{name}', // Database field name\n  type: 'upload',\n  label: 'Upload Field', // Label shown in the admin UI\n  relationTo: 'media', // The collection to upload to\n  required: true,\n  // Optional: Add custom validation\n  validate: (value) => {\n    if (!value) {\n      return 'Please upload a file';\n    }\n    return true; // Return true if valid\n  },\n}"
     },
     "createCodeField": {
       "name": "createCodeField",
-      "description": "Creates a Payload CMS 3.0 CodeField configuration",
+      "description": "Creates a Payload CMS 3.0 CodeField configuration\n\nExample:\n```typescript\n{\n  name: 'codeField',\n  type: 'code',\n  required: true,\n  label: 'Code Field',\n  // Custom validation example\n  validate: (value, { siblingData, operation }) => {\n    // Validation logic based on the value, sibling data, or operation\n    if (operation === 'create' && !value) {\n      return 'This field is required for new records';\n    }\n    return true;\n  }\n}\n```",
       "inputSchema": {
         "type": "object",
-        "description": "import(\"/home/rrrodzilla/Projects/payload-mcp/node_modules/payload/dist/fields/config/types\").CodeField configuration object",
+        "description": "Payload.CodeField configuration object",
         "properties": {
           "name": {
             "type": "string",
@@ -12537,6 +12560,10 @@
           "required": {
             "type": "boolean",
             "description": "Whether this field is required"
+          },
+          "validate": {
+            "type": "string",
+            "description": "Custom validation function that returns true if valid or an error message string if invalid"
           }
         },
         "required": [
@@ -12544,14 +12571,14 @@
           "type"
         ]
       },
-      "template": "{ name: '{name}', type: '{type}', ...{rest} }"
+      "template": "{\n  name: '{name}', // Database field name\n  type: 'code',\n  label: 'Code Field', // Label shown in the admin UI\n  admin: {\n    language: 'javascript', // The language for syntax highlighting\n  },\n  // Optional: Add custom validation\n  validate: (value) => {\n    if (value && value.length < 10) {\n      return 'Please enter more code';\n    }\n    return true; // Return true if valid\n  },\n}"
     },
     "createJSONField": {
       "name": "createJSONField",
-      "description": "Creates a Payload CMS 3.0 JSONField configuration",
+      "description": "Creates a Payload CMS 3.0 JSONField configuration\n\nExample:\n```typescript\n{\n  name: 'jsonField',\n  type: 'json',\n  required: true,\n  label: 'Json Field',\n  // Custom validation example\n  validate: (value, { siblingData, operation }) => {\n    // Validation logic based on the value, sibling data, or operation\n    if (operation === 'create' && !value) {\n      return 'This field is required for new records';\n    }\n    return true;\n  }\n}\n```",
       "inputSchema": {
         "type": "object",
-        "description": "import(\"/home/rrrodzilla/Projects/payload-mcp/node_modules/payload/dist/fields/config/types\").JSONField configuration object",
+        "description": "Payload.JSONField configuration object",
         "properties": {
           "name": {
             "type": "string",
@@ -12571,6 +12598,10 @@
           "required": {
             "type": "boolean",
             "description": "Whether this field is required"
+          },
+          "validate": {
+            "type": "string",
+            "description": "Custom validation function that returns true if valid or an error message string if invalid"
           }
         },
         "required": [
@@ -12578,11 +12609,11 @@
           "type"
         ]
       },
-      "template": "{ name: '{name}', type: '{type}', ...{rest} }"
+      "template": "{\n  name: '{name}', // Database field name\n  type: 'json',\n  label: 'JSON Field', // Label shown in the admin UI\n  // Optional: Add custom validation\n  validate: (value) => {\n    try {\n      if (typeof value === 'string') {\n        JSON.parse(value);\n      }\n      return true; // Return true if valid\n    } catch (err) {\n      return 'Invalid JSON format';\n    }\n  },\n}"
     },
     "createSelectField": {
       "name": "createSelectField",
-      "description": "Creates a Payload CMS 3.0 SelectField configuration",
+      "description": "Creates a Payload CMS 3.0 SelectField configuration\n\nExample:\n```typescript\n{\n  name: 'status',\n  type: 'select',\n  required: true,\n  label: 'Status',\n  options: [\n    { label: 'Draft', value: 'draft' },\n    { label: 'Published', value: 'published' },\n    { label: 'Archived', value: 'archived' }\n  ],\n  defaultValue: 'draft',\n  // Custom validation example\n  validate: (value, { siblingData }) => {\n    if (value === 'published' && !siblingData.publishedAt) {\n      return 'Cannot set status to published without a publish date';\n    }\n    return true;\n  }\n}\n```",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -12609,11 +12640,11 @@
         ],
         "description": "Field configuration"
       },
-      "template": "{ name: '{name}', type: '{type}', ...{rest} }"
+      "template": "{\n  name: '{name}', // Database field name\n  type: 'select',\n  label: 'Select Field', // Label shown in the admin UI\n  required: true,\n  options: [\n    {\n      label: 'Option One',\n      value: 'option-one',\n    },\n    {\n      label: 'Option Two',\n      value: 'option-two',\n    },\n  ],\n  defaultValue: 'option-one',\n  // Optional: Add custom validation\n  validate: (value, { siblingData }) => {\n    if (value === 'option-two' && !siblingData.requiredForOptionTwo) {\n      return 'Additional field is required when Option Two is selected';\n    }\n    return true; // Return true if valid\n  },\n}"
     },
     "createPolymorphicRelationshipField": {
       "name": "createPolymorphicRelationshipField",
-      "description": "Creates a Payload CMS 3.0 PolymorphicRelationshipField configuration",
+      "description": "Creates a Payload CMS 3.0 PolymorphicRelationshipField configuration\n\nExample:\n```typescript\n{\n  name: 'polymorphicrelationshipField',\n  type: 'polymorphicrelationship',\n  required: true,\n  label: 'Polymorphicrelationship Field',\n  // Custom validation example\n  validate: (value, { siblingData, operation }) => {\n    // Validation logic based on the value, sibling data, or operation\n    if (operation === 'create' && !value) {\n      return 'This field is required for new records';\n    }\n    return true;\n  }\n}\n```",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -12640,11 +12671,11 @@
         ],
         "description": "Field configuration"
       },
-      "template": "{ name: '{name}', type: '{type}', ...{rest} }"
+      "template": "{\n  name: '{name}', // Database field name\n  type: 'relationship',\n  label: 'Relationship Field', // Label shown in the admin UI\n  required: true,\n  relationTo: 'collection-slug', // The collection to relate to\n  hasMany: false, // Set to true for multiple relationships\n  // Optional: Add custom validation\n  validate: async (value, { req }) => {\n    if (value) {\n      try {\n        const doc = await req.payload.findByID({\n          collection: 'collection-slug',\n          id: value,\n        });\n        if (!doc) {\n          return 'Related document not found';\n        }\n      } catch (err) {\n        return 'Error validating relationship';\n      }\n    }\n    return true; // Return true if valid\n  },\n}"
     },
     "createSingleRelationshipField": {
       "name": "createSingleRelationshipField",
-      "description": "Creates a Payload CMS 3.0 SingleRelationshipField configuration",
+      "description": "Creates a Payload CMS 3.0 SingleRelationshipField configuration\n\nExample:\n```typescript\n{\n  name: 'singlerelationshipField',\n  type: 'singlerelationship',\n  required: true,\n  label: 'Singlerelationship Field',\n  // Custom validation example\n  validate: (value, { siblingData, operation }) => {\n    // Validation logic based on the value, sibling data, or operation\n    if (operation === 'create' && !value) {\n      return 'This field is required for new records';\n    }\n    return true;\n  }\n}\n```",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -12671,11 +12702,11 @@
         ],
         "description": "Field configuration"
       },
-      "template": "{ name: '{name}', type: '{type}', ...{rest} }"
+      "template": "{\n  name: '{name}', // Database field name\n  type: 'singlerelationship',\n  label: 'Singlerelationship Field', // Label shown in the admin UI\n  required: true,\n  // Add field-specific properties here\n  \n  // Optional: Add custom validation\n  validate: (value, { siblingData, operation }) => {\n    // Custom validation logic based on the value, sibling data, or operation\n    if (!value && operation === 'create') {\n      return 'This field is required for new records';\n    }\n    return true; // Return true if valid\n  },\n  ...{rest}\n}"
     },
     "createRelationshipField": {
       "name": "createRelationshipField",
-      "description": "Creates a Payload CMS 3.0 RelationshipField configuration",
+      "description": "Creates a Payload CMS 3.0 RelationshipField configuration\n\nExample:\n```typescript\n{\n  name: 'author',\n  type: 'relationship',\n  relationTo: 'users',\n  hasMany: false,\n  required: true,\n  // Custom validation example\n  validate: async (value, { req }) => {\n    // Check if the related document exists and is published\n    if (value) {\n      const relatedDoc = await req.payload.findByID({\n        collection: 'users',\n        id: value,\n      });\n      \n      if (!relatedDoc) {\n        return 'Selected user does not exist';\n      }\n    }\n    return true;\n  }\n}\n```",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -12702,14 +12733,14 @@
         ],
         "description": "Field configuration"
       },
-      "template": "{ name: '{name}', type: '{type}', ...{rest} }"
+      "template": "{\n  name: '{name}', // Database field name\n  type: 'relationship',\n  label: 'Relationship Field', // Label shown in the admin UI\n  required: true,\n  relationTo: 'collection-slug', // The collection to relate to\n  hasMany: false, // Set to true for multiple relationships\n  // Optional: Add custom validation\n  validate: async (value, { req }) => {\n    if (value) {\n      try {\n        const doc = await req.payload.findByID({\n          collection: 'collection-slug',\n          id: value,\n        });\n        if (!doc) {\n          return 'Related document not found';\n        }\n      } catch (err) {\n        return 'Error validating relationship';\n      }\n    }\n    return true; // Return true if valid\n  },\n}"
     },
     "createRichTextField": {
       "name": "createRichTextField",
-      "description": "Creates a Payload CMS 3.0 RichTextField configuration",
+      "description": "Creates a Payload CMS 3.0 RichTextField configuration\n\nExample:\n```typescript\n{\n  name: 'richtextField',\n  type: 'richtext',\n  required: true,\n  label: 'Richtext Field',\n  // Custom validation example\n  validate: (value, { siblingData, operation }) => {\n    // Validation logic based on the value, sibling data, or operation\n    if (operation === 'create' && !value) {\n      return 'This field is required for new records';\n    }\n    return true;\n  }\n}\n```",
       "inputSchema": {
         "type": "object",
-        "description": "import(\"/home/rrrodzilla/Projects/payload-mcp/node_modules/payload/dist/fields/config/types\").RichTextField<TValue, TAdapterProps, TExtraProperties> configuration object",
+        "description": "Payload.RichTextField configuration object",
         "properties": {
           "name": {
             "type": "string",
@@ -12729,6 +12760,10 @@
           "required": {
             "type": "boolean",
             "description": "Whether this field is required"
+          },
+          "validate": {
+            "type": "string",
+            "description": "Custom validation function that returns true if valid or an error message string if invalid"
           }
         },
         "required": [
@@ -12736,11 +12771,11 @@
           "type"
         ]
       },
-      "template": "{ name: '{name}', type: '{type}', ...{rest} }"
+      "template": "{\n  name: '{name}', // Database field name\n  type: 'richText',\n  label: 'Rich Text Field', // Label shown in the admin UI\n  required: true,\n  admin: {\n    elements: ['h2', 'h3', 'link', 'ol', 'ul', 'indent'],\n    leaves: ['bold', 'italic', 'underline'],\n  },\n  // Optional: Add custom validation\n  validate: (value) => {\n    if (value && JSON.stringify(value).length < 20) {\n      return 'Please enter more content';\n    }\n    return true; // Return true if valid\n  },\n}"
     },
     "createArrayField": {
       "name": "createArrayField",
-      "description": "Creates a Payload CMS 3.0 ArrayField configuration",
+      "description": "Creates a Payload CMS 3.0 ArrayField configuration\n\nExample:\n```typescript\n{\n  name: 'items',\n  type: 'array',\n  label: 'Items',\n  minRows: 1,\n  maxRows: 10,\n  fields: [\n    {\n      name: 'name',\n      type: 'text',\n      required: true\n    },\n    {\n      name: 'quantity',\n      type: 'number',\n      required: true,\n      min: 1\n    }\n  ],\n  // Custom validation example\n  validate: (value) => {\n    if (value && value.length > 0) {\n      const totalQuantity = value.reduce((sum, item) => sum + (item.quantity || 0), 0);\n      if (totalQuantity > 100) {\n        return 'Total quantity cannot exceed 100';\n      }\n    }\n    return true;\n  }\n}\n```",
       "inputSchema": {
         "type": "object",
         "items": {
@@ -12774,6 +12809,10 @@
           "maxRows": {
             "type": "number",
             "description": "Maximum number of rows"
+          },
+          "validate": {
+            "type": "string",
+            "description": "Custom validation function that returns true if valid or an error message string if invalid"
           }
         },
         "required": [
@@ -12781,14 +12820,14 @@
           "type"
         ]
       },
-      "template": "{ name: '{name}', type: '{type}', ...{rest} }"
+      "template": "{\n  name: '{name}', // Database field name\n  type: 'array',\n  label: 'Array Field', // Label shown in the admin UI\n  minRows: 1,\n  maxRows: 10,\n  labels: {\n    singular: 'Item',\n    plural: 'Items',\n  },\n  fields: [\n    {\n      name: 'itemName',\n      type: 'text',\n      required: true,\n    },\n    // Add more fields as needed\n  ],\n  // Optional: Add custom validation\n  validate: (value) => {\n    if (value && value.length > 0) {\n      // Validate the array as a whole\n      return true;\n    }\n    return 'Please add at least one item';\n  },\n}"
     },
     "createRadioField": {
       "name": "createRadioField",
-      "description": "Creates a Payload CMS 3.0 RadioField configuration",
+      "description": "Creates a Payload CMS 3.0 RadioField configuration\n\nExample:\n```typescript\n{\n  name: 'radioField',\n  type: 'radio',\n  required: true,\n  label: 'Radio Field',\n  // Custom validation example\n  validate: (value, { siblingData, operation }) => {\n    // Validation logic based on the value, sibling data, or operation\n    if (operation === 'create' && !value) {\n      return 'This field is required for new records';\n    }\n    return true;\n  }\n}\n```",
       "inputSchema": {
         "type": "object",
-        "description": "import(\"/home/rrrodzilla/Projects/payload-mcp/node_modules/payload/dist/fields/config/types\").RadioField configuration object",
+        "description": "Payload.RadioField configuration object",
         "properties": {
           "name": {
             "type": "string",
@@ -12823,6 +12862,10 @@
               }
             },
             "description": "Options for the select/radio field"
+          },
+          "validate": {
+            "type": "string",
+            "description": "Custom validation function that returns true if valid or an error message string if invalid"
           }
         },
         "required": [
@@ -12830,14 +12873,14 @@
           "type"
         ]
       },
-      "template": "{ name: '{name}', type: '{type}', ...{rest} }"
+      "template": "{\n  name: '{name}', // Database field name\n  type: 'radio',\n  label: 'Radio Field', // Label shown in the admin UI\n  required: true,\n  options: [\n    {\n      label: 'Option One',\n      value: 'option-one',\n    },\n    {\n      label: 'Option Two',\n      value: 'option-two',\n    },\n  ],\n  defaultValue: 'option-one',\n  // Optional: Add custom validation\n  validate: (value) => {\n    // Custom validation logic\n    return true; // Return true if valid\n  },\n}"
     },
     "createBlocksField": {
       "name": "createBlocksField",
-      "description": "Creates a Payload CMS 3.0 BlocksField configuration",
+      "description": "Creates a Payload CMS 3.0 BlocksField configuration\n\nExample:\n```typescript\n{\n  name: 'blocksField',\n  type: 'blocks',\n  required: true,\n  label: 'Blocks Field',\n  // Custom validation example\n  validate: (value, { siblingData, operation }) => {\n    // Validation logic based on the value, sibling data, or operation\n    if (operation === 'create' && !value) {\n      return 'This field is required for new records';\n    }\n    return true;\n  }\n}\n```",
       "inputSchema": {
         "type": "object",
-        "description": "import(\"/home/rrrodzilla/Projects/payload-mcp/node_modules/payload/dist/fields/config/types\").BlocksField configuration object",
+        "description": "Payload.BlocksField configuration object",
         "properties": {
           "name": {
             "type": "string",
@@ -12857,6 +12900,10 @@
           "required": {
             "type": "boolean",
             "description": "Whether this field is required"
+          },
+          "validate": {
+            "type": "string",
+            "description": "Custom validation function that returns true if valid or an error message string if invalid"
           }
         },
         "required": [
@@ -12864,11 +12911,11 @@
           "type"
         ]
       },
-      "template": "{ name: '{name}', type: '{type}', ...{rest} }"
+      "template": "{\n  name: '{name}', // Database field name\n  type: 'blocks',\n  label: 'Blocks Field', // Label shown in the admin UI\n  minRows: 1,\n  maxRows: 10,\n  blocks: [\n    {\n      slug: 'textBlock',\n      fields: [\n        {\n          name: 'text',\n          type: 'richText',\n          required: true,\n        },\n      ],\n    },\n    {\n      slug: 'imageBlock',\n      fields: [\n        {\n          name: 'image',\n          type: 'upload',\n          relationTo: 'media',\n          required: true,\n        },\n      ],\n    },\n    // Add more block types as needed\n  ],\n  // Optional: Add custom validation\n  validate: (value) => {\n    if (value && value.length > 0) {\n      // Validate the blocks as a whole\n      return true;\n    }\n    return 'Please add at least one block';\n  },\n}"
     },
     "createPointField": {
       "name": "createPointField",
-      "description": "Creates a Payload CMS 3.0 PointField configuration",
+      "description": "Creates a Payload CMS 3.0 PointField configuration\n\nExample:\n```typescript\n{\n  name: 'pointField',\n  type: 'point',\n  required: true,\n  label: 'Point Field',\n  // Custom validation example\n  validate: (value, { siblingData, operation }) => {\n    // Validation logic based on the value, sibling data, or operation\n    if (operation === 'create' && !value) {\n      return 'This field is required for new records';\n    }\n    return true;\n  }\n}\n```",
       "inputSchema": {
         "type": "object",
         "description": "Numeric value",
@@ -12891,6 +12938,10 @@
           "required": {
             "type": "boolean",
             "description": "Whether this field is required"
+          },
+          "validate": {
+            "type": "string",
+            "description": "Custom validation function that returns true if valid or an error message string if invalid"
           }
         },
         "required": [
@@ -12898,14 +12949,14 @@
           "type"
         ]
       },
-      "template": "{ name: '{name}', type: '{type}', ...{rest} }"
+      "template": "{\n  name: '{name}', // Database field name\n  type: 'point',\n  label: 'Point Field', // Label shown in the admin UI\n  required: true,\n  // Add field-specific properties here\n  \n  // Optional: Add custom validation\n  validate: (value, { siblingData, operation }) => {\n    // Custom validation logic based on the value, sibling data, or operation\n    if (!value && operation === 'create') {\n      return 'This field is required for new records';\n    }\n    return true; // Return true if valid\n  },\n  ...{rest}\n}"
     },
     "createJoinField": {
       "name": "createJoinField",
-      "description": "Creates a Payload CMS 3.0 JoinField configuration",
+      "description": "Creates a Payload CMS 3.0 JoinField configuration\n\nA virtual field that loads in related collections by querying a relationship or upload field.\n\nExample:\n```typescript\n{\n  name: 'joinField',\n  type: 'join',\n  required: true,\n  label: 'Join Field',\n  // Custom validation example\n  validate: (value, { siblingData, operation }) => {\n    // Validation logic based on the value, sibling data, or operation\n    if (operation === 'create' && !value) {\n      return 'This field is required for new records';\n    }\n    return true;\n  }\n}\n```",
       "inputSchema": {
         "type": "object",
-        "description": "import(\"/home/rrrodzilla/Projects/payload-mcp/node_modules/payload/dist/fields/config/types\").JoinField configuration object",
+        "description": "Payload.JoinField configuration object",
         "properties": {
           "name": {
             "type": "string",
@@ -12925,6 +12976,10 @@
           "required": {
             "type": "boolean",
             "description": "Whether this field is required"
+          },
+          "validate": {
+            "type": "string",
+            "description": "Custom validation function that returns true if valid or an error message string if invalid"
           }
         },
         "required": [
@@ -12932,11 +12987,11 @@
           "type"
         ]
       },
-      "template": "{ name: '{name}', type: '{type}', ...{rest} }"
+      "template": "{\n  name: '{name}', // Database field name\n  type: 'join',\n  label: 'Join Field', // Label shown in the admin UI\n  required: true,\n  // Add field-specific properties here\n  \n  // Optional: Add custom validation\n  validate: (value, { siblingData, operation }) => {\n    // Custom validation logic based on the value, sibling data, or operation\n    if (!value && operation === 'create') {\n      return 'This field is required for new records';\n    }\n    return true; // Return true if valid\n  },\n  ...{rest}\n}"
     },
     "createField": {
       "name": "createField",
-      "description": "Creates a Payload CMS 3.0 Field configuration",
+      "description": "Creates a Payload CMS 3.0 Field configuration\n\nExample:\n```typescript\n{\n  name: 'Field',\n  type: '',\n  required: true,\n  label: ' Field',\n  // Custom validation example\n  validate: (value, { siblingData, operation }) => {\n    // Validation logic based on the value, sibling data, or operation\n    if (operation === 'create' && !value) {\n      return 'This field is required for new records';\n    }\n    return true;\n  }\n}\n```",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -12963,7 +13018,7 @@
         ],
         "description": "Field configuration"
       },
-      "template": "{ name: '{name}', type: '{type}', ...{rest} }"
+      "template": "{\n  name: '{name}', // Database field name\n  type: 'text',\n  label: 'Text Field', // Label shown in the admin UI\n  required: true,\n  minLength: 2,\n  maxLength: 100,\n  // Optional: Add custom validation\n  validate: (value, { siblingData }) => {\n    if (value && value.toLowerCase().includes('forbidden')) {\n      return 'This field cannot contain the word \"forbidden\"';\n    }\n    return true; // Return true if valid\n  },\n}"
     }
   }
 }

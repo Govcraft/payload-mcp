@@ -1,0 +1,9 @@
+{
+  "name": "createBeforeValidateHook",
+  "description": "Creates a Payload CMS 3.0 BeforeValidateHook configuration",
+  "inputSchema": {
+    "type": "object",
+    "properties": {}
+  },
+  "template": "/**\n * This hook runs before validation occurs\n * It allows you to modify the data before validation\n */\nconst beforeValidateHook = ({ data, req, operation, originalDoc }) => {\n  // 'data' contains the data to be validated\n  // 'req' is the Express request object with the Payload instance\n  // 'operation' is either 'create' or 'update'\n  // 'originalDoc' is the document before changes (for updates)\n  \n  // Example: Set default values\n  return {\n    ...data,\n    status: data.status || 'draft',\n  };\n};"
+}
