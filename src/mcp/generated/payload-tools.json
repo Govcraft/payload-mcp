@@ -3,7 +3,7 @@
     "createCollection": {
       "name": "createCollection",
       "description": "Creates a Payload CMS 3.0 CollectionConfig configuration",
-      "parameters": {
+      "inputSchema": {
         "type": "object",
         "properties": {
           "auth": {
@@ -473,13 +473,12 @@
           "versions"
         ]
       },
-      "execute": "code_gen",
       "template": "export const {slug} = { slug: '{slug}', fields: {fields}, ...{rest} };"
     },
     "createGlobal": {
       "name": "createGlobal",
       "description": "Creates a Payload CMS 3.0 GlobalConfig configuration",
-      "parameters": {
+      "inputSchema": {
         "type": "object",
         "properties": {
           "endpoints": {
@@ -765,33 +764,30 @@
           "versions"
         ]
       },
-      "execute": "code_gen",
       "template": "export const {slug} = { slug: '{slug}', fields: {fields}, ...{rest} };"
     },
     "createAccess": {
       "name": "createAccess",
       "description": "Creates a Payload CMS 3.0 Access configuration",
-      "parameters": {
+      "inputSchema": {
         "type": "object",
         "properties": {}
       },
-      "execute": "code_gen",
       "template": "({ req }) => !!req.user;"
     },
     "createAfterErrorHook": {
       "name": "createAfterErrorHook",
       "description": "Creates a Payload CMS 3.0 AfterErrorHook configuration",
-      "parameters": {
+      "inputSchema": {
         "type": "object",
         "properties": {}
       },
-      "execute": "code_gen",
       "template": "({ data }) => { return { ...data, modified: true }; }"
     },
     "create": {
       "name": "create",
       "description": "Creates a Payload CMS 3.0 Config configuration",
-      "parameters": {
+      "inputSchema": {
         "type": "object",
         "properties": {
           "admin": {
@@ -9544,183 +9540,165 @@
           "secret"
         ]
       },
-      "execute": "code_gen",
       "template": "export const {slug} = { slug: '{slug}', fields: {fields}, ...{rest} };"
     },
     "createBeforeOperationHook": {
       "name": "createBeforeOperationHook",
       "description": "Creates a Payload CMS 3.0 BeforeOperationHook configuration",
-      "parameters": {
+      "inputSchema": {
         "type": "object",
         "properties": {}
       },
-      "execute": "code_gen",
       "template": "({ data }) => { return { ...data, modified: true }; }"
     },
     "createBeforeValidateHook": {
       "name": "createBeforeValidateHook",
       "description": "Creates a Payload CMS 3.0 BeforeValidateHook configuration",
-      "parameters": {
+      "inputSchema": {
         "type": "object",
         "properties": {}
       },
-      "execute": "code_gen",
       "template": "({ data }) => { return { ...data, modified: true }; }"
     },
     "createBeforeChangeHook": {
       "name": "createBeforeChangeHook",
       "description": "Creates a Payload CMS 3.0 BeforeChangeHook configuration",
-      "parameters": {
+      "inputSchema": {
         "type": "object",
         "properties": {}
       },
-      "execute": "code_gen",
       "template": "({ data }) => { return { ...data, modified: true }; }"
     },
     "createAfterChangeHook": {
       "name": "createAfterChangeHook",
       "description": "Creates a Payload CMS 3.0 AfterChangeHook configuration",
-      "parameters": {
+      "inputSchema": {
         "type": "object",
         "properties": {}
       },
-      "execute": "code_gen",
       "template": "({ data }) => { return { ...data, modified: true }; }"
     },
     "createBeforeReadHook": {
       "name": "createBeforeReadHook",
       "description": "Creates a Payload CMS 3.0 BeforeReadHook configuration",
-      "parameters": {
+      "inputSchema": {
         "type": "object",
         "properties": {}
       },
-      "execute": "code_gen",
       "template": "({ data }) => { return { ...data, modified: true }; }"
     },
     "createAfterReadHook": {
       "name": "createAfterReadHook",
       "description": "Creates a Payload CMS 3.0 AfterReadHook configuration",
-      "parameters": {
+      "inputSchema": {
         "type": "object",
         "properties": {}
       },
-      "execute": "code_gen",
       "template": "({ data }) => { return { ...data, modified: true }; }"
     },
     "createBeforeDeleteHook": {
       "name": "createBeforeDeleteHook",
       "description": "Creates a Payload CMS 3.0 BeforeDeleteHook configuration",
-      "parameters": {
+      "inputSchema": {
         "type": "object",
         "properties": {}
       },
-      "execute": "code_gen",
       "template": "({ data }) => { return { ...data, modified: true }; }"
     },
     "createAfterDeleteHook": {
       "name": "createAfterDeleteHook",
       "description": "Creates a Payload CMS 3.0 AfterDeleteHook configuration",
-      "parameters": {
+      "inputSchema": {
         "type": "object",
         "properties": {}
       },
-      "execute": "code_gen",
       "template": "({ data }) => { return { ...data, modified: true }; }"
     },
     "createAfterOperationHook": {
       "name": "createAfterOperationHook",
       "description": "Creates a Payload CMS 3.0 AfterOperationHook configuration",
-      "parameters": {
+      "inputSchema": {
         "type": "object",
         "properties": {}
       },
-      "execute": "code_gen",
       "template": "({ data }) => { return { ...data, modified: true }; }"
     },
     "createBeforeLoginHook": {
       "name": "createBeforeLoginHook",
       "description": "Creates a Payload CMS 3.0 BeforeLoginHook configuration",
-      "parameters": {
+      "inputSchema": {
         "type": "object",
         "properties": {}
       },
-      "execute": "code_gen",
       "template": "({ data }) => { return { ...data, modified: true }; }"
     },
     "createAfterLoginHook": {
       "name": "createAfterLoginHook",
       "description": "Creates a Payload CMS 3.0 AfterLoginHook configuration",
-      "parameters": {
+      "inputSchema": {
         "type": "object",
         "properties": {}
       },
-      "execute": "code_gen",
       "template": "({ data }) => { return { ...data, modified: true }; }"
     },
     "createAfterLogoutHook": {
       "name": "createAfterLogoutHook",
       "description": "Creates a Payload CMS 3.0 AfterLogoutHook configuration",
-      "parameters": {
+      "inputSchema": {
         "type": "object",
         "properties": {}
       },
-      "execute": "code_gen",
       "template": "({ data }) => { return { ...data, modified: true }; }"
     },
     "createAfterMeHook": {
       "name": "createAfterMeHook",
       "description": "Creates a Payload CMS 3.0 AfterMeHook configuration",
-      "parameters": {
+      "inputSchema": {
         "type": "object",
         "properties": {}
       },
-      "execute": "code_gen",
       "template": "({ data }) => { return { ...data, modified: true }; }"
     },
     "createRefreshHook": {
       "name": "createRefreshHook",
       "description": "Creates a Payload CMS 3.0 RefreshHook configuration",
-      "parameters": {
+      "inputSchema": {
         "type": "object",
         "properties": {}
       },
-      "execute": "code_gen",
       "template": "({ data }) => { return { ...data, modified: true }; }"
     },
     "createMeHook": {
       "name": "createMeHook",
       "description": "Creates a Payload CMS 3.0 MeHook configuration",
-      "parameters": {
+      "inputSchema": {
         "type": "object",
         "properties": {}
       },
-      "execute": "code_gen",
       "template": "({ data }) => { return { ...data, modified: true }; }"
     },
     "createAfterRefreshHook": {
       "name": "createAfterRefreshHook",
       "description": "Creates a Payload CMS 3.0 AfterRefreshHook configuration",
-      "parameters": {
+      "inputSchema": {
         "type": "object",
         "properties": {}
       },
-      "execute": "code_gen",
       "template": "({ data }) => { return { ...data, modified: true }; }"
     },
     "createAfterForgotPasswordHook": {
       "name": "createAfterForgotPasswordHook",
       "description": "Creates a Payload CMS 3.0 AfterForgotPasswordHook configuration",
-      "parameters": {
+      "inputSchema": {
         "type": "object",
         "properties": {}
       },
-      "execute": "code_gen",
       "template": "({ data }) => { return { ...data, modified: true }; }"
     },
     "createCollectionAdminOptions": {
       "name": "createCollectionAdminOptions",
       "description": "Creates a Payload CMS 3.0 CollectionAdminOptions configuration",
-      "parameters": {
+      "inputSchema": {
         "type": "object",
         "properties": {
           "baseListFilter": {
@@ -12183,13 +12161,12 @@
           }
         }
       },
-      "execute": "code_gen",
       "template": "{ ...{rest} }"
     },
     "createNumberField": {
       "name": "createNumberField",
       "description": "Creates a Payload CMS 3.0 NumberField configuration",
-      "parameters": {
+      "inputSchema": {
         "oneOf": [
           {
             "type": "any"
@@ -12199,13 +12176,12 @@
           }
         ]
       },
-      "execute": "code_gen",
       "template": "{ name: '{name}', type: '{type}', ...{rest} }"
     },
     "createTextField": {
       "name": "createTextField",
       "description": "Creates a Payload CMS 3.0 TextField configuration",
-      "parameters": {
+      "inputSchema": {
         "oneOf": [
           {
             "type": "any"
@@ -12215,49 +12191,44 @@
           }
         ]
       },
-      "execute": "code_gen",
       "template": "{ name: '{name}', type: '{type}', ...{rest} }"
     },
     "createEmailField": {
       "name": "createEmailField",
       "description": "Creates a Payload CMS 3.0 EmailField configuration",
-      "parameters": {
+      "inputSchema": {
         "type": "any"
       },
-      "execute": "code_gen",
       "template": "{ name: '{name}', type: '{type}', ...{rest} }"
     },
     "createTextareaField": {
       "name": "createTextareaField",
       "description": "Creates a Payload CMS 3.0 TextareaField configuration",
-      "parameters": {
+      "inputSchema": {
         "type": "any"
       },
-      "execute": "code_gen",
       "template": "{ name: '{name}', type: '{type}', ...{rest} }"
     },
     "createDateField": {
       "name": "createDateField",
       "description": "Creates a Payload CMS 3.0 DateField configuration",
-      "parameters": {
+      "inputSchema": {
         "type": "any"
       },
-      "execute": "code_gen",
       "template": "{ name: '{name}', type: '{type}', ...{rest} }"
     },
     "createGroupField": {
       "name": "createGroupField",
       "description": "Creates a Payload CMS 3.0 GroupField configuration",
-      "parameters": {
+      "inputSchema": {
         "type": "any"
       },
-      "execute": "code_gen",
       "template": "{ name: '{name}', type: '{type}', ...{rest} }"
     },
     "createUploadField": {
       "name": "createUploadField",
       "description": "Creates a Payload CMS 3.0 UploadField configuration",
-      "parameters": {
+      "inputSchema": {
         "oneOf": [
           {
             "type": "any"
@@ -12267,31 +12238,28 @@
           }
         ]
       },
-      "execute": "code_gen",
       "template": "{ name: '{name}', type: '{type}', ...{rest} }"
     },
     "createCodeField": {
       "name": "createCodeField",
       "description": "Creates a Payload CMS 3.0 CodeField configuration",
-      "parameters": {
+      "inputSchema": {
         "type": "any"
       },
-      "execute": "code_gen",
       "template": "{ name: '{name}', type: '{type}', ...{rest} }"
     },
     "createJSONField": {
       "name": "createJSONField",
       "description": "Creates a Payload CMS 3.0 JSONField configuration",
-      "parameters": {
+      "inputSchema": {
         "type": "any"
       },
-      "execute": "code_gen",
       "template": "{ name: '{name}', type: '{type}', ...{rest} }"
     },
     "createSelectField": {
       "name": "createSelectField",
       "description": "Creates a Payload CMS 3.0 SelectField configuration",
-      "parameters": {
+      "inputSchema": {
         "oneOf": [
           {
             "type": "any"
@@ -12301,13 +12269,12 @@
           }
         ]
       },
-      "execute": "code_gen",
       "template": "{ name: '{name}', type: '{type}', ...{rest} }"
     },
     "createPolymorphicRelationshipField": {
       "name": "createPolymorphicRelationshipField",
       "description": "Creates a Payload CMS 3.0 PolymorphicRelationshipField configuration",
-      "parameters": {
+      "inputSchema": {
         "oneOf": [
           {
             "type": "any"
@@ -12317,13 +12284,12 @@
           }
         ]
       },
-      "execute": "code_gen",
       "template": "{ name: '{name}', type: '{type}', ...{rest} }"
     },
     "createSingleRelationshipField": {
       "name": "createSingleRelationshipField",
       "description": "Creates a Payload CMS 3.0 SingleRelationshipField configuration",
-      "parameters": {
+      "inputSchema": {
         "oneOf": [
           {
             "type": "any"
@@ -12333,13 +12299,12 @@
           }
         ]
       },
-      "execute": "code_gen",
       "template": "{ name: '{name}', type: '{type}', ...{rest} }"
     },
     "createRelationshipField": {
       "name": "createRelationshipField",
       "description": "Creates a Payload CMS 3.0 RelationshipField configuration",
-      "parameters": {
+      "inputSchema": {
         "oneOf": [
           {
             "type": "any"
@@ -12355,67 +12320,60 @@
           }
         ]
       },
-      "execute": "code_gen",
       "template": "{ name: '{name}', type: '{type}', ...{rest} }"
     },
     "createRichTextField": {
       "name": "createRichTextField",
       "description": "Creates a Payload CMS 3.0 RichTextField configuration",
-      "parameters": {
+      "inputSchema": {
         "type": "any"
       },
-      "execute": "code_gen",
       "template": "{ name: '{name}', type: '{type}', ...{rest} }"
     },
     "createArrayField": {
       "name": "createArrayField",
       "description": "Creates a Payload CMS 3.0 ArrayField configuration",
-      "parameters": {
+      "inputSchema": {
         "type": "any"
       },
-      "execute": "code_gen",
       "template": "{ name: '{name}', type: '{type}', ...{rest} }"
     },
     "createRadioField": {
       "name": "createRadioField",
       "description": "Creates a Payload CMS 3.0 RadioField configuration",
-      "parameters": {
+      "inputSchema": {
         "type": "any"
       },
-      "execute": "code_gen",
       "template": "{ name: '{name}', type: '{type}', ...{rest} }"
     },
     "createBlocksField": {
       "name": "createBlocksField",
       "description": "Creates a Payload CMS 3.0 BlocksField configuration",
-      "parameters": {
+      "inputSchema": {
         "type": "any"
       },
-      "execute": "code_gen",
       "template": "{ name: '{name}', type: '{type}', ...{rest} }"
     },
     "createPointField": {
       "name": "createPointField",
       "description": "Creates a Payload CMS 3.0 PointField configuration",
-      "parameters": {
+      "inputSchema": {
         "type": "any"
       },
-      "execute": "code_gen",
       "template": "{ name: '{name}', type: '{type}', ...{rest} }"
     },
     "createJoinField": {
       "name": "createJoinField",
       "description": "Creates a Payload CMS 3.0 JoinField configuration",
-      "parameters": {
+      "inputSchema": {
         "type": "any"
       },
-      "execute": "code_gen",
       "template": "{ name: '{name}', type: '{type}', ...{rest} }"
     },
     "createField": {
       "name": "createField",
       "description": "Creates a Payload CMS 3.0 Field configuration",
-      "parameters": {
+      "inputSchema": {
         "oneOf": [
           {
             "type": "any"
@@ -12565,7 +12523,6 @@
           }
         ]
       },
-      "execute": "code_gen",
       "template": "{ name: '{name}', type: '{type}', ...{rest} }"
     }
   }

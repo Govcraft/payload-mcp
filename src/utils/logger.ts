@@ -9,6 +9,9 @@ if (!fs.existsSync(logDir)) {
   fs.mkdirSync(logDir, { recursive: true });
 }
 
+// Check if running in stdio-only mode
+const isStdioOnly = process.argv.includes('--stdio-only');
+
 // Define log format
 const logFormat = winston.format.combine(
   winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
@@ -48,10 +51,21 @@ export const logger = winston.createLogger({
 
 // If we're not in production, also log to the console
 if (config.server.env !== 'production') {
-  logger.add(new winston.transports.Console({
-    format: winston.format.combine(
-      winston.format.colorize(),
-      winston.format.simple()
-    ),
-  }));
+  // When in stdio-only mode, use stderr instead of stdout to avoid interfering with JSON-RPC
+  if (isStdioOnly) {
+    logger.add(new winston.transports.Console({
+      format: winston.format.combine(
+        winston.format.colorize(),
+        winston.format.simple()
+      ),
+      stderrLevels: ['error', 'warn', 'info', 'http', 'verbose', 'debug', 'silly'], // Send all logs to stderr
+    }));
+  } else {
+    logger.add(new winston.transports.Console({
+      format: winston.format.combine(
+        winston.format.colorize(),
+        winston.format.simple()
+      ),
+    }));
+  }
 } 
