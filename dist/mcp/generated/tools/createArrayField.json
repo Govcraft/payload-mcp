@@ -1,49 +1,49 @@
 {
-    "name": "createArrayField",
-    "description": "Creates a Payload CMS 3.0 ArrayField configuration\n\nExample:\n```typescript\n{\n  name: 'items',\n  type: 'array',\n  label: 'Items',\n  minRows: 1,\n  maxRows: 10,\n  fields: [\n    {\n      name: 'name',\n      type: 'text',\n      required: true\n    },\n    {\n      name: 'quantity',\n      type: 'number',\n      required: true,\n      min: 1\n    }\n  ],\n  // Custom validation example\n  validate: (value) => {\n    if (value && value.length > 0) {\n      const totalQuantity = value.reduce((sum, item) => sum + (item.quantity || 0), 0);\n      if (totalQuantity > 100) {\n        return 'Total quantity cannot exceed 100';\n      }\n    }\n    return true;\n  }\n}\n```",
-    "inputSchema": {
-        "type": "object",
-        "items": {
-            "type": "object"
-        },
-        "description": "Array of items",
-        "properties": {
-            "name": {
-                "type": "string",
-                "description": "The name of the field, used as the property name in the database"
-            },
-            "type": {
-                "type": "string",
-                "enum": [
-                    "arrayfield"
-                ],
-                "description": "The type of field"
-            },
-            "label": {
-                "type": "string",
-                "description": "The label shown in the admin UI"
-            },
-            "required": {
-                "type": "boolean",
-                "description": "Whether this field is required"
-            },
-            "minRows": {
-                "type": "number",
-                "description": "Minimum number of rows"
-            },
-            "maxRows": {
-                "type": "number",
-                "description": "Maximum number of rows"
-            },
-            "validate": {
-                "type": "string",
-                "description": "Custom validation function that returns true if valid or an error message string if invalid"
-            }
-        },
-        "required": [
-            "name",
-            "type"
-        ]
+  "name": "createArrayField",
+  "description": "Creates a Payload CMS 3.0 ArrayField configuration\n\nExample:\n```typescript\n{\n  name: 'items',\n  type: 'array',\n  label: 'Items',\n  minRows: 1,\n  maxRows: 10,\n  fields: [\n    {\n      name: 'name',\n      type: 'text',\n      required: true\n    },\n    {\n      name: 'quantity',\n      type: 'number',\n      required: true,\n      min: 1\n    }\n  ],\n  // Custom validation example\n  validate: (value) => {\n    if (value && value.length > 0) {\n      const totalQuantity = value.reduce((sum, item) => sum + (item.quantity || 0), 0);\n      if (totalQuantity > 100) {\n        return 'Total quantity cannot exceed 100';\n      }\n    }\n    return true;\n  }\n}\n```",
+  "inputSchema": {
+    "type": "object",
+    "items": {
+      "type": "object"
     },
-    "template": "{\n  name: '{name}', // Database field name\n  type: 'array',\n  label: 'Array Field', // Label shown in the admin UI\n  minRows: 1,\n  maxRows: 10,\n  labels: {\n    singular: 'Item',\n    plural: 'Items',\n  },\n  fields: [\n    {\n      name: 'itemName',\n      type: 'text',\n      required: true,\n    },\n    // Add more fields as needed\n  ],\n  // Optional: Add custom validation\n  validate: (value) => {\n    if (value && value.length > 0) {\n      // Validate the array as a whole\n      return true;\n    }\n    return 'Please add at least one item';\n  },\n}"
+    "description": "Array of items",
+    "properties": {
+      "name": {
+        "type": "string",
+        "description": "The name of the field, used as the property name in the database"
+      },
+      "type": {
+        "type": "string",
+        "enum": [
+          "arrayfield"
+        ],
+        "description": "The type of field"
+      },
+      "label": {
+        "type": "string",
+        "description": "The label shown in the admin UI"
+      },
+      "required": {
+        "type": "boolean",
+        "description": "Whether this field is required"
+      },
+      "minRows": {
+        "type": "number",
+        "description": "Minimum number of rows"
+      },
+      "maxRows": {
+        "type": "number",
+        "description": "Maximum number of rows"
+      },
+      "validate": {
+        "type": "string",
+        "description": "Custom validation function that returns true if valid or an error message string if invalid"
+      }
+    },
+    "required": [
+      "name",
+      "type"
+    ]
+  },
+  "template": "{\n  name: '{name}', // Database field name\n  type: 'array',\n  label: 'Array Field', // Label shown in the admin UI\n  minRows: 1,\n  maxRows: 10,\n  labels: {\n    singular: 'Item',\n    plural: 'Items',\n  },\n  fields: [\n    {\n      name: 'itemName',\n      type: 'text',\n      required: true,\n    },\n    // Add more fields as needed\n  ],\n  // Optional: Add custom validation\n  validate: (value) => {\n    if (value && value.length > 0) {\n      // Validate the array as a whole\n      return true;\n    }\n    return 'Please add at least one item';\n  },\n}"
 }

@@ -1,9 +1,9 @@
 {
-    "name": "createAfterDeleteHook",
-    "description": "Creates a Payload CMS 3.0 AfterDeleteHook configuration",
-    "inputSchema": {
-        "type": "object",
-        "properties": {}
-    },
-    "template": "/**\n * This hook runs after a document has been deleted\n * It allows you to perform side effects\n */\nconst afterDeleteHook = ({ req, id, doc }) => {\n  // 'req' is the Express request object with the Payload instance\n  // 'id' is the ID of the document that was deleted\n  // 'doc' is the document that was deleted\n  \n  // Example: Clean up related data\n  console.log(`Document deleted: ${id}`);\n  \n  // No return value is expected\n};"
+  "name": "createAfterDeleteHook",
+  "description": "Creates a Payload CMS 3.0 AfterDeleteHook configuration",
+  "inputSchema": {
+    "type": "object",
+    "properties": {}
+  },
+  "template": "/**\n * This hook runs after a document has been deleted\n * It allows you to perform side effects\n */\nconst afterDeleteHook = ({ req, id, doc }) => {\n  // 'req' is the Express request object with the Payload instance\n  // 'id' is the ID of the document that was deleted\n  // 'doc' is the document that was deleted\n  \n  // Example: Clean up related data\n  logger.info(`Document deleted: ${id}`);\n  \n  // No return value is expected\n};"
 }

@@ -541,7 +541,7 @@
         "type": "object",
         "properties": {}
       },
-      "template": "/**\n * Generic Payload CMS hook\n * See documentation for specific hook parameters\n */\nconst hook = (args) => {\n  // Extract relevant properties from args based on hook type\n  const { req } = args;\n  \n  // Example: Log hook execution\n  console.log('Hook executed');\n  \n  // For hooks that modify data, return the modified data\n  // For other hooks, return as appropriate for the hook type\n  return args.data ? { ...args.data, modified: true } : undefined;\n};"
+      "template": "/**\n * Generic Payload CMS hook\n * See documentation for specific hook parameters\n */\nconst hook = (args) => {\n  // Extract relevant properties from args based on hook type\n  const { req } = args;\n  \n  // Example: Log hook execution\n  logger.info('Hook executed');\n  \n  // For hooks that modify data, return the modified data\n  // For other hooks, return as appropriate for the hook type\n  return args.data ? { ...args.data, modified: true } : undefined;\n};"
     },
     "create": {
       "name": "create",
@@ -9334,7 +9334,7 @@
         "type": "object",
         "properties": {}
       },
-      "template": "/**\n * Generic Payload CMS hook\n * See documentation for specific hook parameters\n */\nconst hook = (args) => {\n  // Extract relevant properties from args based on hook type\n  const { req } = args;\n  \n  // Example: Log hook execution\n  console.log('Hook executed');\n  \n  // For hooks that modify data, return the modified data\n  // For other hooks, return as appropriate for the hook type\n  return args.data ? { ...args.data, modified: true } : undefined;\n};"
+      "template": "/**\n * Generic Payload CMS hook\n * See documentation for specific hook parameters\n */\nconst hook = (args) => {\n  // Extract relevant properties from args based on hook type\n  const { req } = args;\n  \n  // Example: Log hook execution\n  logger.info('Hook executed');\n  \n  // For hooks that modify data, return the modified data\n  // For other hooks, return as appropriate for the hook type\n  return args.data ? { ...args.data, modified: true } : undefined;\n};"
     },
     "createBeforeValidateHook": {
       "name": "createBeforeValidateHook",
@@ -9361,7 +9361,7 @@
         "type": "object",
         "properties": {}
       },
-      "template": "/**\n * This hook runs after a document has been saved to the database\n * It allows you to perform side effects but cannot modify the saved data\n */\nconst afterChangeHook = ({ doc, req, operation, previousDoc }) => {\n  // 'doc' contains the saved document\n  // 'req' is the Express request object with the Payload instance\n  // 'operation' is either 'create' or 'update'\n  // 'previousDoc' is the document before changes (for updates)\n  \n  // Example: Send a notification\n  if (operation === 'create') {\n    // Send notification about new document\n    console.log(`New document created: ${doc.id}`);\n  }\n  \n  // Return the document (cannot be modified)\n  return doc;\n};"
+      "template": "/**\n * This hook runs after a document has been saved to the database\n * It allows you to perform side effects but cannot modify the saved data\n */\nconst afterChangeHook = ({ doc, req, operation, previousDoc }) => {\n  // 'doc' contains the saved document\n  // 'req' is the Express request object with the Payload instance\n  // 'operation' is either 'create' or 'update'\n  // 'previousDoc' is the document before changes (for updates)\n  \n  // Example: Send a notification\n  if (operation === 'create') {\n    // Send notification about new document\n    logger.info(`New document created: ${doc.id}`);\n  }\n  \n  // Return the document (cannot be modified)\n  return doc;\n};"
     },
     "createBeforeReadHook": {
       "name": "createBeforeReadHook",
@@ -9397,7 +9397,7 @@
         "type": "object",
         "properties": {}
       },
-      "template": "/**\n * This hook runs after a document has been deleted\n * It allows you to perform side effects\n */\nconst afterDeleteHook = ({ req, id, doc }) => {\n  // 'req' is the Express request object with the Payload instance\n  // 'id' is the ID of the document that was deleted\n  // 'doc' is the document that was deleted\n  \n  // Example: Clean up related data\n  console.log(`Document deleted: ${id}`);\n  \n  // No return value is expected\n};"
+      "template": "/**\n * This hook runs after a document has been deleted\n * It allows you to perform side effects\n */\nconst afterDeleteHook = ({ req, id, doc }) => {\n  // 'req' is the Express request object with the Payload instance\n  // 'id' is the ID of the document that was deleted\n  // 'doc' is the document that was deleted\n  \n  // Example: Clean up related data\n  logger.info(`Document deleted: ${id}`);\n  \n  // No return value is expected\n};"
     },
     "createAfterOperationHook": {
       "name": "createAfterOperationHook",
@@ -9406,7 +9406,7 @@
         "type": "object",
         "properties": {}
       },
-      "template": "/**\n * Generic Payload CMS hook\n * See documentation for specific hook parameters\n */\nconst hook = (args) => {\n  // Extract relevant properties from args based on hook type\n  const { req } = args;\n  \n  // Example: Log hook execution\n  console.log('Hook executed');\n  \n  // For hooks that modify data, return the modified data\n  // For other hooks, return as appropriate for the hook type\n  return args.data ? { ...args.data, modified: true } : undefined;\n};"
+      "template": "/**\n * Generic Payload CMS hook\n * See documentation for specific hook parameters\n */\nconst hook = (args) => {\n  // Extract relevant properties from args based on hook type\n  const { req } = args;\n  \n  // Example: Log hook execution\n  logger.info('Hook executed');\n  \n  // For hooks that modify data, return the modified data\n  // For other hooks, return as appropriate for the hook type\n  return args.data ? { ...args.data, modified: true } : undefined;\n};"
     },
     "createBeforeLoginHook": {
       "name": "createBeforeLoginHook",
@@ -9415,7 +9415,7 @@
         "type": "object",
         "properties": {}
       },
-      "template": "/**\n * Generic Payload CMS hook\n * See documentation for specific hook parameters\n */\nconst hook = (args) => {\n  // Extract relevant properties from args based on hook type\n  const { req } = args;\n  \n  // Example: Log hook execution\n  console.log('Hook executed');\n  \n  // For hooks that modify data, return the modified data\n  // For other hooks, return as appropriate for the hook type\n  return args.data ? { ...args.data, modified: true } : undefined;\n};"
+      "template": "/**\n * Generic Payload CMS hook\n * See documentation for specific hook parameters\n */\nconst hook = (args) => {\n  // Extract relevant properties from args based on hook type\n  const { req } = args;\n  \n  // Example: Log hook execution\n  logger.info('Hook executed');\n  \n  // For hooks that modify data, return the modified data\n  // For other hooks, return as appropriate for the hook type\n  return args.data ? { ...args.data, modified: true } : undefined;\n};"
     },
     "createAfterLoginHook": {
       "name": "createAfterLoginHook",
@@ -9424,7 +9424,7 @@
         "type": "object",
         "properties": {}
       },
-      "template": "/**\n * Generic Payload CMS hook\n * See documentation for specific hook parameters\n */\nconst hook = (args) => {\n  // Extract relevant properties from args based on hook type\n  const { req } = args;\n  \n  // Example: Log hook execution\n  console.log('Hook executed');\n  \n  // For hooks that modify data, return the modified data\n  // For other hooks, return as appropriate for the hook type\n  return args.data ? { ...args.data, modified: true } : undefined;\n};"
+      "template": "/**\n * Generic Payload CMS hook\n * See documentation for specific hook parameters\n */\nconst hook = (args) => {\n  // Extract relevant properties from args based on hook type\n  const { req } = args;\n  \n  // Example: Log hook execution\n  logger.info('Hook executed');\n  \n  // For hooks that modify data, return the modified data\n  // For other hooks, return as appropriate for the hook type\n  return args.data ? { ...args.data, modified: true } : undefined;\n};"
     },
     "createAfterLogoutHook": {
       "name": "createAfterLogoutHook",
@@ -9433,7 +9433,7 @@
         "type": "object",
         "properties": {}
       },
-      "template": "/**\n * Generic Payload CMS hook\n * See documentation for specific hook parameters\n */\nconst hook = (args) => {\n  // Extract relevant properties from args based on hook type\n  const { req } = args;\n  \n  // Example: Log hook execution\n  console.log('Hook executed');\n  \n  // For hooks that modify data, return the modified data\n  // For other hooks, return as appropriate for the hook type\n  return args.data ? { ...args.data, modified: true } : undefined;\n};"
+      "template": "/**\n * Generic Payload CMS hook\n * See documentation for specific hook parameters\n */\nconst hook = (args) => {\n  // Extract relevant properties from args based on hook type\n  const { req } = args;\n  \n  // Example: Log hook execution\n  logger.info('Hook executed');\n  \n  // For hooks that modify data, return the modified data\n  // For other hooks, return as appropriate for the hook type\n  return args.data ? { ...args.data, modified: true } : undefined;\n};"
     },
     "createAfterMeHook": {
       "name": "createAfterMeHook",
@@ -9442,7 +9442,7 @@
         "type": "object",
         "properties": {}
       },
-      "template": "/**\n * Generic Payload CMS hook\n * See documentation for specific hook parameters\n */\nconst hook = (args) => {\n  // Extract relevant properties from args based on hook type\n  const { req } = args;\n  \n  // Example: Log hook execution\n  console.log('Hook executed');\n  \n  // For hooks that modify data, return the modified data\n  // For other hooks, return as appropriate for the hook type\n  return args.data ? { ...args.data, modified: true } : undefined;\n};"
+      "template": "/**\n * Generic Payload CMS hook\n * See documentation for specific hook parameters\n */\nconst hook = (args) => {\n  // Extract relevant properties from args based on hook type\n  const { req } = args;\n  \n  // Example: Log hook execution\n  logger.info('Hook executed');\n  \n  // For hooks that modify data, return the modified data\n  // For other hooks, return as appropriate for the hook type\n  return args.data ? { ...args.data, modified: true } : undefined;\n};"
     },
     "createRefreshHook": {
       "name": "createRefreshHook",
@@ -9451,7 +9451,7 @@
         "type": "object",
         "properties": {}
       },
-      "template": "/**\n * Generic Payload CMS hook\n * See documentation for specific hook parameters\n */\nconst hook = (args) => {\n  // Extract relevant properties from args based on hook type\n  const { req } = args;\n  \n  // Example: Log hook execution\n  console.log('Hook executed');\n  \n  // For hooks that modify data, return the modified data\n  // For other hooks, return as appropriate for the hook type\n  return args.data ? { ...args.data, modified: true } : undefined;\n};"
+      "template": "/**\n * Generic Payload CMS hook\n * See documentation for specific hook parameters\n */\nconst hook = (args) => {\n  // Extract relevant properties from args based on hook type\n  const { req } = args;\n  \n  // Example: Log hook execution\n  logger.info('Hook executed');\n  \n  // For hooks that modify data, return the modified data\n  // For other hooks, return as appropriate for the hook type\n  return args.data ? { ...args.data, modified: true } : undefined;\n};"
     },
     "createMeHook": {
       "name": "createMeHook",
@@ -9460,7 +9460,7 @@
         "type": "object",
         "properties": {}
       },
-      "template": "/**\n * Generic Payload CMS hook\n * See documentation for specific hook parameters\n */\nconst hook = (args) => {\n  // Extract relevant properties from args based on hook type\n  const { req } = args;\n  \n  // Example: Log hook execution\n  console.log('Hook executed');\n  \n  // For hooks that modify data, return the modified data\n  // For other hooks, return as appropriate for the hook type\n  return args.data ? { ...args.data, modified: true } : undefined;\n};"
+      "template": "/**\n * Generic Payload CMS hook\n * See documentation for specific hook parameters\n */\nconst hook = (args) => {\n  // Extract relevant properties from args based on hook type\n  const { req } = args;\n  \n  // Example: Log hook execution\n  logger.info('Hook executed');\n  \n  // For hooks that modify data, return the modified data\n  // For other hooks, return as appropriate for the hook type\n  return args.data ? { ...args.data, modified: true } : undefined;\n};"
     },
     "createAfterRefreshHook": {
       "name": "createAfterRefreshHook",
@@ -9469,7 +9469,7 @@
         "type": "object",
         "properties": {}
       },
-      "template": "/**\n * Generic Payload CMS hook\n * See documentation for specific hook parameters\n */\nconst hook = (args) => {\n  // Extract relevant properties from args based on hook type\n  const { req } = args;\n  \n  // Example: Log hook execution\n  console.log('Hook executed');\n  \n  // For hooks that modify data, return the modified data\n  // For other hooks, return as appropriate for the hook type\n  return args.data ? { ...args.data, modified: true } : undefined;\n};"
+      "template": "/**\n * Generic Payload CMS hook\n * See documentation for specific hook parameters\n */\nconst hook = (args) => {\n  // Extract relevant properties from args based on hook type\n  const { req } = args;\n  \n  // Example: Log hook execution\n  logger.info('Hook executed');\n  \n  // For hooks that modify data, return the modified data\n  // For other hooks, return as appropriate for the hook type\n  return args.data ? { ...args.data, modified: true } : undefined;\n};"
     },
     "createAfterForgotPasswordHook": {
       "name": "createAfterForgotPasswordHook",
@@ -9478,7 +9478,7 @@
         "type": "object",
         "properties": {}
       },
-      "template": "/**\n * Generic Payload CMS hook\n * See documentation for specific hook parameters\n */\nconst hook = (args) => {\n  // Extract relevant properties from args based on hook type\n  const { req } = args;\n  \n  // Example: Log hook execution\n  console.log('Hook executed');\n  \n  // For hooks that modify data, return the modified data\n  // For other hooks, return as appropriate for the hook type\n  return args.data ? { ...args.data, modified: true } : undefined;\n};"
+      "template": "/**\n * Generic Payload CMS hook\n * See documentation for specific hook parameters\n */\nconst hook = (args) => {\n  // Extract relevant properties from args based on hook type\n  const { req } = args;\n  \n  // Example: Log hook execution\n  logger.info('Hook executed');\n  \n  // For hooks that modify data, return the modified data\n  // For other hooks, return as appropriate for the hook type\n  return args.data ? { ...args.data, modified: true } : undefined;\n};"
     },
     "createCollectionAdminOptions": {
       "name": "createCollectionAdminOptions",

@@ -1,9 +1,9 @@
 {
-    "name": "createAfterMeHook",
-    "description": "Creates a Payload CMS 3.0 AfterMeHook configuration",
-    "inputSchema": {
-        "type": "object",
-        "properties": {}
-    },
-    "template": "/**\n * Generic Payload CMS hook\n * See documentation for specific hook parameters\n */\nconst hook = (args) => {\n  // Extract relevant properties from args based on hook type\n  const { req } = args;\n  \n  // Example: Log hook execution\n  console.log('Hook executed');\n  \n  // For hooks that modify data, return the modified data\n  // For other hooks, return as appropriate for the hook type\n  return args.data ? { ...args.data, modified: true } : undefined;\n};"
+  "name": "createAfterMeHook",
+  "description": "Creates a Payload CMS 3.0 AfterMeHook configuration",
+  "inputSchema": {
+    "type": "object",
+    "properties": {}
+  },
+  "template": "/**\n * Generic Payload CMS hook\n * See documentation for specific hook parameters\n */\nconst hook = (args) => {\n  // Extract relevant properties from args based on hook type\n  const { req } = args;\n  \n  // Example: Log hook execution\n  logger.info('Hook executed');\n  \n  // For hooks that modify data, return the modified data\n  // For other hooks, return as appropriate for the hook type\n  return args.data ? { ...args.data, modified: true } : undefined;\n};"
 }

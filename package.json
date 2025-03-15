@@ -10,7 +10,8 @@
   "scripts": {
     "start": "node dist/index.js --stdio-only",
     "dev": "tsx watch src/index.ts",
-    "build": "tsc",
+    "build": "tsc && npm run copy-tools",
+    "copy-tools": "mkdir -p dist/mcp/generated && cp -r src/mcp/generated/tools dist/mcp/generated/ && cp src/mcp/generated/payload-tools.js dist/mcp/generated/",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
     "format": "prettier --write \"src/**/*.ts\"",
@@ -42,6 +43,7 @@
     "@modelcontextprotocol/sdk": "^1.7.0",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "payload": "^3.28.1",
     "uuid": "^11.1.0",
     "winston": "^3.17.0",
     "zod": "^3.24.2"

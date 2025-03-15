@@ -1,31 +1,31 @@
 {
-    "name": "createSelectField",
-    "description": "Creates a Payload CMS 3.0 SelectField configuration\n\nExample:\n```typescript\n{\n  name: 'status',\n  type: 'select',\n  required: true,\n  label: 'Status',\n  options: [\n    { label: 'Draft', value: 'draft' },\n    { label: 'Published', value: 'published' },\n    { label: 'Archived', value: 'archived' }\n  ],\n  defaultValue: 'draft',\n  // Custom validation example\n  validate: (value, { siblingData }) => {\n    if (value === 'published' && !siblingData.publishedAt) {\n      return 'Cannot set status to published without a publish date';\n    }\n    return true;\n  }\n}\n```",
-    "inputSchema": {
-        "type": "object",
-        "properties": {
-            "name": {
-                "type": "string",
-                "description": "The name of the field"
-            },
-            "type": {
-                "type": "string",
-                "description": "The type of field"
-            },
-            "label": {
-                "type": "string",
-                "description": "The label shown in the admin UI"
-            },
-            "required": {
-                "type": "boolean",
-                "description": "Whether this field is required"
-            }
-        },
-        "required": [
-            "name",
-            "type"
-        ],
-        "description": "Field configuration"
+  "name": "createSelectField",
+  "description": "Creates a Payload CMS 3.0 SelectField configuration\n\nExample:\n```typescript\n{\n  name: 'status',\n  type: 'select',\n  required: true,\n  label: 'Status',\n  options: [\n    { label: 'Draft', value: 'draft' },\n    { label: 'Published', value: 'published' },\n    { label: 'Archived', value: 'archived' }\n  ],\n  defaultValue: 'draft',\n  // Custom validation example\n  validate: (value, { siblingData }) => {\n    if (value === 'published' && !siblingData.publishedAt) {\n      return 'Cannot set status to published without a publish date';\n    }\n    return true;\n  }\n}\n```",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string",
+        "description": "The name of the field"
+      },
+      "type": {
+        "type": "string",
+        "description": "The type of field"
+      },
+      "label": {
+        "type": "string",
+        "description": "The label shown in the admin UI"
+      },
+      "required": {
+        "type": "boolean",
+        "description": "Whether this field is required"
+      }
     },
-    "template": "{\n  name: '{name}', // Database field name\n  type: 'select',\n  label: 'Select Field', // Label shown in the admin UI\n  required: true,\n  options: [\n    {\n      label: 'Option One',\n      value: 'option-one',\n    },\n    {\n      label: 'Option Two',\n      value: 'option-two',\n    },\n  ],\n  defaultValue: 'option-one',\n  // Optional: Add custom validation\n  validate: (value, { siblingData }) => {\n    if (value === 'option-two' && !siblingData.requiredForOptionTwo) {\n      return 'Additional field is required when Option Two is selected';\n    }\n    return true; // Return true if valid\n  },\n}"
+    "required": [
+      "name",
+      "type"
+    ],
+    "description": "Field configuration"
+  },
+  "template": "{\n  name: '{name}', // Database field name\n  type: 'select',\n  label: 'Select Field', // Label shown in the admin UI\n  required: true,\n  options: [\n    {\n      label: 'Option One',\n      value: 'option-one',\n    },\n    {\n      label: 'Option Two',\n      value: 'option-two',\n    },\n  ],\n  defaultValue: 'option-one',\n  // Optional: Add custom validation\n  validate: (value, { siblingData }) => {\n    if (value === 'option-two' && !siblingData.requiredForOptionTwo) {\n      return 'Additional field is required when Option Two is selected';\n    }\n    return true; // Return true if valid\n  },\n}"
 }

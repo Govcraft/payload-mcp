@@ -1,9 +1,9 @@
 {
-    "name": "createBeforeChangeHook",
-    "description": "Creates a Payload CMS 3.0 BeforeChangeHook configuration",
-    "inputSchema": {
-        "type": "object",
-        "properties": {}
-    },
-    "template": "/**\n * This hook runs before a document is saved to the database\n * It allows you to modify the data or perform validation\n */\nconst beforeChangeHook = ({ data, req, operation, originalDoc }) => {\n  // 'data' contains the data being saved\n  // 'req' is the Express request object with the Payload instance\n  // 'operation' is either 'create' or 'update'\n  // 'originalDoc' is the document before changes (for updates)\n  \n  // Example: Add a timestamp\n  return {\n    ...data,\n    modifiedAt: new Date().toISOString(),\n    modifiedBy: req.user?.id,\n  };\n};"
+  "name": "createBeforeChangeHook",
+  "description": "Creates a Payload CMS 3.0 BeforeChangeHook configuration",
+  "inputSchema": {
+    "type": "object",
+    "properties": {}
+  },
+  "template": "/**\n * This hook runs before a document is saved to the database\n * It allows you to modify the data or perform validation\n */\nconst beforeChangeHook = ({ data, req, operation, originalDoc }) => {\n  // 'data' contains the data being saved\n  // 'req' is the Express request object with the Payload instance\n  // 'operation' is either 'create' or 'update'\n  // 'originalDoc' is the document before changes (for updates)\n  \n  // Example: Add a timestamp\n  return {\n    ...data,\n    modifiedAt: new Date().toISOString(),\n    modifiedBy: req.user?.id,\n  };\n};"
 }

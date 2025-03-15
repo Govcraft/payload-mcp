@@ -1,363 +1,363 @@
 {
-    "name": "createCollection",
-    "description": "Creates a Payload CMS 3.0 CollectionConfig configuration\n\n@todo remove the `DeepRequired` in v4.\nWe don't actually guarantee that all properties are set when sanitizing configs.\n\nExample:\n```typescript\n// Collection for a basic blog post\nexport const Posts = {\n  slug: 'posts',\n  admin: {\n    useAsTitle: 'title',\n  },\n  fields: [\n    {\n      name: 'title',\n      type: 'text',\n      required: true,\n    },\n    {\n      name: 'content',\n      type: 'richText',\n    },\n    {\n      name: 'author',\n      type: 'relationship',\n      relationTo: 'users',\n    },\n  ],\n}\n```",
-    "inputSchema": {
+  "name": "createCollection",
+  "description": "Creates a Payload CMS 3.0 CollectionConfig configuration\n\n@todo remove the `DeepRequired` in v4.\nWe don't actually guarantee that all properties are set when sanitizing configs.\n\nExample:\n```typescript\n// Collection for a basic blog post\nexport const Posts = {\n  slug: 'posts',\n  admin: {\n    useAsTitle: 'title',\n  },\n  fields: [\n    {\n      name: 'title',\n      type: 'text',\n      required: true,\n    },\n    {\n      name: 'content',\n      type: 'richText',\n    },\n    {\n      name: 'author',\n      type: 'relationship',\n      relationTo: 'users',\n    },\n  ],\n}\n```",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "auth": {
         "type": "object",
         "properties": {
-            "auth": {
-                "type": "object",
-                "properties": {
-                    "forgotPassword": {
-                        "type": "object",
-                        "properties": {
-                            "expiration": {
-                                "type": "number"
-                            },
-                            "generateEmailHTML": {
-                                "type": "string",
-                                "description": "Function expression (e.g., \"({ req }) => req.user.role === 'admin'\")"
-                            },
-                            "generateEmailSubject": {
-                                "type": "string",
-                                "description": "Function expression (e.g., \"({ req }) => req.user.role === 'admin'\")"
-                            }
-                        }
-                    },
-                    "loginWithUsername": {
-                        "oneOf": [
-                            {
-                                "type": "object",
-                                "description": "false configuration object"
-                            },
-                            {
-                                "type": "object",
-                                "properties": {
-                                    "allowEmailLogin": {
-                                        "type": "object",
-                                        "description": "false configuration object"
-                                    },
-                                    "requireEmail": {
-                                        "type": "boolean"
-                                    },
-                                    "requireUsername": {
-                                        "type": "object",
-                                        "description": "true configuration object"
-                                    }
-                                }
-                            },
-                            {
-                                "type": "object",
-                                "properties": {
-                                    "allowEmailLogin": {
-                                        "type": "object",
-                                        "description": "true configuration object"
-                                    },
-                                    "requireEmail": {
-                                        "type": "boolean"
-                                    },
-                                    "requireUsername": {
-                                        "type": "boolean"
-                                    }
-                                }
-                            }
-                        ],
-                        "description": "One of the allowed types"
-                    },
-                    "verify": {
-                        "oneOf": [
-                            {
-                                "type": "object",
-                                "description": "false configuration object"
-                            },
-                            {
-                                "type": "object",
-                                "description": "true configuration object"
-                            },
-                            {
-                                "type": "object",
-                                "properties": {
-                                    "generateEmailHTML": {
-                                        "type": "string",
-                                        "description": "Function expression (e.g., \"({ req }) => req.user.role === 'admin'\")"
-                                    },
-                                    "generateEmailSubject": {
-                                        "type": "string",
-                                        "description": "Function expression (e.g., \"({ req }) => req.user.role === 'admin'\")"
-                                    }
-                                }
-                            }
-                        ],
-                        "description": "One of the allowed types"
-                    }
-                },
-                "required": [
-                    "loginWithUsername"
-                ]
-            },
-            "endpoints": {
-                "oneOf": [
-                    {
-                        "type": "object",
-                        "description": "false configuration object"
-                    },
-                    {
-                        "type": "array",
-                        "items": {
-                            "type": "object",
-                            "properties": {
-                                "custom": {
-                                    "type": "object",
-                                    "properties": {}
-                                },
-                                "handler": {
-                                    "type": "string",
-                                    "description": "Function expression (e.g., \"({ req }) => req.user.role === 'admin'\")"
-                                },
-                                "method": {
-                                    "type": "string",
-                                    "enum": [
-                                        "connect",
-                                        "delete",
-                                        "get",
-                                        "head",
-                                        "options",
-                                        "patch",
-                                        "post",
-                                        "put"
-                                    ],
-                                    "description": "One of the allowed string values"
-                                },
-                                "path": {
-                                    "type": "string"
-                                },
-                                "root": {
-                                    "type": "object",
-                                    "description": "never configuration object"
-                                }
-                            },
-                            "required": [
-                                "method",
-                                "path"
-                            ]
-                        }
-                    }
-                ],
-                "description": "One of the allowed types"
-            },
-            "fields": {
-                "type": "array",
-                "items": {
-                    "type": "object",
-                    "properties": {
-                        "name": {
-                            "type": "string",
-                            "description": "The name of the field"
-                        },
-                        "type": {
-                            "type": "string",
-                            "description": "The type of field"
-                        },
-                        "label": {
-                            "type": "string",
-                            "description": "The label shown in the admin UI"
-                        },
-                        "required": {
-                            "type": "boolean",
-                            "description": "Whether this field is required"
-                        }
-                    },
-                    "required": [
-                        "name",
-                        "type"
-                    ]
-                },
-                "description": "Array of field configurations"
-            },
-            "flattenedFields": {
-                "type": "array",
-                "items": {
-                    "type": "object",
-                    "description": "any configuration object"
-                },
-                "description": "Fields in the database schema structure\nRows / collapsible / tabs w/o name `fields` merged to top, UIs are excluded"
-            },
-            "joins": {
-                "type": "object",
-                "properties": {},
-                "description": "Object of collections to join 'Join Fields object keyed by collection"
-            },
-            "polymorphicJoins": {
-                "type": "array",
-                "items": {
-                    "type": "object",
-                    "properties": {
-                        "field": {
-                            "type": "object",
-                            "description": "Payload.JoinField configuration object"
-                        },
-                        "getForeignPath": {
-                            "type": "string",
-                            "description": "Function expression (e.g., \"({ req }) => req.user.role === 'admin'\")"
-                        },
-                        "joinPath": {
-                            "type": "string"
-                        },
-                        "parentIsLocalized": {
-                            "type": "boolean"
-                        },
-                        "targetField": {
-                            "type": "object",
-                            "properties": {
-                                "name": {
-                                    "type": "string",
-                                    "description": "The name of the field"
-                                },
-                                "type": {
-                                    "type": "string",
-                                    "description": "The type of field"
-                                },
-                                "label": {
-                                    "type": "string",
-                                    "description": "The label shown in the admin UI"
-                                },
-                                "required": {
-                                    "type": "boolean",
-                                    "description": "Whether this field is required"
-                                }
-                            },
-                            "required": [
-                                "name",
-                                "type"
-                            ],
-                            "description": "Field configuration"
-                        }
-                    },
-                    "required": [
-                        "field",
-                        "joinPath",
-                        "parentIsLocalized",
-                        "targetField"
-                    ]
-                },
-                "description": "List of all polymorphic join fields"
-            },
-            "sanitizedIndexes": {
-                "type": "array",
-                "items": {
-                    "type": "object",
-                    "properties": {
-                        "fields": {
-                            "type": "array",
-                            "items": {
-                                "type": "object",
-                                "properties": {
-                                    "field": {
-                                        "type": "object",
-                                        "description": "any configuration object"
-                                    },
-                                    "localizedPath": {
-                                        "type": "string"
-                                    },
-                                    "path": {
-                                        "type": "string"
-                                    },
-                                    "pathHasLocalized": {
-                                        "type": "boolean"
-                                    }
-                                },
-                                "required": [
-                                    "field",
-                                    "localizedPath",
-                                    "path",
-                                    "pathHasLocalized"
-                                ]
-                            }
-                        },
-                        "unique": {
-                            "type": "boolean"
-                        }
-                    },
-                    "required": [
-                        "fields",
-                        "unique"
-                    ]
-                }
-            },
-            "slug": {
-                "type": "string"
-            },
-            "upload": {
-                "type": "object",
-                "description": "Payload.SanitizedUploadConfig configuration object"
-            },
-            "versions": {
-                "type": "object",
-                "properties": {
-                    "drafts": {
-                        "oneOf": [
-                            {
-                                "type": "object",
-                                "description": "false configuration object"
-                            },
-                            {
-                                "type": "object",
-                                "properties": {
-                                    "autosave": {
-                                        "oneOf": [
-                                            {
-                                                "type": "object",
-                                                "description": "false configuration object"
-                                            },
-                                            {
-                                                "type": "object",
-                                                "properties": {
-                                                    "interval": {
-                                                        "type": "number"
-                                                    }
-                                                }
-                                            }
-                                        ],
-                                        "description": "One of the allowed types"
-                                    },
-                                    "schedulePublish": {
-                                        "type": "boolean"
-                                    },
-                                    "validate": {
-                                        "type": "boolean"
-                                    }
-                                },
-                                "required": [
-                                    "autosave",
-                                    "schedulePublish",
-                                    "validate"
-                                ]
-                            }
-                        ],
-                        "description": "One of the allowed types"
-                    },
-                    "maxPerDoc": {
-                        "type": "number"
-                    }
-                },
-                "required": [
-                    "drafts",
-                    "maxPerDoc"
-                ]
+          "forgotPassword": {
+            "type": "object",
+            "properties": {
+              "expiration": {
+                "type": "number"
+              },
+              "generateEmailHTML": {
+                "type": "string",
+                "description": "Function expression (e.g., \"({ req }) => req.user.role === 'admin'\")"
+              },
+              "generateEmailSubject": {
+                "type": "string",
+                "description": "Function expression (e.g., \"({ req }) => req.user.role === 'admin'\")"
+              }
             }
+          },
+          "loginWithUsername": {
+            "oneOf": [
+              {
+                "type": "object",
+                "description": "false configuration object"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "allowEmailLogin": {
+                    "type": "object",
+                    "description": "false configuration object"
+                  },
+                  "requireEmail": {
+                    "type": "boolean"
+                  },
+                  "requireUsername": {
+                    "type": "object",
+                    "description": "true configuration object"
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "allowEmailLogin": {
+                    "type": "object",
+                    "description": "true configuration object"
+                  },
+                  "requireEmail": {
+                    "type": "boolean"
+                  },
+                  "requireUsername": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            ],
+            "description": "One of the allowed types"
+          },
+          "verify": {
+            "oneOf": [
+              {
+                "type": "object",
+                "description": "false configuration object"
+              },
+              {
+                "type": "object",
+                "description": "true configuration object"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "generateEmailHTML": {
+                    "type": "string",
+                    "description": "Function expression (e.g., \"({ req }) => req.user.role === 'admin'\")"
+                  },
+                  "generateEmailSubject": {
+                    "type": "string",
+                    "description": "Function expression (e.g., \"({ req }) => req.user.role === 'admin'\")"
+                  }
+                }
+              }
+            ],
+            "description": "One of the allowed types"
+          }
         },
         "required": [
-            "auth",
-            "endpoints",
-            "fields",
-            "flattenedFields",
-            "joins",
-            "polymorphicJoins",
-            "sanitizedIndexes",
-            "slug",
-            "upload",
-            "versions"
+          "loginWithUsername"
+        ]
+      },
+      "endpoints": {
+        "oneOf": [
+          {
+            "type": "object",
+            "description": "false configuration object"
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "custom": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "handler": {
+                  "type": "string",
+                  "description": "Function expression (e.g., \"({ req }) => req.user.role === 'admin'\")"
+                },
+                "method": {
+                  "type": "string",
+                  "enum": [
+                    "connect",
+                    "delete",
+                    "get",
+                    "head",
+                    "options",
+                    "patch",
+                    "post",
+                    "put"
+                  ],
+                  "description": "One of the allowed string values"
+                },
+                "path": {
+                  "type": "string"
+                },
+                "root": {
+                  "type": "object",
+                  "description": "never configuration object"
+                }
+              },
+              "required": [
+                "method",
+                "path"
+              ]
+            }
+          }
         ],
-        "description": "@todo remove the `DeepRequired` in v4.\nWe don't actually guarantee that all properties are set when sanitizing configs."
+        "description": "One of the allowed types"
+      },
+      "fields": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "The name of the field"
+            },
+            "type": {
+              "type": "string",
+              "description": "The type of field"
+            },
+            "label": {
+              "type": "string",
+              "description": "The label shown in the admin UI"
+            },
+            "required": {
+              "type": "boolean",
+              "description": "Whether this field is required"
+            }
+          },
+          "required": [
+            "name",
+            "type"
+          ]
+        },
+        "description": "Array of field configurations"
+      },
+      "flattenedFields": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "description": "any configuration object"
+        },
+        "description": "Fields in the database schema structure\nRows / collapsible / tabs w/o name `fields` merged to top, UIs are excluded"
+      },
+      "joins": {
+        "type": "object",
+        "properties": {},
+        "description": "Object of collections to join 'Join Fields object keyed by collection"
+      },
+      "polymorphicJoins": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "field": {
+              "type": "object",
+              "description": "Payload.JoinField configuration object"
+            },
+            "getForeignPath": {
+              "type": "string",
+              "description": "Function expression (e.g., \"({ req }) => req.user.role === 'admin'\")"
+            },
+            "joinPath": {
+              "type": "string"
+            },
+            "parentIsLocalized": {
+              "type": "boolean"
+            },
+            "targetField": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "The name of the field"
+                },
+                "type": {
+                  "type": "string",
+                  "description": "The type of field"
+                },
+                "label": {
+                  "type": "string",
+                  "description": "The label shown in the admin UI"
+                },
+                "required": {
+                  "type": "boolean",
+                  "description": "Whether this field is required"
+                }
+              },
+              "required": [
+                "name",
+                "type"
+              ],
+              "description": "Field configuration"
+            }
+          },
+          "required": [
+            "field",
+            "joinPath",
+            "parentIsLocalized",
+            "targetField"
+          ]
+        },
+        "description": "List of all polymorphic join fields"
+      },
+      "sanitizedIndexes": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "fields": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "field": {
+                    "type": "object",
+                    "description": "any configuration object"
+                  },
+                  "localizedPath": {
+                    "type": "string"
+                  },
+                  "path": {
+                    "type": "string"
+                  },
+                  "pathHasLocalized": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "field",
+                  "localizedPath",
+                  "path",
+                  "pathHasLocalized"
+                ]
+              }
+            },
+            "unique": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "fields",
+            "unique"
+          ]
+        }
+      },
+      "slug": {
+        "type": "string"
+      },
+      "upload": {
+        "type": "object",
+        "description": "Payload.SanitizedUploadConfig configuration object"
+      },
+      "versions": {
+        "type": "object",
+        "properties": {
+          "drafts": {
+            "oneOf": [
+              {
+                "type": "object",
+                "description": "false configuration object"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "autosave": {
+                    "oneOf": [
+                      {
+                        "type": "object",
+                        "description": "false configuration object"
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "interval": {
+                            "type": "number"
+                          }
+                        }
+                      }
+                    ],
+                    "description": "One of the allowed types"
+                  },
+                  "schedulePublish": {
+                    "type": "boolean"
+                  },
+                  "validate": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "autosave",
+                  "schedulePublish",
+                  "validate"
+                ]
+              }
+            ],
+            "description": "One of the allowed types"
+          },
+          "maxPerDoc": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "drafts",
+          "maxPerDoc"
+        ]
+      }
     },
-    "template": "// Collection configuration for Payload CMS\nexport const {slug} = {\n  slug: '{slug}', // URL-friendly identifier for this collection\n  admin: {\n    useAsTitle: 'title', // Field to use as the title in the admin UI\n    defaultColumns: ['title', 'createdAt'], // Default columns in the admin UI list view\n  },\n  // Define the fields for this collection\n  fields: [\n    {\n      name: 'title',\n      type: 'text',\n      required: true,\n    },\n    // Add more fields as needed\n    {fields}\n  ],\n  // Optional: Add hooks, access control, etc.\n  ...{rest}\n};"
+    "required": [
+      "auth",
+      "endpoints",
+      "fields",
+      "flattenedFields",
+      "joins",
+      "polymorphicJoins",
+      "sanitizedIndexes",
+      "slug",
+      "upload",
+      "versions"
+    ],
+    "description": "@todo remove the `DeepRequired` in v4.\nWe don't actually guarantee that all properties are set when sanitizing configs."
+  },
+  "template": "// Collection configuration for Payload CMS\nexport const {slug} = {\n  slug: '{slug}', // URL-friendly identifier for this collection\n  admin: {\n    useAsTitle: 'title', // Field to use as the title in the admin UI\n    defaultColumns: ['title', 'createdAt'], // Default columns in the admin UI list view\n  },\n  // Define the fields for this collection\n  fields: [\n    {\n      name: 'title',\n      type: 'text',\n      required: true,\n    },\n    // Add more fields as needed\n    {fields}\n  ],\n  // Optional: Add hooks, access control, etc.\n  ...{rest}\n};"
 }

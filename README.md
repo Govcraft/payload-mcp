@@ -123,6 +123,45 @@ pnpm add payload@latest
 pnpm generate-tools
 ```
 
+### Logging
+
+The server uses Winston for logging. By default, logs are written to the `logs` directory with the following files:
+
+- `combined.log`: All logs (info level and above)
+- `error.log`: Error logs only
+- `exceptions.log`: Uncaught exceptions
+- `rejections.log`: Unhandled promise rejections
+
+The server uses npm logging levels (from highest to lowest priority):
+```
+error: 0,
+warn: 1,
+info: 2,
+http: 3,
+verbose: 4,
+debug: 5,
+silly: 6
+```
+
+By default, the log level is set to `info`, which means only logs with level `info`, `warn`, and `error` will be recorded. To see more detailed logs:
+
+- Set to `verbose` to see tool registration details
+- Set to `debug` for even more detailed debugging information
+- Set to `silly` for the most verbose output
+
+You can change the log level by setting the `LOG_LEVEL` environment variable:
+
+```bash
+# Run with verbose logging (shows tool registration)
+LOG_LEVEL=verbose pnpm start
+
+# Run with debug logging (more detailed)
+LOG_LEVEL=debug pnpm start
+
+# Or set in .env file
+# LOG_LEVEL=verbose
+```
+
 ### Testing
 
 To test the auto-generated tools:

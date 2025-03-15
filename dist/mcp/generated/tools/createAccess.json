@@ -1,10 +1,10 @@
 {
-    "name": "createAccess",
-    "description": "Creates a Payload CMS 3.0 Access configuration\n\nAccess function runs on the server\nand is sent to the client allowing the dashboard to show accessible data and actions.\n@see ://payloadcms.com/docs/access-control/overview",
-    "inputSchema": {
-        "type": "object",
-        "properties": {},
-        "description": "Access function runs on the server\nand is sent to the client allowing the dashboard to show accessible data and actions.\n@see ://payloadcms.com/docs/access-control/overview"
-    },
-    "template": "/**\n * Access control function to determine if the operation is allowed\n * Returns true if access is granted, false if denied\n * Can also return a string with an error message if denied\n */\nconst accessControl = ({ req, id, data, doc }) => {\n  // 'req' is the Express request object with the Payload instance and user\n  // 'id' is the ID of the document being accessed (for operations on existing documents)\n  // 'data' contains the data for create/update operations\n  // 'doc' is the existing document for update operations\n  \n  // Example: Only allow access if user is logged in\n  if (!req.user) {\n    return false; // Or return 'You must be logged in'\n  }\n  \n  // Example: Check user roles\n  if (req.user.role === 'admin') {\n    return true; // Admins have full access\n  }\n  \n  // Example: Users can only access their own documents\n  if (id && doc && doc.createdBy === req.user.id) {\n    return true;\n  }\n  \n  // Deny access with a custom message\n  return 'You do not have permission to access this resource';\n};"
+  "name": "createAccess",
+  "description": "Creates a Payload CMS 3.0 Access configuration\n\nAccess function runs on the server\nand is sent to the client allowing the dashboard to show accessible data and actions.\n@see ://payloadcms.com/docs/access-control/overview",
+  "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "description": "Access function runs on the server\nand is sent to the client allowing the dashboard to show accessible data and actions.\n@see ://payloadcms.com/docs/access-control/overview"
+  },
+  "template": "/**\n * Access control function to determine if the operation is allowed\n * Returns true if access is granted, false if denied\n * Can also return a string with an error message if denied\n */\nconst accessControl = ({ req, id, data, doc }) => {\n  // 'req' is the Express request object with the Payload instance and user\n  // 'id' is the ID of the document being accessed (for operations on existing documents)\n  // 'data' contains the data for create/update operations\n  // 'doc' is the existing document for update operations\n  \n  // Example: Only allow access if user is logged in\n  if (!req.user) {\n    return false; // Or return 'You must be logged in'\n  }\n  \n  // Example: Check user roles\n  if (req.user.role === 'admin') {\n    return true; // Admins have full access\n  }\n  \n  // Example: Users can only access their own documents\n  if (id && doc && doc.createdBy === req.user.id) {\n    return true;\n  }\n  \n  // Deny access with a custom message\n  return 'You do not have permission to access this resource';\n};"
 }

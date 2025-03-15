@@ -1,46 +1,46 @@
 {
-    "name": "createTextareaField",
-    "description": "Creates a Payload CMS 3.0 TextareaField configuration\n\nExample:\n```typescript\n{\n  name: 'textareaField',\n  type: 'textarea',\n  required: true,\n  label: 'Textarea Field',\n  // Custom validation example\n  validate: (value, { siblingData, operation }) => {\n    // Validation logic based on the value, sibling data, or operation\n    if (operation === 'create' && !value) {\n      return 'This field is required for new records';\n    }\n    return true;\n  }\n}\n```",
-    "inputSchema": {
-        "type": "object",
-        "description": "Payload.TextareaField configuration object",
-        "properties": {
-            "name": {
-                "type": "string",
-                "description": "The name of the field, used as the property name in the database"
-            },
-            "type": {
-                "type": "string",
-                "enum": [
-                    "textareafield"
-                ],
-                "description": "The type of field"
-            },
-            "label": {
-                "type": "string",
-                "description": "The label shown in the admin UI"
-            },
-            "required": {
-                "type": "boolean",
-                "description": "Whether this field is required"
-            },
-            "minLength": {
-                "type": "number",
-                "description": "Minimum length of the text"
-            },
-            "maxLength": {
-                "type": "number",
-                "description": "Maximum length of the text"
-            },
-            "validate": {
-                "type": "string",
-                "description": "Custom validation function that returns true if valid or an error message string if invalid"
-            }
-        },
-        "required": [
-            "name",
-            "type"
-        ]
+  "name": "createTextareaField",
+  "description": "Creates a Payload CMS 3.0 TextareaField configuration\n\nExample:\n```typescript\n{\n  name: 'textareaField',\n  type: 'textarea',\n  required: true,\n  label: 'Textarea Field',\n  // Custom validation example\n  validate: (value, { siblingData, operation }) => {\n    // Validation logic based on the value, sibling data, or operation\n    if (operation === 'create' && !value) {\n      return 'This field is required for new records';\n    }\n    return true;\n  }\n}\n```",
+  "inputSchema": {
+    "type": "object",
+    "description": "Payload.TextareaField configuration object",
+    "properties": {
+      "name": {
+        "type": "string",
+        "description": "The name of the field, used as the property name in the database"
+      },
+      "type": {
+        "type": "string",
+        "enum": [
+          "textareafield"
+        ],
+        "description": "The type of field"
+      },
+      "label": {
+        "type": "string",
+        "description": "The label shown in the admin UI"
+      },
+      "required": {
+        "type": "boolean",
+        "description": "Whether this field is required"
+      },
+      "minLength": {
+        "type": "number",
+        "description": "Minimum length of the text"
+      },
+      "maxLength": {
+        "type": "number",
+        "description": "Maximum length of the text"
+      },
+      "validate": {
+        "type": "string",
+        "description": "Custom validation function that returns true if valid or an error message string if invalid"
+      }
     },
-    "template": "{\n  name: '{name}', // Database field name\n  type: 'textarea',\n  label: 'Textarea Field', // Label shown in the admin UI\n  required: true,\n  minLength: 10,\n  maxLength: 1000,\n  // Optional: Add custom validation\n  validate: (value) => {\n    if (value && value.split('\\n').length < 2) {\n      return 'Please include at least two paragraphs';\n    }\n    return true; // Return true if valid\n  },\n}"
+    "required": [
+      "name",
+      "type"
+    ]
+  },
+  "template": "{\n  name: '{name}', // Database field name\n  type: 'textarea',\n  label: 'Textarea Field', // Label shown in the admin UI\n  required: true,\n  minLength: 10,\n  maxLength: 1000,\n  // Optional: Add custom validation\n  validate: (value) => {\n    if (value && value.split('\\n').length < 2) {\n      return 'Please include at least two paragraphs';\n    }\n    return true; // Return true if valid\n  },\n}"
 }
