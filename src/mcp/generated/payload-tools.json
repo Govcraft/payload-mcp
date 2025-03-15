@@ -14,14 +14,6 @@
                 "properties": {
                   "expiration": {
                     "type": "number"
-                  },
-                  "generateEmailHTML": {
-                    "type": "object",
-                    "properties": {}
-                  },
-                  "generateEmailSubject": {
-                    "type": "object",
-                    "properties": {}
                   }
                 }
               },
@@ -70,16 +62,7 @@
                   },
                   {
                     "type": "object",
-                    "properties": {
-                      "generateEmailHTML": {
-                        "type": "object",
-                        "properties": {}
-                      },
-                      "generateEmailSubject": {
-                        "type": "object",
-                        "properties": {}
-                      }
-                    }
+                    "properties": {}
                   }
                 ]
               }
@@ -102,36 +85,17 @@
                       "type": "object",
                       "properties": {}
                     },
-                    "handler": {
-                      "type": "object",
-                      "properties": {}
-                    },
                     "method": {
-                      "oneOf": [
-                        {
-                          "type": "any"
-                        },
-                        {
-                          "type": "any"
-                        },
-                        {
-                          "type": "any"
-                        },
-                        {
-                          "type": "any"
-                        },
-                        {
-                          "type": "any"
-                        },
-                        {
-                          "type": "any"
-                        },
-                        {
-                          "type": "any"
-                        },
-                        {
-                          "type": "any"
-                        }
+                      "type": "string",
+                      "enum": [
+                        "connect",
+                        "delete",
+                        "get",
+                        "head",
+                        "options",
+                        "patch",
+                        "post",
+                        "put"
                       ]
                     },
                     "path": {
@@ -142,7 +106,6 @@
                     }
                   },
                   "required": [
-                    "handler",
                     "method",
                     "path"
                   ]
@@ -153,153 +116,24 @@
           "fields": {
             "type": "array",
             "items": {
-              "oneOf": [
-                {
-                  "type": "any"
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
                 },
-                {
-                  "type": "any"
+                "type": {
+                  "type": "string"
                 },
-                {
-                  "type": "any"
+                "label": {
+                  "type": "string"
                 },
-                {
-                  "type": "any"
-                },
-                {
-                  "type": "any"
-                },
-                {
-                  "type": "any"
-                },
-                {
-                  "type": "any"
-                },
-                {
-                  "type": "any"
-                },
-                {
-                  "type": "any"
-                },
-                {
-                  "type": "any"
-                },
-                {
-                  "type": "any"
-                },
-                {
-                  "type": "any"
-                },
-                {
-                  "type": "any"
-                },
-                {
-                  "type": "any"
-                },
-                {
-                  "type": "any"
-                },
-                {
-                  "type": "any"
-                },
-                {
-                  "type": "any"
-                },
-                {
-                  "type": "any"
-                },
-                {
-                  "type": "any"
-                },
-                {
-                  "type": "any"
-                },
-                {
-                  "type": "any"
-                },
-                {
-                  "type": "any"
-                },
-                {
-                  "type": "any"
-                },
-                {
-                  "type": "any"
-                },
-                {
-                  "type": "any"
-                },
-                {
-                  "type": "any"
-                },
-                {
-                  "type": "any"
-                },
-                {
-                  "type": "object",
-                  "properties": {
-                    "admin": {
-                      "type": "object",
-                      "properties": {
-                        "components": {
-                          "type": "any"
-                        },
-                        "condition": {
-                          "type": "object",
-                          "properties": {}
-                        },
-                        "custom": {
-                          "type": "object",
-                          "properties": {}
-                        },
-                        "disableBulkEdit": {
-                          "type": "boolean"
-                        },
-                        "disableListColumn": {
-                          "type": "boolean"
-                        },
-                        "position": {
-                          "type": "string"
-                        },
-                        "width": {
-                          "type": "any"
-                        }
-                      }
-                    },
-                    "custom": {
-                      "type": "object",
-                      "properties": {}
-                    },
-                    "label": {
-                      "oneOf": [
-                        {
-                          "type": "string"
-                        },
-                        {
-                          "type": "object",
-                          "properties": {}
-                        }
-                      ]
-                    },
-                    "name": {
-                      "type": "string"
-                    },
-                    "type": {
-                      "type": "any"
-                    }
-                  },
-                  "required": [
-                    "admin",
-                    "name",
-                    "type"
-                  ]
-                },
-                {
-                  "type": "any"
-                },
-                {
-                  "type": "any"
+                "required": {
+                  "type": "boolean"
                 }
+              },
+              "required": [
+                "name",
+                "type"
               ]
             }
           },
@@ -321,10 +155,6 @@
                 "field": {
                   "type": "any"
                 },
-                "getForeignPath": {
-                  "type": "object",
-                  "properties": {}
-                },
                 "joinPath": {
                   "type": "string"
                 },
@@ -332,25 +162,24 @@
                   "type": "boolean"
                 },
                 "targetField": {
-                  "oneOf": [
-                    {
-                      "type": "any"
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
                     },
-                    {
-                      "type": "any"
+                    "type": {
+                      "type": "string"
                     },
-                    {
-                      "type": "any"
+                    "label": {
+                      "type": "string"
                     },
-                    {
-                      "type": "any"
-                    },
-                    {
-                      "type": "any"
-                    },
-                    {
-                      "type": "any"
+                    "required": {
+                      "type": "boolean"
                     }
+                  },
+                  "required": [
+                    "name",
+                    "type"
                   ]
                 }
               },
@@ -495,36 +324,17 @@
                       "type": "object",
                       "properties": {}
                     },
-                    "handler": {
-                      "type": "object",
-                      "properties": {}
-                    },
                     "method": {
-                      "oneOf": [
-                        {
-                          "type": "any"
-                        },
-                        {
-                          "type": "any"
-                        },
-                        {
-                          "type": "any"
-                        },
-                        {
-                          "type": "any"
-                        },
-                        {
-                          "type": "any"
-                        },
-                        {
-                          "type": "any"
-                        },
-                        {
-                          "type": "any"
-                        },
-                        {
-                          "type": "any"
-                        }
+                      "type": "string",
+                      "enum": [
+                        "connect",
+                        "delete",
+                        "get",
+                        "head",
+                        "options",
+                        "patch",
+                        "post",
+                        "put"
                       ]
                     },
                     "path": {
@@ -535,7 +345,6 @@
                     }
                   },
                   "required": [
-                    "handler",
                     "method",
                     "path"
                   ]
@@ -546,153 +355,24 @@
           "fields": {
             "type": "array",
             "items": {
-              "oneOf": [
-                {
-                  "type": "any"
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
                 },
-                {
-                  "type": "any"
+                "type": {
+                  "type": "string"
                 },
-                {
-                  "type": "any"
+                "label": {
+                  "type": "string"
                 },
-                {
-                  "type": "any"
-                },
-                {
-                  "type": "any"
-                },
-                {
-                  "type": "any"
-                },
-                {
-                  "type": "any"
-                },
-                {
-                  "type": "any"
-                },
-                {
-                  "type": "any"
-                },
-                {
-                  "type": "any"
-                },
-                {
-                  "type": "any"
-                },
-                {
-                  "type": "any"
-                },
-                {
-                  "type": "any"
-                },
-                {
-                  "type": "any"
-                },
-                {
-                  "type": "any"
-                },
-                {
-                  "type": "any"
-                },
-                {
-                  "type": "any"
-                },
-                {
-                  "type": "any"
-                },
-                {
-                  "type": "any"
-                },
-                {
-                  "type": "any"
-                },
-                {
-                  "type": "any"
-                },
-                {
-                  "type": "any"
-                },
-                {
-                  "type": "any"
-                },
-                {
-                  "type": "any"
-                },
-                {
-                  "type": "any"
-                },
-                {
-                  "type": "any"
-                },
-                {
-                  "type": "any"
-                },
-                {
-                  "type": "object",
-                  "properties": {
-                    "admin": {
-                      "type": "object",
-                      "properties": {
-                        "components": {
-                          "type": "any"
-                        },
-                        "condition": {
-                          "type": "object",
-                          "properties": {}
-                        },
-                        "custom": {
-                          "type": "object",
-                          "properties": {}
-                        },
-                        "disableBulkEdit": {
-                          "type": "boolean"
-                        },
-                        "disableListColumn": {
-                          "type": "boolean"
-                        },
-                        "position": {
-                          "type": "string"
-                        },
-                        "width": {
-                          "type": "any"
-                        }
-                      }
-                    },
-                    "custom": {
-                      "type": "object",
-                      "properties": {}
-                    },
-                    "label": {
-                      "oneOf": [
-                        {
-                          "type": "string"
-                        },
-                        {
-                          "type": "object",
-                          "properties": {}
-                        }
-                      ]
-                    },
-                    "name": {
-                      "type": "string"
-                    },
-                    "type": {
-                      "type": "any"
-                    }
-                  },
-                  "required": [
-                    "admin",
-                    "name",
-                    "type"
-                  ]
-                },
-                {
-                  "type": "any"
-                },
-                {
-                  "type": "any"
+                "required": {
+                  "type": "boolean"
                 }
+              },
+              "required": [
+                "name",
+                "type"
               ]
             }
           },
@@ -1734,16 +1414,11 @@
                 "type": "boolean"
               },
               "theme": {
-                "oneOf": [
-                  {
-                    "type": "any"
-                  },
-                  {
-                    "type": "any"
-                  },
-                  {
-                    "type": "any"
-                  }
+                "type": "string",
+                "enum": [
+                  "all",
+                  "dark",
+                  "light"
                 ]
               },
               "timezones": {
@@ -1791,16 +1466,11 @@
               "jwtOrder": {
                 "type": "array",
                 "items": {
-                  "oneOf": [
-                    {
-                      "type": "any"
-                    },
-                    {
-                      "type": "any"
-                    },
-                    {
-                      "type": "any"
-                    }
+                  "type": "string",
+                  "enum": [
+                    "Bearer",
+                    "cookie",
+                    "JWT"
                   ]
                 }
               }
@@ -1987,153 +1657,24 @@
                 "fields": {
                   "type": "array",
                   "items": {
-                    "oneOf": [
-                      {
-                        "type": "any"
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
                       },
-                      {
-                        "type": "any"
+                      "type": {
+                        "type": "string"
                       },
-                      {
-                        "type": "any"
+                      "label": {
+                        "type": "string"
                       },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "object",
-                        "properties": {
-                          "admin": {
-                            "type": "object",
-                            "properties": {
-                              "components": {
-                                "type": "any"
-                              },
-                              "condition": {
-                                "type": "object",
-                                "properties": {}
-                              },
-                              "custom": {
-                                "type": "object",
-                                "properties": {}
-                              },
-                              "disableBulkEdit": {
-                                "type": "boolean"
-                              },
-                              "disableListColumn": {
-                                "type": "boolean"
-                              },
-                              "position": {
-                                "type": "string"
-                              },
-                              "width": {
-                                "type": "any"
-                              }
-                            }
-                          },
-                          "custom": {
-                            "type": "object",
-                            "properties": {}
-                          },
-                          "label": {
-                            "oneOf": [
-                              {
-                                "type": "string"
-                              },
-                              {
-                                "type": "object",
-                                "properties": {}
-                              }
-                            ]
-                          },
-                          "name": {
-                            "type": "string"
-                          },
-                          "type": {
-                            "type": "any"
-                          }
-                        },
-                        "required": [
-                          "admin",
-                          "name",
-                          "type"
-                        ]
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
+                      "required": {
+                        "type": "boolean"
                       }
+                    },
+                    "required": [
+                      "name",
+                      "type"
                     ]
                   }
                 },
@@ -2162,14 +1703,6 @@
                         {
                           "type": "object",
                           "properties": {
-                            "exec": {
-                              "type": "object",
-                              "properties": {}
-                            },
-                            "test": {
-                              "type": "object",
-                              "properties": {}
-                            },
                             "source": {
                               "type": "string"
                             },
@@ -2185,10 +1718,6 @@
                             "lastIndex": {
                               "type": "number"
                             },
-                            "compile": {
-                              "type": "object",
-                              "properties": {}
-                            },
                             "flags": {
                               "type": "string"
                             },
@@ -2200,46 +1729,18 @@
                             },
                             "dotAll": {
                               "type": "boolean"
-                            },
-                            "__@match@519": {
-                              "type": "object",
-                              "properties": {}
-                            },
-                            "__@replace@521": {
-                              "type": "object",
-                              "properties": {}
-                            },
-                            "__@search@524": {
-                              "type": "object",
-                              "properties": {}
-                            },
-                            "__@split@526": {
-                              "type": "object",
-                              "properties": {}
-                            },
-                            "__@matchAll@528": {
-                              "type": "object",
-                              "properties": {}
                             }
                           },
                           "required": [
-                            "exec",
-                            "test",
                             "source",
                             "global",
                             "ignoreCase",
                             "multiline",
                             "lastIndex",
-                            "compile",
                             "flags",
                             "sticky",
                             "unicode",
-                            "dotAll",
-                            "__@match@519",
-                            "__@replace@521",
-                            "__@search@524",
-                            "__@split@526",
-                            "__@matchAll@528"
+                            "dotAll"
                           ]
                         },
                         {
@@ -2251,14 +1752,6 @@
                             "regExp": {
                               "type": "object",
                               "properties": {
-                                "exec": {
-                                  "type": "object",
-                                  "properties": {}
-                                },
-                                "test": {
-                                  "type": "object",
-                                  "properties": {}
-                                },
                                 "source": {
                                   "type": "string"
                                 },
@@ -2274,10 +1767,6 @@
                                 "lastIndex": {
                                   "type": "number"
                                 },
-                                "compile": {
-                                  "type": "object",
-                                  "properties": {}
-                                },
                                 "flags": {
                                   "type": "string"
                                 },
@@ -2289,46 +1778,18 @@
                                 },
                                 "dotAll": {
                                   "type": "boolean"
-                                },
-                                "__@match@519": {
-                                  "type": "object",
-                                  "properties": {}
-                                },
-                                "__@replace@521": {
-                                  "type": "object",
-                                  "properties": {}
-                                },
-                                "__@search@524": {
-                                  "type": "object",
-                                  "properties": {}
-                                },
-                                "__@split@526": {
-                                  "type": "object",
-                                  "properties": {}
-                                },
-                                "__@matchAll@528": {
-                                  "type": "object",
-                                  "properties": {}
                                 }
                               },
                               "required": [
-                                "exec",
-                                "test",
                                 "source",
                                 "global",
                                 "ignoreCase",
                                 "multiline",
                                 "lastIndex",
-                                "compile",
                                 "flags",
                                 "sticky",
                                 "unicode",
-                                "dotAll",
-                                "__@match@519",
-                                "__@replace@521",
-                                "__@search@524",
-                                "__@split@526",
-                                "__@matchAll@528"
+                                "dotAll"
                               ]
                             }
                           },
@@ -2341,14 +1802,6 @@
                     "customStartRegex": {
                       "type": "object",
                       "properties": {
-                        "exec": {
-                          "type": "object",
-                          "properties": {}
-                        },
-                        "test": {
-                          "type": "object",
-                          "properties": {}
-                        },
                         "source": {
                           "type": "string"
                         },
@@ -2364,10 +1817,6 @@
                         "lastIndex": {
                           "type": "number"
                         },
-                        "compile": {
-                          "type": "object",
-                          "properties": {}
-                        },
                         "flags": {
                           "type": "string"
                         },
@@ -2379,64 +1828,24 @@
                         },
                         "dotAll": {
                           "type": "boolean"
-                        },
-                        "__@match@519": {
-                          "type": "object",
-                          "properties": {}
-                        },
-                        "__@replace@521": {
-                          "type": "object",
-                          "properties": {}
-                        },
-                        "__@search@524": {
-                          "type": "object",
-                          "properties": {}
-                        },
-                        "__@split@526": {
-                          "type": "object",
-                          "properties": {}
-                        },
-                        "__@matchAll@528": {
-                          "type": "object",
-                          "properties": {}
                         }
                       },
                       "required": [
-                        "exec",
-                        "test",
                         "source",
                         "global",
                         "ignoreCase",
                         "multiline",
                         "lastIndex",
-                        "compile",
                         "flags",
                         "sticky",
                         "unicode",
-                        "dotAll",
-                        "__@match@519",
-                        "__@replace@521",
-                        "__@search@524",
-                        "__@split@526",
-                        "__@matchAll@528"
+                        "dotAll"
                       ]
                     },
                     "doNotTrimChildren": {
                       "type": "boolean"
-                    },
-                    "export": {
-                      "type": "object",
-                      "properties": {}
-                    },
-                    "import": {
-                      "type": "object",
-                      "properties": {}
                     }
-                  },
-                  "required": [
-                    "export",
-                    "import"
-                  ]
+                  }
                 },
                 "labels": {
                   "type": "object",
@@ -2497,44 +1906,11 @@
                 },
                 "access": {
                   "type": "object",
-                  "properties": {
-                    "admin": {
-                      "type": "object",
-                      "properties": {}
-                    },
-                    "create": {
-                      "type": "object",
-                      "properties": {}
-                    },
-                    "delete": {
-                      "type": "object",
-                      "properties": {}
-                    },
-                    "read": {
-                      "type": "object",
-                      "properties": {}
-                    },
-                    "readVersions": {
-                      "type": "object",
-                      "properties": {}
-                    },
-                    "unlock": {
-                      "type": "object",
-                      "properties": {}
-                    },
-                    "update": {
-                      "type": "object",
-                      "properties": {}
-                    }
-                  }
+                  "properties": {}
                 },
                 "admin": {
                   "type": "object",
                   "properties": {
-                    "baseListFilter": {
-                      "type": "object",
-                      "properties": {}
-                    },
                     "components": {
                       "type": "object",
                       "properties": {
@@ -3240,10 +2616,6 @@
                                                     }
                                                   ]
                                                 },
-                                                "condition": {
-                                                  "type": "object",
-                                                  "properties": {}
-                                                },
                                                 "href": {
                                                   "oneOf": [
                                                     {
@@ -3514,10 +2886,6 @@
                                                     }
                                                   ]
                                                 },
-                                                "condition": {
-                                                  "type": "object",
-                                                  "properties": {}
-                                                },
                                                 "href": {
                                                   "oneOf": [
                                                     {
@@ -3787,10 +3155,6 @@
                                                       ]
                                                     }
                                                   ]
-                                                },
-                                                "condition": {
-                                                  "type": "object",
-                                                  "properties": {}
                                                 },
                                                 "href": {
                                                   "oneOf": [
@@ -4065,10 +3429,6 @@
                                                     }
                                                   ]
                                                 },
-                                                "condition": {
-                                                  "type": "object",
-                                                  "properties": {}
-                                                },
                                                 "href": {
                                                   "oneOf": [
                                                     {
@@ -4338,10 +3698,6 @@
                                                       ]
                                                     }
                                                   ]
-                                                },
-                                                "condition": {
-                                                  "type": "object",
-                                                  "properties": {}
                                                 },
                                                 "href": {
                                                   "oneOf": [
@@ -4626,10 +3982,6 @@
                                                       ]
                                                     }
                                                   ]
-                                                },
-                                                "condition": {
-                                                  "type": "object",
-                                                  "properties": {}
                                                 },
                                                 "href": {
                                                   "oneOf": [
@@ -4982,10 +4334,6 @@
                         }
                       }
                     },
-                    "preview": {
-                      "type": "object",
-                      "properties": {}
-                    },
                     "useAsTitle": {
                       "type": "string"
                     }
@@ -5058,14 +4406,6 @@
                           "properties": {
                             "expiration": {
                               "type": "number"
-                            },
-                            "generateEmailHTML": {
-                              "type": "object",
-                              "properties": {}
-                            },
-                            "generateEmailSubject": {
-                              "type": "object",
-                              "properties": {}
                             }
                           }
                         },
@@ -5121,16 +4461,11 @@
                           "items": {
                             "type": "object",
                             "properties": {
-                              "authenticate": {
-                                "type": "object",
-                                "properties": {}
-                              },
                               "name": {
                                 "type": "string"
                               }
                             },
                             "required": [
-                              "authenticate",
                               "name"
                             ]
                           }
@@ -5151,16 +4486,7 @@
                             },
                             {
                               "type": "object",
-                              "properties": {
-                                "generateEmailHTML": {
-                                  "type": "object",
-                                  "properties": {}
-                                },
-                                "generateEmailSubject": {
-                                  "type": "object",
-                                  "properties": {}
-                                }
-                              }
+                              "properties": {}
                             }
                           ]
                         }
@@ -5228,42 +4554,22 @@
                           "path": {
                             "type": "string"
                           },
-                          "handler": {
-                            "type": "object",
-                            "properties": {}
-                          },
                           "method": {
-                            "oneOf": [
-                              {
-                                "type": "any"
-                              },
-                              {
-                                "type": "any"
-                              },
-                              {
-                                "type": "any"
-                              },
-                              {
-                                "type": "any"
-                              },
-                              {
-                                "type": "any"
-                              },
-                              {
-                                "type": "any"
-                              },
-                              {
-                                "type": "any"
-                              },
-                              {
-                                "type": "any"
-                              }
+                            "type": "string",
+                            "enum": [
+                              "connect",
+                              "delete",
+                              "get",
+                              "head",
+                              "options",
+                              "patch",
+                              "post",
+                              "put"
                             ]
                           }
                         },
                         "required": [
                           "path",
-                          "handler",
                           "method"
                         ]
                       }
@@ -5273,153 +4579,24 @@
                 "fields": {
                   "type": "array",
                   "items": {
-                    "oneOf": [
-                      {
-                        "type": "any"
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
                       },
-                      {
-                        "type": "any"
+                      "type": {
+                        "type": "string"
                       },
-                      {
-                        "type": "any"
+                      "label": {
+                        "type": "string"
                       },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "object",
-                        "properties": {
-                          "admin": {
-                            "type": "object",
-                            "properties": {
-                              "components": {
-                                "type": "any"
-                              },
-                              "condition": {
-                                "type": "object",
-                                "properties": {}
-                              },
-                              "custom": {
-                                "type": "object",
-                                "properties": {}
-                              },
-                              "disableBulkEdit": {
-                                "type": "boolean"
-                              },
-                              "disableListColumn": {
-                                "type": "boolean"
-                              },
-                              "position": {
-                                "type": "string"
-                              },
-                              "width": {
-                                "type": "any"
-                              }
-                            }
-                          },
-                          "custom": {
-                            "type": "object",
-                            "properties": {}
-                          },
-                          "label": {
-                            "oneOf": [
-                              {
-                                "type": "string"
-                              },
-                              {
-                                "type": "object",
-                                "properties": {}
-                              }
-                            ]
-                          },
-                          "name": {
-                            "type": "string"
-                          },
-                          "type": {
-                            "type": "any"
-                          }
-                        },
-                        "required": [
-                          "admin",
-                          "name",
-                          "type"
-                        ]
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
+                      "required": {
+                        "type": "boolean"
                       }
+                    },
+                    "required": [
+                      "name",
+                      "type"
                     ]
                   }
                 },
@@ -5705,10 +4882,6 @@
                         "displayPreview": {
                           "type": "boolean"
                         },
-                        "externalFileHeaderFilter": {
-                          "type": "object",
-                          "properties": {}
-                        },
                         "filenameCompoundIndex": {
                           "type": "array",
                           "items": {
@@ -5760,10 +4933,6 @@
                             "type": "string"
                           }
                         },
-                        "modifyResponseHeaders": {
-                          "type": "object",
-                          "properties": {}
-                        },
                         "pasteURL": {
                           "oneOf": [
                             {
@@ -5787,13 +4956,10 @@
                                         "type": "string"
                                       },
                                       "protocol": {
-                                        "oneOf": [
-                                          {
-                                            "type": "any"
-                                          },
-                                          {
-                                            "type": "any"
-                                          }
+                                        "type": "string",
+                                        "enum": [
+                                          "http",
+                                          "https"
                                         ]
                                       },
                                       "search": {
@@ -5971,23 +5137,15 @@
             "type": "object",
             "properties": {
               "defaultIDType": {
-                "oneOf": [
-                  {
-                    "type": "any"
-                  },
-                  {
-                    "type": "any"
-                  }
+                "type": "string",
+                "enum": [
+                  "number",
+                  "text"
                 ]
-              },
-              "init": {
-                "type": "object",
-                "properties": {}
               }
             },
             "required": [
-              "defaultIDType",
-              "init"
+              "defaultIDType"
             ]
           },
           "debug": {
@@ -5999,10 +5157,6 @@
           "defaultMaxTextLength": {
             "type": "number"
           },
-          "editor": {
-            "type": "object",
-            "properties": {}
-          },
           "email": {
             "oneOf": [
               {
@@ -6012,27 +5166,12 @@
               {
                 "type": "object",
                 "properties": {
-                  "then": {
-                    "type": "object",
-                    "properties": {}
-                  },
-                  "catch": {
-                    "type": "object",
-                    "properties": {}
-                  },
-                  "finally": {
-                    "type": "object",
-                    "properties": {}
-                  },
-                  "__@toStringTag@1055": {
+                  "__@toStringTag@1073": {
                     "type": "string"
                   }
                 },
                 "required": [
-                  "then",
-                  "catch",
-                  "finally",
-                  "__@toStringTag@1055"
+                  "__@toStringTag@1073"
                 ]
               }
             ]
@@ -6046,36 +5185,17 @@
                   "type": "object",
                   "properties": {}
                 },
-                "handler": {
-                  "type": "object",
-                  "properties": {}
-                },
                 "method": {
-                  "oneOf": [
-                    {
-                      "type": "any"
-                    },
-                    {
-                      "type": "any"
-                    },
-                    {
-                      "type": "any"
-                    },
-                    {
-                      "type": "any"
-                    },
-                    {
-                      "type": "any"
-                    },
-                    {
-                      "type": "any"
-                    },
-                    {
-                      "type": "any"
-                    },
-                    {
-                      "type": "any"
-                    }
+                  "type": "string",
+                  "enum": [
+                    "connect",
+                    "delete",
+                    "get",
+                    "head",
+                    "options",
+                    "patch",
+                    "post",
+                    "put"
                   ]
                 },
                 "path": {
@@ -6086,7 +5206,6 @@
                 }
               },
               "required": [
-                "handler",
                 "method",
                 "path"
               ]
@@ -6102,24 +5221,7 @@
                 },
                 "access": {
                   "type": "object",
-                  "properties": {
-                    "read": {
-                      "type": "object",
-                      "properties": {}
-                    },
-                    "readDrafts": {
-                      "type": "object",
-                      "properties": {}
-                    },
-                    "readVersions": {
-                      "type": "object",
-                      "properties": {}
-                    },
-                    "update": {
-                      "type": "object",
-                      "properties": {}
-                    }
-                  }
+                  "properties": {}
                 },
                 "admin": {
                   "type": "object",
@@ -6544,10 +5646,6 @@
                                                     }
                                                   ]
                                                 },
-                                                "condition": {
-                                                  "type": "object",
-                                                  "properties": {}
-                                                },
                                                 "href": {
                                                   "oneOf": [
                                                     {
@@ -6818,10 +5916,6 @@
                                                     }
                                                   ]
                                                 },
-                                                "condition": {
-                                                  "type": "object",
-                                                  "properties": {}
-                                                },
                                                 "href": {
                                                   "oneOf": [
                                                     {
@@ -7091,10 +6185,6 @@
                                                       ]
                                                     }
                                                   ]
-                                                },
-                                                "condition": {
-                                                  "type": "object",
-                                                  "properties": {}
                                                 },
                                                 "href": {
                                                   "oneOf": [
@@ -7369,10 +6459,6 @@
                                                     }
                                                   ]
                                                 },
-                                                "condition": {
-                                                  "type": "object",
-                                                  "properties": {}
-                                                },
                                                 "href": {
                                                   "oneOf": [
                                                     {
@@ -7642,10 +6728,6 @@
                                                       ]
                                                     }
                                                   ]
-                                                },
-                                                "condition": {
-                                                  "type": "object",
-                                                  "properties": {}
                                                 },
                                                 "href": {
                                                   "oneOf": [
@@ -7931,10 +7013,6 @@
                                                     }
                                                   ]
                                                 },
-                                                "condition": {
-                                                  "type": "object",
-                                                  "properties": {}
-                                                },
                                                 "href": {
                                                   "oneOf": [
                                                     {
@@ -8151,10 +7229,6 @@
                     },
                     "meta": {
                       "type": "any"
-                    },
-                    "preview": {
-                      "type": "object",
-                      "properties": {}
                     }
                   }
                 },
@@ -8190,42 +7264,22 @@
                           "path": {
                             "type": "string"
                           },
-                          "handler": {
-                            "type": "object",
-                            "properties": {}
-                          },
                           "method": {
-                            "oneOf": [
-                              {
-                                "type": "any"
-                              },
-                              {
-                                "type": "any"
-                              },
-                              {
-                                "type": "any"
-                              },
-                              {
-                                "type": "any"
-                              },
-                              {
-                                "type": "any"
-                              },
-                              {
-                                "type": "any"
-                              },
-                              {
-                                "type": "any"
-                              },
-                              {
-                                "type": "any"
-                              }
+                            "type": "string",
+                            "enum": [
+                              "connect",
+                              "delete",
+                              "get",
+                              "head",
+                              "options",
+                              "patch",
+                              "post",
+                              "put"
                             ]
                           }
                         },
                         "required": [
                           "path",
-                          "handler",
                           "method"
                         ]
                       }
@@ -8235,153 +7289,24 @@
                 "fields": {
                   "type": "array",
                   "items": {
-                    "oneOf": [
-                      {
-                        "type": "any"
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
                       },
-                      {
-                        "type": "any"
+                      "type": {
+                        "type": "string"
                       },
-                      {
-                        "type": "any"
+                      "label": {
+                        "type": "string"
                       },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "object",
-                        "properties": {
-                          "admin": {
-                            "type": "object",
-                            "properties": {
-                              "components": {
-                                "type": "any"
-                              },
-                              "condition": {
-                                "type": "object",
-                                "properties": {}
-                              },
-                              "custom": {
-                                "type": "object",
-                                "properties": {}
-                              },
-                              "disableBulkEdit": {
-                                "type": "boolean"
-                              },
-                              "disableListColumn": {
-                                "type": "boolean"
-                              },
-                              "position": {
-                                "type": "string"
-                              },
-                              "width": {
-                                "type": "any"
-                              }
-                            }
-                          },
-                          "custom": {
-                            "type": "object",
-                            "properties": {}
-                          },
-                          "label": {
-                            "oneOf": [
-                              {
-                                "type": "string"
-                              },
-                              {
-                                "type": "object",
-                                "properties": {}
-                              }
-                            ]
-                          },
-                          "name": {
-                            "type": "string"
-                          },
-                          "type": {
-                            "type": "any"
-                          }
-                        },
-                        "required": [
-                          "admin",
-                          "name",
-                          "type"
-                        ]
-                      },
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
+                      "required": {
+                        "type": "boolean"
                       }
+                    },
+                    "required": [
+                      "name",
+                      "type"
                     ]
                   }
                 },
@@ -8566,20 +7491,8 @@
               "maxComplexity": {
                 "type": "number"
               },
-              "mutations": {
-                "type": "object",
-                "properties": {}
-              },
-              "queries": {
-                "type": "object",
-                "properties": {}
-              },
               "schemaOutputFile": {
                 "type": "string"
-              },
-              "validationRules": {
-                "type": "object",
-                "properties": {}
               }
             }
           },
@@ -8606,12 +7519,7 @@
             "properties": {
               "access": {
                 "type": "object",
-                "properties": {
-                  "run": {
-                    "type": "object",
-                    "properties": {}
-                  }
-                }
+                "properties": {}
               },
               "addParentToTaskLog": {
                 "type": "boolean"
@@ -8647,14 +7555,6 @@
               "depth": {
                 "type": "number"
               },
-              "jobsCollectionOverrides": {
-                "type": "object",
-                "properties": {}
-              },
-              "shouldAutoRun": {
-                "type": "object",
-                "properties": {}
-              },
               "tasks": {
                 "type": "array",
                 "items": {
@@ -8674,153 +7574,24 @@
                     "inputSchema": {
                       "type": "array",
                       "items": {
-                        "oneOf": [
-                          {
-                            "type": "any"
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
                           },
-                          {
-                            "type": "any"
+                          "type": {
+                            "type": "string"
                           },
-                          {
-                            "type": "any"
+                          "label": {
+                            "type": "string"
                           },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "object",
-                            "properties": {
-                              "admin": {
-                                "type": "object",
-                                "properties": {
-                                  "components": {
-                                    "type": "any"
-                                  },
-                                  "condition": {
-                                    "type": "object",
-                                    "properties": {}
-                                  },
-                                  "custom": {
-                                    "type": "object",
-                                    "properties": {}
-                                  },
-                                  "disableBulkEdit": {
-                                    "type": "boolean"
-                                  },
-                                  "disableListColumn": {
-                                    "type": "boolean"
-                                  },
-                                  "position": {
-                                    "type": "string"
-                                  },
-                                  "width": {
-                                    "type": "any"
-                                  }
-                                }
-                              },
-                              "custom": {
-                                "type": "object",
-                                "properties": {}
-                              },
-                              "label": {
-                                "oneOf": [
-                                  {
-                                    "type": "string"
-                                  },
-                                  {
-                                    "type": "object",
-                                    "properties": {}
-                                  }
-                                ]
-                              },
-                              "name": {
-                                "type": "string"
-                              },
-                              "type": {
-                                "type": "any"
-                              }
-                            },
-                            "required": [
-                              "admin",
-                              "name",
-                              "type"
-                            ]
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
+                          "required": {
+                            "type": "boolean"
                           }
+                        },
+                        "required": [
+                          "name",
+                          "type"
                         ]
                       }
                     },
@@ -8830,164 +7601,27 @@
                     "label": {
                       "type": "string"
                     },
-                    "onFail": {
-                      "type": "object",
-                      "properties": {}
-                    },
-                    "onSuccess": {
-                      "type": "object",
-                      "properties": {}
-                    },
                     "outputSchema": {
                       "type": "array",
                       "items": {
-                        "oneOf": [
-                          {
-                            "type": "any"
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
                           },
-                          {
-                            "type": "any"
+                          "type": {
+                            "type": "string"
                           },
-                          {
-                            "type": "any"
+                          "label": {
+                            "type": "string"
                           },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "object",
-                            "properties": {
-                              "admin": {
-                                "type": "object",
-                                "properties": {
-                                  "components": {
-                                    "type": "any"
-                                  },
-                                  "condition": {
-                                    "type": "object",
-                                    "properties": {}
-                                  },
-                                  "custom": {
-                                    "type": "object",
-                                    "properties": {}
-                                  },
-                                  "disableBulkEdit": {
-                                    "type": "boolean"
-                                  },
-                                  "disableListColumn": {
-                                    "type": "boolean"
-                                  },
-                                  "position": {
-                                    "type": "string"
-                                  },
-                                  "width": {
-                                    "type": "any"
-                                  }
-                                }
-                              },
-                              "custom": {
-                                "type": "object",
-                                "properties": {}
-                              },
-                              "label": {
-                                "oneOf": [
-                                  {
-                                    "type": "string"
-                                  },
-                                  {
-                                    "type": "object",
-                                    "properties": {}
-                                  }
-                                ]
-                              },
-                              "name": {
-                                "type": "string"
-                              },
-                              "type": {
-                                "type": "any"
-                              }
-                            },
-                            "required": [
-                              "admin",
-                              "name",
-                              "type"
-                            ]
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
+                          "required": {
+                            "type": "boolean"
                           }
+                        },
+                        "required": [
+                          "name",
+                          "type"
                         ]
                       }
                     },
@@ -9009,13 +7643,10 @@
                                   "type": "number"
                                 },
                                 "type": {
-                                  "oneOf": [
-                                    {
-                                      "type": "any"
-                                    },
-                                    {
-                                      "type": "any"
-                                    }
+                                  "type": "string",
+                                  "enum": [
+                                    "exponential",
+                                    "fixed"
                                   ]
                                 }
                               },
@@ -9083,153 +7714,24 @@
                     "inputSchema": {
                       "type": "array",
                       "items": {
-                        "oneOf": [
-                          {
-                            "type": "any"
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
                           },
-                          {
-                            "type": "any"
+                          "type": {
+                            "type": "string"
                           },
-                          {
-                            "type": "any"
+                          "label": {
+                            "type": "string"
                           },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "object",
-                            "properties": {
-                              "admin": {
-                                "type": "object",
-                                "properties": {
-                                  "components": {
-                                    "type": "any"
-                                  },
-                                  "condition": {
-                                    "type": "object",
-                                    "properties": {}
-                                  },
-                                  "custom": {
-                                    "type": "object",
-                                    "properties": {}
-                                  },
-                                  "disableBulkEdit": {
-                                    "type": "boolean"
-                                  },
-                                  "disableListColumn": {
-                                    "type": "boolean"
-                                  },
-                                  "position": {
-                                    "type": "string"
-                                  },
-                                  "width": {
-                                    "type": "any"
-                                  }
-                                }
-                              },
-                              "custom": {
-                                "type": "object",
-                                "properties": {}
-                              },
-                              "label": {
-                                "oneOf": [
-                                  {
-                                    "type": "string"
-                                  },
-                                  {
-                                    "type": "object",
-                                    "properties": {}
-                                  }
-                                ]
-                              },
-                              "name": {
-                                "type": "string"
-                              },
-                              "type": {
-                                "type": "any"
-                              }
-                            },
-                            "required": [
-                              "admin",
-                              "name",
-                              "type"
-                            ]
-                          },
-                          {
-                            "type": "any"
-                          },
-                          {
-                            "type": "any"
+                          "required": {
+                            "type": "boolean"
                           }
+                        },
+                        "required": [
+                          "name",
+                          "type"
                         ]
                       }
                     },
@@ -9260,13 +7762,10 @@
                                   "type": "number"
                                 },
                                 "type": {
-                                  "oneOf": [
-                                    {
-                                      "type": "any"
-                                    },
-                                    {
-                                      "type": "any"
-                                    }
+                                  "type": "string",
+                                  "enum": [
+                                    "exponential",
+                                    "fixed"
                                   ]
                                 }
                               },
@@ -9351,21 +7850,14 @@
                     "type": "string"
                   },
                   "defaultLocalePublishOption": {
-                    "oneOf": [
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      }
+                    "type": "string",
+                    "enum": [
+                      "all",
+                      "active"
                     ]
                   },
                   "fallback": {
                     "type": "boolean"
-                  },
-                  "filterAvailableLocales": {
-                    "type": "object",
-                    "properties": {}
                   }
                 },
                 "required": [
@@ -9386,21 +7878,14 @@
                     "type": "string"
                   },
                   "defaultLocalePublishOption": {
-                    "oneOf": [
-                      {
-                        "type": "any"
-                      },
-                      {
-                        "type": "any"
-                      }
+                    "type": "string",
+                    "enum": [
+                      "all",
+                      "active"
                     ]
                   },
                   "fallback": {
                     "type": "boolean"
-                  },
-                  "filterAvailableLocales": {
-                    "type": "object",
-                    "properties": {}
                   }
                 },
                 "required": [
@@ -9457,10 +7942,6 @@
           "maxDepth": {
             "type": "number"
           },
-          "onInit": {
-            "type": "object",
-            "properties": {}
-          },
           "plugins": {
             "type": "array",
             "items": {
@@ -9490,10 +7971,6 @@
           },
           "serverURL": {
             "type": "string"
-          },
-          "sharp": {
-            "type": "object",
-            "properties": {}
           },
           "telemetry": {
             "type": "boolean"
@@ -9701,10 +8178,6 @@
       "inputSchema": {
         "type": "object",
         "properties": {
-          "baseListFilter": {
-            "type": "object",
-            "properties": {}
-          },
           "components": {
             "type": "object",
             "properties": {
@@ -10410,10 +8883,6 @@
                                           }
                                         ]
                                       },
-                                      "condition": {
-                                        "type": "object",
-                                        "properties": {}
-                                      },
                                       "href": {
                                         "oneOf": [
                                           {
@@ -10684,10 +9153,6 @@
                                           }
                                         ]
                                       },
-                                      "condition": {
-                                        "type": "object",
-                                        "properties": {}
-                                      },
                                       "href": {
                                         "oneOf": [
                                           {
@@ -10957,10 +9422,6 @@
                                             ]
                                           }
                                         ]
-                                      },
-                                      "condition": {
-                                        "type": "object",
-                                        "properties": {}
                                       },
                                       "href": {
                                         "oneOf": [
@@ -11235,10 +9696,6 @@
                                           }
                                         ]
                                       },
-                                      "condition": {
-                                        "type": "object",
-                                        "properties": {}
-                                      },
                                       "href": {
                                         "oneOf": [
                                           {
@@ -11508,10 +9965,6 @@
                                             ]
                                           }
                                         ]
-                                      },
-                                      "condition": {
-                                        "type": "object",
-                                        "properties": {}
                                       },
                                       "href": {
                                         "oneOf": [
@@ -11796,10 +10249,6 @@
                                             ]
                                           }
                                         ]
-                                      },
-                                      "condition": {
-                                        "type": "object",
-                                        "properties": {}
                                       },
                                       "href": {
                                         "oneOf": [
@@ -12152,10 +10601,6 @@
               }
             }
           },
-          "preview": {
-            "type": "object",
-            "properties": {}
-          },
           "useAsTitle": {
             "type": "string"
           }
@@ -12167,13 +10612,24 @@
       "name": "createNumberField",
       "description": "Creates a Payload CMS 3.0 NumberField configuration",
       "inputSchema": {
-        "oneOf": [
-          {
-            "type": "any"
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
           },
-          {
-            "type": "any"
+          "type": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "required": {
+            "type": "boolean"
           }
+        },
+        "required": [
+          "name",
+          "type"
         ]
       },
       "template": "{ name: '{name}', type: '{type}', ...{rest} }"
@@ -12182,13 +10638,24 @@
       "name": "createTextField",
       "description": "Creates a Payload CMS 3.0 TextField configuration",
       "inputSchema": {
-        "oneOf": [
-          {
-            "type": "any"
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
           },
-          {
-            "type": "any"
+          "type": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "required": {
+            "type": "boolean"
           }
+        },
+        "required": [
+          "name",
+          "type"
         ]
       },
       "template": "{ name: '{name}', type: '{type}', ...{rest} }"
@@ -12229,13 +10696,24 @@
       "name": "createUploadField",
       "description": "Creates a Payload CMS 3.0 UploadField configuration",
       "inputSchema": {
-        "oneOf": [
-          {
-            "type": "any"
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
           },
-          {
-            "type": "any"
+          "type": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "required": {
+            "type": "boolean"
           }
+        },
+        "required": [
+          "name",
+          "type"
         ]
       },
       "template": "{ name: '{name}', type: '{type}', ...{rest} }"
@@ -12260,13 +10738,24 @@
       "name": "createSelectField",
       "description": "Creates a Payload CMS 3.0 SelectField configuration",
       "inputSchema": {
-        "oneOf": [
-          {
-            "type": "any"
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
           },
-          {
-            "type": "any"
+          "type": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "required": {
+            "type": "boolean"
           }
+        },
+        "required": [
+          "name",
+          "type"
         ]
       },
       "template": "{ name: '{name}', type: '{type}', ...{rest} }"
@@ -12275,13 +10764,24 @@
       "name": "createPolymorphicRelationshipField",
       "description": "Creates a Payload CMS 3.0 PolymorphicRelationshipField configuration",
       "inputSchema": {
-        "oneOf": [
-          {
-            "type": "any"
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
           },
-          {
-            "type": "any"
+          "type": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "required": {
+            "type": "boolean"
           }
+        },
+        "required": [
+          "name",
+          "type"
         ]
       },
       "template": "{ name: '{name}', type: '{type}', ...{rest} }"
@@ -12290,13 +10790,24 @@
       "name": "createSingleRelationshipField",
       "description": "Creates a Payload CMS 3.0 SingleRelationshipField configuration",
       "inputSchema": {
-        "oneOf": [
-          {
-            "type": "any"
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
           },
-          {
-            "type": "any"
+          "type": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "required": {
+            "type": "boolean"
           }
+        },
+        "required": [
+          "name",
+          "type"
         ]
       },
       "template": "{ name: '{name}', type: '{type}', ...{rest} }"
@@ -12305,19 +10816,24 @@
       "name": "createRelationshipField",
       "description": "Creates a Payload CMS 3.0 RelationshipField configuration",
       "inputSchema": {
-        "oneOf": [
-          {
-            "type": "any"
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
           },
-          {
-            "type": "any"
+          "type": {
+            "type": "string"
           },
-          {
-            "type": "any"
+          "label": {
+            "type": "string"
           },
-          {
-            "type": "any"
+          "required": {
+            "type": "boolean"
           }
+        },
+        "required": [
+          "name",
+          "type"
         ]
       },
       "template": "{ name: '{name}', type: '{type}', ...{rest} }"
@@ -12374,153 +10890,24 @@
       "name": "createField",
       "description": "Creates a Payload CMS 3.0 Field configuration",
       "inputSchema": {
-        "oneOf": [
-          {
-            "type": "any"
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
           },
-          {
-            "type": "any"
+          "type": {
+            "type": "string"
           },
-          {
-            "type": "any"
+          "label": {
+            "type": "string"
           },
-          {
-            "type": "any"
-          },
-          {
-            "type": "any"
-          },
-          {
-            "type": "any"
-          },
-          {
-            "type": "any"
-          },
-          {
-            "type": "any"
-          },
-          {
-            "type": "any"
-          },
-          {
-            "type": "any"
-          },
-          {
-            "type": "any"
-          },
-          {
-            "type": "any"
-          },
-          {
-            "type": "any"
-          },
-          {
-            "type": "any"
-          },
-          {
-            "type": "any"
-          },
-          {
-            "type": "any"
-          },
-          {
-            "type": "any"
-          },
-          {
-            "type": "any"
-          },
-          {
-            "type": "any"
-          },
-          {
-            "type": "any"
-          },
-          {
-            "type": "any"
-          },
-          {
-            "type": "any"
-          },
-          {
-            "type": "any"
-          },
-          {
-            "type": "any"
-          },
-          {
-            "type": "any"
-          },
-          {
-            "type": "any"
-          },
-          {
-            "type": "any"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "admin": {
-                "type": "object",
-                "properties": {
-                  "components": {
-                    "type": "any"
-                  },
-                  "condition": {
-                    "type": "object",
-                    "properties": {}
-                  },
-                  "custom": {
-                    "type": "object",
-                    "properties": {}
-                  },
-                  "disableBulkEdit": {
-                    "type": "boolean"
-                  },
-                  "disableListColumn": {
-                    "type": "boolean"
-                  },
-                  "position": {
-                    "type": "string"
-                  },
-                  "width": {
-                    "type": "any"
-                  }
-                }
-              },
-              "custom": {
-                "type": "object",
-                "properties": {}
-              },
-              "label": {
-                "oneOf": [
-                  {
-                    "type": "string"
-                  },
-                  {
-                    "type": "object",
-                    "properties": {}
-                  }
-                ]
-              },
-              "name": {
-                "type": "string"
-              },
-              "type": {
-                "type": "any"
-              }
-            },
-            "required": [
-              "admin",
-              "name",
-              "type"
-            ]
-          },
-          {
-            "type": "any"
-          },
-          {
-            "type": "any"
+          "required": {
+            "type": "boolean"
           }
+        },
+        "required": [
+          "name",
+          "type"
         ]
       },
       "template": "{ name: '{name}', type: '{type}', ...{rest} }"

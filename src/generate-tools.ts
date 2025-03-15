@@ -10,19 +10,49 @@ function typeToJsonSchema(type: Type): any {
   if (type.isString()) return { type: 'string' };
   if (type.isNumber()) return { type: 'number' };
   if (type.isBoolean()) return { type: 'boolean' };
+  
   if (type.isArray()) {
     const elementType = type.getArrayElementType();
-    return { type: 'array', items: elementType ? typeToJsonSchema(elementType) : { type: 'any' } };
+    
+    // Special handling for fields array
+    if (elementType && elementType.isUnion() && elementType.getUnionTypes().some(t => t.getProperties().some(p => p.getName() === 'type'))) {
+      // This is likely a fields array, handle it specially
+      return {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            name: { type: 'string' },
+            type: { type: 'string' },
+            label: { type: 'string' },
+            required: { type: 'boolean' }
+          },
+          required: ['name', 'type']
+        }
+      };
+    }
+    
+    return { 
+      type: 'array', 
+      items: elementType ? typeToJsonSchema(elementType) : { type: 'any' } 
+    };
   }
+  
   if (type.isObject()) {
     const properties: Record<string, any> = {};
     const required: string[] = [];
+    
     type.getProperties().forEach((prop: any) => {
       const propName = prop.getName();
-      let propType;
       try {
         const declarations = prop.getDeclarations();
-        propType = declarations.length > 0 ? prop.getTypeAtLocation(declarations[0]) : prop.getType();
+        const propType = declarations.length > 0 ? prop.getTypeAtLocation(declarations[0]) : prop.getType();
+        
+        // Skip properties that are functions or too complex
+        if (propType.getCallSignatures().length > 0) {
+          return;
+        }
+        
         properties[propName] = typeToJsonSchema(propType);
         if (!prop.isOptional()) required.push(propName);
       } catch (error) {
@@ -30,17 +60,75 @@ function typeToJsonSchema(type: Type): any {
         properties[propName] = { type: 'any' };
       }
     });
-    return { type: 'object', properties, required: required.length ? required : undefined };
+    
+    return { 
+      type: 'object', 
+      properties, 
+      required: required.length ? required : undefined 
+    };
   }
+  
   if (type.isUnion()) {
-    const types = type.getUnionTypes().map((t: Type) => typeToJsonSchema(t));
-    return { oneOf: types };
+    const unionTypes = type.getUnionTypes();
+    
+    // Check if this is a field type union (common in Payload)
+    const isFieldUnion = unionTypes.some(t => {
+      const props = t.getProperties();
+      return props.some(p => p.getName() === 'type') && 
+             props.some(p => p.getName() === 'name');
+    });
+    
+    if (isFieldUnion) {
+      // For field unions, create a more specific schema
+      return {
+        type: 'object',
+        properties: {
+          name: { type: 'string' },
+          type: { type: 'string' },
+          label: { type: 'string' },
+          required: { type: 'boolean' }
+        },
+        required: ['name', 'type']
+      };
+    }
+    
+    // Handle string literal unions (like enums)
+    const stringLiterals = unionTypes.filter(t => t.isStringLiteral());
+    if (stringLiterals.length === unionTypes.length) {
+      return { 
+        type: 'string', 
+        enum: stringLiterals.map(t => t.getLiteralValueOrThrow()) 
+      };
+    }
+    
+    // Handle number literal unions
+    const numberLiterals = unionTypes.filter(t => t.isNumberLiteral());
+    if (numberLiterals.length === unionTypes.length) {
+      return { 
+        type: 'number', 
+        enum: numberLiterals.map(t => t.getLiteralValueOrThrow()) 
+      };
+    }
+    
+    // Handle null unions (optional types)
+    const nonNullTypes = unionTypes.filter(t => !t.isNull() && !t.isUndefined());
+    if (nonNullTypes.length === 1) {
+      return typeToJsonSchema(nonNullTypes[0]);
+    }
+    
+    // For other unions, use oneOf
+    return { 
+      oneOf: unionTypes.map((t: Type) => typeToJsonSchema(t)) 
+    };
   }
+  
   if (type.isEnum()) {
     const enumMembers = type.getSymbol()?.getDeclarations()?.[0]?.getType().getUnionTypes() || [];
     const enumValues = enumMembers.map((t: Type) => t.getLiteralValueOrThrow());
     return { type: 'string', enum: enumValues };
   }
+  
+  // For any other type, return a generic schema
   return { type: 'any' };
 }
 
