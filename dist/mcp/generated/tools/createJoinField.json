@@ -1,0 +1,38 @@
+{
+    "name": "createJoinField",
+    "description": "Creates a Payload CMS 3.0 JoinField configuration\n\nA virtual field that loads in related collections by querying a relationship or upload field.\n\nExample:\n```typescript\n{\n  name: 'joinField',\n  type: 'join',\n  required: true,\n  label: 'Join Field',\n  // Custom validation example\n  validate: (value, { siblingData, operation }) => {\n    // Validation logic based on the value, sibling data, or operation\n    if (operation === 'create' && !value) {\n      return 'This field is required for new records';\n    }\n    return true;\n  }\n}\n```",
+    "inputSchema": {
+        "type": "object",
+        "description": "Payload.JoinField configuration object",
+        "properties": {
+            "name": {
+                "type": "string",
+                "description": "The name of the field, used as the property name in the database"
+            },
+            "type": {
+                "type": "string",
+                "enum": [
+                    "joinfield"
+                ],
+                "description": "The type of field"
+            },
+            "label": {
+                "type": "string",
+                "description": "The label shown in the admin UI"
+            },
+            "required": {
+                "type": "boolean",
+                "description": "Whether this field is required"
+            },
+            "validate": {
+                "type": "string",
+                "description": "Custom validation function that returns true if valid or an error message string if invalid"
+            }
+        },
+        "required": [
+            "name",
+            "type"
+        ]
+    },
+    "template": "{\n  name: '{name}', // Database field name\n  type: 'join',\n  label: 'Join Field', // Label shown in the admin UI\n  required: true,\n  // Add field-specific properties here\n  \n  // Optional: Add custom validation\n  validate: (value, { siblingData, operation }) => {\n    // Custom validation logic based on the value, sibling data, or operation\n    if (!value && operation === 'create') {\n      return 'This field is required for new records';\n    }\n    return true; // Return true if valid\n  },\n  ...{rest}\n}"
+}

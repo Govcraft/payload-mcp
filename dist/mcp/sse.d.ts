@@ -1,0 +1,10 @@
+import { Response } from 'express';
+import { EventEmitter } from 'events';
+import { MCPMessage } from './types.js';
+export declare const sseEmitter: EventEmitter<[never]>;
+export declare function initializeSSE(res: Response, sessionId: string): void;
+export declare function sendMessageToClient(sessionId: string, message: MCPMessage): boolean;
+export declare function broadcastMessage(message: MCPMessage): void;
+export declare function closeSSEConnection(sessionId: string): boolean;
+export declare function getActiveConnectionsCount(): number;
+export declare function hasActiveConnection(sessionId: string): boolean;

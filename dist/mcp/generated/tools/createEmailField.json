@@ -1,0 +1,46 @@
+{
+    "name": "createEmailField",
+    "description": "Creates a Payload CMS 3.0 EmailField configuration\n\nExample:\n```typescript\n{\n  name: 'emailField',\n  type: 'email',\n  required: true,\n  label: 'Email Field',\n  // Custom validation example\n  validate: (value, { siblingData, operation }) => {\n    // Validation logic based on the value, sibling data, or operation\n    if (operation === 'create' && !value) {\n      return 'This field is required for new records';\n    }\n    return true;\n  }\n}\n```",
+    "inputSchema": {
+        "type": "object",
+        "description": "Payload.EmailField configuration object",
+        "properties": {
+            "name": {
+                "type": "string",
+                "description": "The name of the field, used as the property name in the database"
+            },
+            "type": {
+                "type": "string",
+                "enum": [
+                    "emailfield"
+                ],
+                "description": "The type of field"
+            },
+            "label": {
+                "type": "string",
+                "description": "The label shown in the admin UI"
+            },
+            "required": {
+                "type": "boolean",
+                "description": "Whether this field is required"
+            },
+            "minLength": {
+                "type": "number",
+                "description": "Minimum length of the text"
+            },
+            "maxLength": {
+                "type": "number",
+                "description": "Maximum length of the text"
+            },
+            "validate": {
+                "type": "string",
+                "description": "Custom validation function that returns true if valid or an error message string if invalid"
+            }
+        },
+        "required": [
+            "name",
+            "type"
+        ]
+    },
+    "template": "{\n  name: '{name}', // Database field name\n  type: 'email',\n  label: 'Email Field', // Label shown in the admin UI\n  required: true,\n  // Optional: Add custom validation beyond the built-in email validation\n  validate: (value) => {\n    if (value && !value.includes('@example.com')) {\n      return 'Only example.com email addresses are allowed';\n    }\n    return true; // Return true if valid\n  },\n}"
+}

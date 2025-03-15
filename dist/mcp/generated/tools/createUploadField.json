@@ -1,0 +1,31 @@
+{
+    "name": "createUploadField",
+    "description": "Creates a Payload CMS 3.0 UploadField configuration\n\nExample:\n```typescript\n{\n  name: 'uploadField',\n  type: 'upload',\n  required: true,\n  label: 'Upload Field',\n  // Custom validation example\n  validate: (value, { siblingData, operation }) => {\n    // Validation logic based on the value, sibling data, or operation\n    if (operation === 'create' && !value) {\n      return 'This field is required for new records';\n    }\n    return true;\n  }\n}\n```",
+    "inputSchema": {
+        "type": "object",
+        "properties": {
+            "name": {
+                "type": "string",
+                "description": "The name of the field"
+            },
+            "type": {
+                "type": "string",
+                "description": "The type of field"
+            },
+            "label": {
+                "type": "string",
+                "description": "The label shown in the admin UI"
+            },
+            "required": {
+                "type": "boolean",
+                "description": "Whether this field is required"
+            }
+        },
+        "required": [
+            "name",
+            "type"
+        ],
+        "description": "Field configuration"
+    },
+    "template": "{\n  name: '{name}', // Database field name\n  type: 'upload',\n  label: 'Upload Field', // Label shown in the admin UI\n  relationTo: 'media', // The collection to upload to\n  required: true,\n  // Optional: Add custom validation\n  validate: (value) => {\n    if (!value) {\n      return 'Please upload a file';\n    }\n    return true; // Return true if valid\n  },\n}"
+}

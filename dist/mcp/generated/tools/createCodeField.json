@@ -1,0 +1,38 @@
+{
+    "name": "createCodeField",
+    "description": "Creates a Payload CMS 3.0 CodeField configuration\n\nExample:\n```typescript\n{\n  name: 'codeField',\n  type: 'code',\n  required: true,\n  label: 'Code Field',\n  // Custom validation example\n  validate: (value, { siblingData, operation }) => {\n    // Validation logic based on the value, sibling data, or operation\n    if (operation === 'create' && !value) {\n      return 'This field is required for new records';\n    }\n    return true;\n  }\n}\n```",
+    "inputSchema": {
+        "type": "object",
+        "description": "Payload.CodeField configuration object",
+        "properties": {
+            "name": {
+                "type": "string",
+                "description": "The name of the field, used as the property name in the database"
+            },
+            "type": {
+                "type": "string",
+                "enum": [
+                    "codefield"
+                ],
+                "description": "The type of field"
+            },
+            "label": {
+                "type": "string",
+                "description": "The label shown in the admin UI"
+            },
+            "required": {
+                "type": "boolean",
+                "description": "Whether this field is required"
+            },
+            "validate": {
+                "type": "string",
+                "description": "Custom validation function that returns true if valid or an error message string if invalid"
+            }
+        },
+        "required": [
+            "name",
+            "type"
+        ]
+    },
+    "template": "{\n  name: '{name}', // Database field name\n  type: 'code',\n  label: 'Code Field', // Label shown in the admin UI\n  admin: {\n    language: 'javascript', // The language for syntax highlighting\n  },\n  // Optional: Add custom validation\n  validate: (value) => {\n    if (value && value.length < 10) {\n      return 'Please enter more code';\n    }\n    return true; // Return true if valid\n  },\n}"
+}
