@@ -22,19 +22,43 @@ function typeToJsonSchema(type: Type): any {
         items: {
           type: 'object',
           properties: {
-            name: { type: 'string' },
-            type: { type: 'string' },
-            label: { type: 'string' },
-            required: { type: 'boolean' }
+            name: { type: 'string', description: 'The name of the field' },
+            type: { type: 'string', description: 'The type of field' },
+            label: { type: 'string', description: 'The label shown in the admin UI' },
+            required: { type: 'boolean', description: 'Whether this field is required' }
           },
           required: ['name', 'type']
-        }
+        },
+        description: 'Array of field configurations'
+      };
+    }
+    
+    // Special handling for options array (common in select/radio fields)
+    if (elementType && elementType.isObject() && 
+        elementType.getProperties().some(p => p.getName() === 'label') && 
+        elementType.getProperties().some(p => p.getName() === 'value')) {
+      return {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            label: { type: 'string', description: 'Display label for the option' },
+            value: { 
+              oneOf: [
+                { type: 'string', description: 'Value stored in the database' },
+                { type: 'number', description: 'Numeric value stored in the database' }
+              ]
+            }
+          },
+          required: ['label', 'value']
+        },
+        description: 'Array of options for select/radio fields'
       };
     }
     
     return { 
       type: 'array', 
-      items: elementType ? typeToJsonSchema(elementType) : { type: 'any' } 
+      items: elementType ? typeToJsonSchema(elementType) : { type: 'object', description: 'Generic object' } 
     };
   }
   
@@ -50,6 +74,11 @@ function typeToJsonSchema(type: Type): any {
         
         // Skip properties that are functions or too complex
         if (propType.getCallSignatures().length > 0) {
+          // For function properties, provide a simplified schema
+          properties[propName] = { 
+            type: 'string', 
+            description: 'Function expression (e.g., "({ req }) => req.user.role === \'admin\'")'
+          };
           return;
         }
         
@@ -57,7 +86,30 @@ function typeToJsonSchema(type: Type): any {
         if (!prop.isOptional()) required.push(propName);
       } catch (error) {
         logger.warn(`Failed to process property ${propName} in type ${type.getText()}: ${error instanceof Error ? error.message : String(error)}`);
-        properties[propName] = { type: 'any' };
+        
+        // Instead of generic any, try to infer a better type based on property name
+        if (propName.includes('path') || propName.includes('url') || propName.includes('name') || 
+            propName.includes('label') || propName.includes('title') || propName.includes('description')) {
+          properties[propName] = { type: 'string', description: `${propName} string value` };
+        } else if (propName.includes('count') || propName.includes('limit') || propName.includes('max') || 
+                  propName.includes('min') || propName.includes('size') || propName.includes('length')) {
+          properties[propName] = { type: 'number', description: `${propName} numeric value` };
+        } else if (propName.includes('enabled') || propName.includes('disabled') || propName.includes('required') || 
+                  propName.includes('visible') || propName.includes('hidden') || propName.startsWith('is') || 
+                  propName.startsWith('has') || propName.startsWith('can')) {
+          properties[propName] = { type: 'boolean', description: `${propName} boolean flag` };
+        } else if (propName.includes('options') || propName.includes('items') || propName.includes('list')) {
+          properties[propName] = { 
+            type: 'array', 
+            items: { type: 'object' },
+            description: `${propName} array of items`
+          };
+        } else {
+          properties[propName] = { 
+            type: 'object', 
+            description: `${propName} configuration object`
+          };
+        }
       }
     });
     
@@ -83,12 +135,13 @@ function typeToJsonSchema(type: Type): any {
       return {
         type: 'object',
         properties: {
-          name: { type: 'string' },
-          type: { type: 'string' },
-          label: { type: 'string' },
-          required: { type: 'boolean' }
+          name: { type: 'string', description: 'The name of the field' },
+          type: { type: 'string', description: 'The type of field' },
+          label: { type: 'string', description: 'The label shown in the admin UI' },
+          required: { type: 'boolean', description: 'Whether this field is required' }
         },
-        required: ['name', 'type']
+        required: ['name', 'type'],
+        description: 'Field configuration'
       };
     }
     
@@ -97,7 +150,8 @@ function typeToJsonSchema(type: Type): any {
     if (stringLiterals.length === unionTypes.length) {
       return { 
         type: 'string', 
-        enum: stringLiterals.map(t => t.getLiteralValueOrThrow()) 
+        enum: stringLiterals.map(t => t.getLiteralValueOrThrow()),
+        description: 'One of the allowed string values'
       };
     }
     
@@ -106,7 +160,28 @@ function typeToJsonSchema(type: Type): any {
     if (numberLiterals.length === unionTypes.length) {
       return { 
         type: 'number', 
-        enum: numberLiterals.map(t => t.getLiteralValueOrThrow()) 
+        enum: numberLiterals.map(t => t.getLiteralValueOrThrow()),
+        description: 'One of the allowed numeric values'
+      };
+    }
+    
+    // Handle boolean unions
+    const booleanTypes = unionTypes.filter(t => t.isBoolean());
+    if (booleanTypes.length > 0) {
+      return { type: 'boolean', description: 'Boolean value' };
+    }
+    
+    // Handle string/number unions (common for IDs)
+    const stringTypes = unionTypes.filter(t => t.isString());
+    const numberTypes = unionTypes.filter(t => t.isNumber());
+    if (stringTypes.length > 0 && numberTypes.length > 0 && 
+        stringTypes.length + numberTypes.length === unionTypes.length) {
+      return { 
+        oneOf: [
+          { type: 'string', description: 'String value' },
+          { type: 'number', description: 'Numeric value' }
+        ],
+        description: 'String or number value'
       };
     }
     
@@ -118,18 +193,47 @@ function typeToJsonSchema(type: Type): any {
     
     // For other unions, use oneOf
     return { 
-      oneOf: unionTypes.map((t: Type) => typeToJsonSchema(t)) 
+      oneOf: unionTypes
+        .filter(t => !t.isNull() && !t.isUndefined())
+        .map((t: Type) => typeToJsonSchema(t)),
+      description: 'One of the allowed types'
     };
   }
   
   if (type.isEnum()) {
     const enumMembers = type.getSymbol()?.getDeclarations()?.[0]?.getType().getUnionTypes() || [];
     const enumValues = enumMembers.map((t: Type) => t.getLiteralValueOrThrow());
-    return { type: 'string', enum: enumValues };
+    return { 
+      type: 'string', 
+      enum: enumValues,
+      description: 'One of the enum values'
+    };
   }
   
-  // For any other type, return a generic schema
-  return { type: 'any' };
+  // For any other type, try to provide a more specific schema based on the type name
+  const typeName = type.getText();
+  if (typeName.includes('string') || typeName.includes('String')) {
+    return { type: 'string', description: 'String value' };
+  } else if (typeName.includes('number') || typeName.includes('Number') || 
+            typeName.includes('int') || typeName.includes('float')) {
+    return { type: 'number', description: 'Numeric value' };
+  } else if (typeName.includes('boolean') || typeName.includes('Boolean')) {
+    return { type: 'boolean', description: 'Boolean value' };
+  } else if (typeName.includes('[]') || typeName.includes('Array')) {
+    return { type: 'array', items: { type: 'object' }, description: 'Array of items' };
+  } else if (typeName.includes('Record') || typeName.includes('Map') || typeName.includes('Object')) {
+    return { type: 'object', properties: {}, description: 'Object with properties' };
+  } else if (typeName.includes('Function') || typeName.includes('Callback')) {
+    return { type: 'string', description: 'Function expression' };
+  } else if (typeName.includes('Date')) {
+    return { type: 'string', format: 'date-time', description: 'Date string (ISO format)' };
+  }
+  
+  // If all else fails, return a generic object schema
+  return { 
+    type: 'object', 
+    description: `${typeName} configuration object`
+  };
 }
 
 function generateToolName(name: string): string {
@@ -301,15 +405,88 @@ function addTool(decl: InterfaceDeclaration | TypeAliasDeclaration, name: string
           'text', 'number', 'date', 'email', 'textarea', 'relationship', 'array', 'richText',
           'code', 'json', 'select', 'radio', 'point', 'blocks', 'join', 'upload', 'group'
         ] : [baseName.toLowerCase()];
-    if (typeProp) {
-      schema.properties.type = { type: 'string', enum: typeEnum.filter(Boolean) };
+    
+    // Ensure we have a proper schema for field types
+    if (schema.type === 'any' || !schema.properties) {
+      // Create a standard field schema if none exists
+      schema.type = 'object';
+      schema.properties = {
+        name: { type: 'string', description: 'The name of the field, used as the property name in the database' },
+        type: { 
+          type: 'string', 
+          enum: typeEnum.filter(Boolean),
+          description: 'The type of field'
+        },
+        label: { type: 'string', description: 'The label shown in the admin UI' },
+        required: { type: 'boolean', description: 'Whether this field is required' }
+      };
+      
+      // Add field-specific properties based on the field type
+      if (baseName === 'TextField' || baseName === 'EmailField' || baseName === 'TextareaField') {
+        schema.properties.minLength = { type: 'number', description: 'Minimum length of the text' };
+        schema.properties.maxLength = { type: 'number', description: 'Maximum length of the text' };
+      } else if (baseName === 'NumberField') {
+        schema.properties.min = { type: 'number', description: 'Minimum value' };
+        schema.properties.max = { type: 'number', description: 'Maximum value' };
+      } else if (baseName === 'DateField') {
+        schema.properties.defaultValue = { type: 'string', description: 'Default date value' };
+      } else if (baseName === 'RelationshipField' || baseName === 'PolymorphicRelationshipField') {
+        schema.properties.relationTo = { 
+          oneOf: [
+            { type: 'string', description: 'Collection to relate to' },
+            { type: 'array', items: { type: 'string' }, description: 'Collections to relate to' }
+          ]
+        };
+        schema.properties.hasMany = { type: 'boolean', description: 'Whether this field can relate to multiple documents' };
+      } else if (baseName === 'ArrayField') {
+        schema.properties.minRows = { type: 'number', description: 'Minimum number of rows' };
+        schema.properties.maxRows = { type: 'number', description: 'Maximum number of rows' };
+      } else if (baseName === 'SelectField' || baseName === 'RadioField') {
+        schema.properties.options = { 
+          type: 'array', 
+          items: { 
+            type: 'object',
+            properties: {
+              label: { type: 'string' },
+              value: { type: 'string' }
+            }
+          },
+          description: 'Options for the select/radio field'
+        };
+      }
+      
+      schema.required = ['name', 'type'];
+    } else if (typeProp) {
+      // If we have a schema but need to add the type enum
+      schema.properties.type = { 
+        type: 'string', 
+        enum: typeEnum.filter(Boolean),
+        description: 'The type of field'
+      };
       schema.required = schema.required?.includes('type') ? ['name', 'type'] : ['name'];
     }
+    
     template = "{ name: '{name}', type: '{type}', ...{rest} }";
   } else if (baseName.includes('Hook')) {
     template = "({ data }) => { return { ...data, modified: true }; }";
+    
+    // Improve hook schema
+    if (schema.type === 'any' || !schema.properties) {
+      schema.type = 'object';
+      schema.properties = {
+        description: { type: 'string', description: 'Description of what this hook does' }
+      };
+    }
   } else if (baseName === 'Access') {
     template = "({ req }) => !!req.user;";
+    
+    // Improve access schema
+    if (schema.type === 'any' || !schema.properties) {
+      schema.type = 'object';
+      schema.properties = {
+        description: { type: 'string', description: 'Description of this access control function' }
+      };
+    }
   } else if (baseName === 'CollectionAdminOptions') {
     template = "{ ...{rest} }";
   }
