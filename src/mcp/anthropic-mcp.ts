@@ -265,5 +265,30 @@ export async function runMCPServer() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
   
-  logger.info('MCP server started');
+  // Log detailed connection information
+  const serverInfo = {
+    name: "payload-mcp",
+    version: "1.0.0",
+    mode: 'stdio',
+    transport: 'StdioServerTransport',
+    toolCount: (server as any).getTools?.() ? (server as any).getTools().length : 'unknown',
+    startTime: new Date().toISOString(),
+    environment: process.env.NODE_ENV || 'development',
+    nodeVersion: process.version,
+    platform: process.platform
+  };
+  
+  // Log detailed server information to files only
+  logger.info('MCP server started successfully', { serverInfo });
+  logger.info('Connection mode: stdio (Standard Input/Output)');
+  logger.info(`Server is ready to process requests via stdin/stdout`);
+  
+  // Log tool names for easy reference
+  const toolNames = (server as any).getTools?.() 
+    ? (server as any).getTools().map((t: Tool) => t.name) 
+    : [];
+  
+  if (toolNames.length > 0) {
+    logger.info('Available tools:', { toolNames });
+  }
 } 

@@ -31,7 +31,7 @@ export const logger = winston.createLogger({
     // Write all logs to combined.log
     new winston.transports.File({ 
       filename: path.join(logDir, 'combined.log') 
-    }),
+    })
   ],
   exceptionHandlers: [
     new winston.transports.File({ 
