@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { logger } from './utils/logger.js';
 import { initializeAnthropicMCP, runMCPServer } from './mcp/anthropic-mcp.js';
 
